@@ -2,13 +2,15 @@ import { Routes } from '@angular/router';
 
 export const routes: Routes = [
   {
-    path: '',
-    redirectTo: 'folder/inbox',
-    pathMatch: 'full',
+    path: 'conversations',
+    loadComponent: () => import('./pages/conversations/conversations.page').then(m => m.ConversationsPage)
   },
   {
-    path: 'folder/:id',
-    loadComponent: () =>
-      import('./folder/folder.page').then((m) => m.FolderPage),
+    path: 'chat',
+    loadComponent: () => import('./pages/chat/chat.page').then(m => m.ChatPage)
+  },
+  {
+    path: 'settings',
+    loadComponent: () => import('./pages/settings/settings.page').then(m => m.SettingsPage)
   },
 ];

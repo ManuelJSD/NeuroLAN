@@ -8,8 +8,8 @@
 
 # NeuroLAN
 
-NeuroLAN is a cross‑platform chat application (Ionic + Angular) designed to interact with language models running locally in LM Studio within a home network.[web:5][web:11][web:14]  
-The app connects to the LM Studio server over LAN, lets you select the active model, and chat with a private AI without relying on any cloud services.[web:3][web:8]
+NeuroLAN is a cross‑platform chat application (Ionic + Angular) designed to interact with language models running locally in LM Studio within a home network.
+The app connects to the LM Studio server over LAN, lets you select the active model, and chat with a private AI without relying on any cloud services.
 
 In future iterations, NeuroLAN will add conversation history management, quick model switching, and basic configuration options, while keeping a *local‑first* and privacy‑oriented approach.
 

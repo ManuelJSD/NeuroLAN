@@ -1,10 +1,19 @@
+<p align="right">
+  <a href="./README.es.md">🇪🇸 Leer este README en español</a>
+</p>
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/6da96cb3-3e3e-4e26-800f-146f67f174df" alt="NeuroLAN logo" width="220" />
+</p>
+
 # NeuroLAN
 
-NeuroLan es una aplicación de chat multiplataforma (Ionic + Angular) pensada para interactuar con modelos de lenguaje ejecutados localmente en LM Studio dentro de la red doméstica. La aplicación permite conectarse al servidor de LM Studio en la LAN, seleccionar el modelo activo y mantener conversaciones con una IA privada sin depender de servicios en la nube.
+NeuroLAN is a cross‑platform chat application (Ionic + Angular) designed to interact with language models running locally in LM Studio within a home network.[web:5][web:11][web:14]  
+The app connects to the LM Studio server over LAN, lets you select the active model, and chat with a private AI without relying on any cloud services.[web:3][web:8]
 
-En fases posteriores, NeuroLan incorporará gestión de historiales de conversación, selección rápida de modelos y opciones básicas de configuración, priorizando siempre un enfoque local‑first y orientado a la privacidad.
+In future iterations, NeuroLAN will add conversation history management, quick model switching, and basic configuration options, while keeping a *local‑first* and privacy‑oriented approach.
 
-## Estructura del proyecto
+## Project structure
 
 ```text
 src/
@@ -13,26 +22,26 @@ src/
  │    ├── app.routes.ts
  │    ├── core/
  │    │    ├── models/
- │    │    │    ├── conversation.model.ts      # Interfaces para conversaciones (más adelante)
- │    │    │    ├── lmstudio.model.ts         # Interfaces para modelos y chat
+ │    │    │    ├── conversation.model.ts      # Interfaces for conversations (later)
+ │    │    │    ├── lmstudio.model.ts         # Interfaces for models and chat
  │    │    ├── services/
- │    │         ├── conversation.service.ts   # Servicio para manejar conversaciones (más adelante)
- │    │         ├── lm-studio.service.ts      # Conexión a LM Studio
+ │    │         ├── conversation.service.ts   # Conversation management (later)
+ │    │         ├── lm-studio.service.ts      # LM Studio connection
  │    ├── pages/
  │         ├── conversations/
- │         │    ├── conversations.component.* # Componente principal (sin chat)
+ │         │    ├── conversations.component.* # Conversation list
  │         ├── chat/
- │         │    ├── chat.component.*          # Componente principal con chat
+ │         │    ├── chat.component.*          # Main chat view
  │         ├── settings/
- │              ├── settings.component.*      # Componente de configuración (más adelante)
- │              ├── settings.routes.ts        # Rutas de configuración (más adelante)
+ │              ├── settings.component.*      # Settings screen (later)
+ │              ├── settings.routes.ts        # Settings routes (later)
  ├── assets/
  ├── environments/
  ├── theme/
 ```
 
-## Tecnologías
+## Technologies
 
-- **Ionic**: Framework multiplataforma para crear aplicaciones móviles y de escritorio.
-- **Angular**: Framework para crear aplicaciones web.
-- **TypeScript**: Lenguaje de programación TypeScript.
+- **Ionic**: Cross‑platform framework for building mobile and desktop apps with web technologies.[web:116][web:92]  
+- **Angular**: Component‑based web framework for building modern applications.[web:24]  
+- **TypeScript**: Typed superset of JavaScript that improves code safety and maintainability.[web:27]

@@ -6,7 +6,7 @@ ion-menu.md ion-content {
   --padding-start: 8px;
   --padding-end: 8px;
   --padding-top: 20px;
-  --padding-bottom: 20px;
+  --padding-bottom: 10px;
 }
 
 ion-menu.md ion-list {
@@ -116,4 +116,11 @@ ion-note {
 
 ion-item.selected {
   --color: var(--ion-color-primary);
+}
+
+.img_logo {
+  display: block;
+  width: 36px;
+  margin: 0;
+  opacity: 0.85;
 }

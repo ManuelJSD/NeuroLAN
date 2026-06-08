@@ -23,12 +23,12 @@ import { ChatMessage, LmStudioModel } from 'src/app/core/models/lmstudio.model';
 export class ChatPage implements OnInit {
   private lmStudioService = inject(LmStudioService);
   models: LmStudioModel[] = [];
-  selectedModelKey: string | undefined;
+  selectedModelKey: string = '';
 
   messages: ChatMessage[] = [];
   userInput: string = '';
   isSending = false;
-  errorMessage: String | null = null;
+  errorMessage: string | null = null;
 
   ngOnInit(): void {
     this.loadModels();
@@ -52,17 +52,40 @@ export class ChatPage implements OnInit {
     // ¿Texto vacio? Salir
     if (userText === '') return;
 
+    // Checkeo de modelo
+    if (!this.selectedModelKey) {
+      this.errorMessage = 'Debes seleccionar un modelo';
+      return;
+    }
+
     //Insermos el mensaje del usuario
     this.messages.push({
       role: 'user',
       content: userText
     });
 
-    //Respuesta dummy
-    this.messages.push({
-      role: 'assistant',
-      content: 'Hola'
-    })
+    //Limpiamos el Input
+    this.userInput = '';
+    this.isSending = true;
+    this.errorMessage = null;
+
+    this.lmStudioService.sendChat({
+      model: this.selectedModelKey,
+      messages: this.messages
+    }).subscribe({
+      next: (res) => {
+        this.messages.push({
+          role: 'assistant',
+          content: res.choices[0].message.content
+        });
+        this.isSending = false;
+      },
+      error: (err) => {
+        console.error(err);
+        this.errorMessage = 'Error al enviar el mensaje';
+        this.isSending = false;
+      }
+    });
 
   }
 

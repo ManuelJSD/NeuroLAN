@@ -22,7 +22,7 @@ export class LmStudioService {
   }
 
   sendChat(body: LmStudioChatRequest): Observable<LmStudioChatResponse> {
-    const url = `${this.baseUrl}/api/v1/chat/completions`;
+    const url = `${this.baseUrl}/v1/chat/completions`;
     return this.http.post<LmStudioChatResponse>(url, body);
   }
 

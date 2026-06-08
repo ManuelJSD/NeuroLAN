@@ -17,6 +17,10 @@
     </ion-item>
   </ion-list>
 
+  <ion-item *ngIf="errorMessage" color="danger">
+    <ion-label>{{ errorMessage }}</ion-label>
+  </ion-item>
+
   <div class="chat-input">
     <ion-item lines="none">
       <ion-textarea
@@ -28,6 +32,7 @@
     <ion-button
       expand="block"
       (click)="sendMessage()"
+      [disabled]="isSending"
     >
       Send
     </ion-button>

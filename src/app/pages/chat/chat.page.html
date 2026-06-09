@@ -6,13 +6,22 @@
   </ion-item>
 </ion-list>
 
+<div *ngIf="usage">
+  <ion-chip>
+    <ion-label>
+      Total tokens: {{ usage.total_tokens }} | Prompt: {{ usage.prompt_tokens }} | Completion: {{ usage.completion_tokens }}
+    </ion-label>
+  </ion-chip>
+</div>
+
 <ion-content>
 
   <ion-list>
     <ion-item *ngFor="let msg of messages" [class.user]="msg.role === 'user'" [class.assistant]="msg.role === 'assistant'">
       <ion-label>
         <h3>{{ msg.role === 'user' ? 'You' : 'Assistant' }}</h3>
-        <p>{{ msg.content }}</p>
+        <markdown *ngIf="msg.role === 'assistant'" [data]="msg.content"></markdown>
+        <p *ngIf="msg.role === 'user'" class="message-content">{{ msg.content }}</p>
       </ion-label>
     </ion-item>
   </ion-list>

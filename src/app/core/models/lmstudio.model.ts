@@ -29,10 +29,17 @@ export interface LmStudioChatChoice {
   message: ChatMessage;
 }
 
+export interface UsageTokens {
+  prompt_tokens: number;
+  completion_tokens: number;
+  total_tokens: number;
+}
+
 export interface LmStudioChatResponse {
   id: string;
   object: string;
   created: number;
   model: string;
   choices: LmStudioChatChoice[];
+  usage?: UsageTokens;
 }

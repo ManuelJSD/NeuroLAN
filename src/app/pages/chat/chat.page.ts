@@ -1,16 +1,17 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonSelect, IonList, IonItem, IonSelectOption, IonContent, IonLabel, IonButton, IonTextarea, IonSpinner } from "@ionic/angular/standalone";
+import { IonSelect, IonList, IonItem, IonSelectOption, IonContent, IonLabel, IonButton, IonTextarea, IonSpinner, IonChip } from "@ionic/angular/standalone";
 import { LmStudioService } from 'src/app/core/services/lm-studio';
-import { ChatMessage, OpenAIModel } from 'src/app/core/models/lmstudio.model';
+import { ChatMessage, OpenAIModel, UsageTokens } from 'src/app/core/models/lmstudio.model';
+import { MarkdownComponent } from 'ngx-markdown';
 
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.page.html',
   styleUrls: ['./chat.page.scss'],
   standalone: true,
-  imports: [IonButton, IonLabel, IonContent,
+  imports: [IonChip, IonButton, IonLabel, IonContent,
     CommonModule,
     FormsModule,
     IonSelect,
@@ -18,7 +19,8 @@ import { ChatMessage, OpenAIModel } from 'src/app/core/models/lmstudio.model';
     IonItem,
     IonSelectOption,
     IonTextarea,
-    IonSpinner],
+    IonSpinner,
+    MarkdownComponent],
 })
 export class ChatPage implements OnInit {
   private lmStudioService = inject(LmStudioService);
@@ -26,6 +28,7 @@ export class ChatPage implements OnInit {
   selectedModelKey: string = '';
 
   messages: ChatMessage[] = [];
+  usage?: UsageTokens;
   userInput: string = '';
   isSending = false;
   errorMessage: string | null = null;
@@ -78,6 +81,7 @@ export class ChatPage implements OnInit {
           role: 'assistant',
           content: res.choices[0].message.content
         });
+        this.usage = res.usage;
         this.isSending = false;
       },
       error: (err) => {

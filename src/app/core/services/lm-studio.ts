@@ -14,15 +14,15 @@ export class LmStudioService {
 
   private http = inject(HttpClient);
 
-  private readonly baseUrl = 'http://127.0.0.1:7788';
+  private readonly baseUrl = 'http://127.0.0.1:7788/v1';
 
   getModels(): Observable<LmStudioModelsResponse> {
-    const url = `${this.baseUrl}/api/v1/models`;
+    const url = `${this.baseUrl}/models`;
     return this.http.get<LmStudioModelsResponse>(url);
   }
 
   sendChat(body: LmStudioChatRequest): Observable<LmStudioChatResponse> {
-    const url = `${this.baseUrl}/v1/chat/completions`;
+    const url = `${this.baseUrl}/chat/completions`;
     return this.http.post<LmStudioChatResponse>(url, body);
   }
 

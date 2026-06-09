@@ -1,7 +1,7 @@
 <ion-list>
   <ion-item>
     <ion-select placeholder="Models" [(ngModel)]="selectedModelKey">
-      <ion-select-option *ngFor="let model of models" [value]="model.key">{{ model.display_name }}</ion-select-option>
+      <ion-select-option *ngFor="let model of models" [value]="model.id">{{ model.id }}</ion-select-option>
     </ion-select>
   </ion-item>
 </ion-list>
@@ -16,6 +16,11 @@
       </ion-label>
     </ion-item>
   </ion-list>
+
+  <ion-item lines="none" *ngIf="isSending">
+    <ion-label>Thinking...</ion-label>
+    <ion-spinner name="dots" slot="end"></ion-spinner>
+  </ion-item>
 
   <ion-item *ngIf="errorMessage" color="danger">
     <ion-label>{{ errorMessage }}</ion-label>

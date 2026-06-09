@@ -1,9 +1,9 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonSelect, IonList, IonItem, IonSelectOption, IonContent, IonLabel, IonButton, IonTextarea } from "@ionic/angular/standalone";
+import { IonSelect, IonList, IonItem, IonSelectOption, IonContent, IonLabel, IonButton, IonTextarea, IonSpinner } from "@ionic/angular/standalone";
 import { LmStudioService } from 'src/app/core/services/lm-studio';
-import { ChatMessage, LmStudioModel } from 'src/app/core/models/lmstudio.model';
+import { ChatMessage, OpenAIModel } from 'src/app/core/models/lmstudio.model';
 
 @Component({
   selector: 'app-chat',
@@ -17,12 +17,12 @@ import { ChatMessage, LmStudioModel } from 'src/app/core/models/lmstudio.model';
     IonList,
     IonItem,
     IonSelectOption,
-    IonTextarea
-  ],
+    IonTextarea,
+    IonSpinner],
 })
 export class ChatPage implements OnInit {
   private lmStudioService = inject(LmStudioService);
-  models: LmStudioModel[] = [];
+  models: OpenAIModel[] = [];
   selectedModelKey: string = '';
 
   messages: ChatMessage[] = [];
@@ -38,8 +38,8 @@ export class ChatPage implements OnInit {
     this.lmStudioService.getModels().subscribe({
       next: (res) => {
         console.log(res);
-        this.models = res.models;
-        this.selectedModelKey = res.models[0].key;
+        this.models = res.data;
+        this.selectedModelKey = res.data[0].id;
       },
       error: (err) => console.error(err),
     })

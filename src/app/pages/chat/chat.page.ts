@@ -1,7 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonSelect, IonList, IonItem, IonSelectOption, IonContent, IonLabel, IonButton, IonTextarea, IonSpinner, IonChip } from "@ionic/angular/standalone";
+import { IonSelect, IonSelectOption, IonContent, IonLabel, IonButton, IonTextarea, IonSpinner, IonChip } from "@ionic/angular/standalone";
 import { LmStudioService } from 'src/app/core/services/lm-studio';
 import { ChatMessage, OpenAIModel, UsageTokens } from 'src/app/core/models/lmstudio.model';
 import { MarkdownComponent } from 'ngx-markdown';
@@ -15,8 +15,6 @@ import { MarkdownComponent } from 'ngx-markdown';
     CommonModule,
     FormsModule,
     IonSelect,
-    IonList,
-    IonItem,
     IonSelectOption,
     IonTextarea,
     IonSpinner,

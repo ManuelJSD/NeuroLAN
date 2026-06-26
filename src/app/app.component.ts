@@ -16,7 +16,7 @@ import { ChatPage } from './pages/chat/chat.page';
 export class AppComponent {
 
   public appPages = [
-    { title: 'Configuración', url: '/folder/inbox', icon: 'settings-outline' },
+    { title: 'Configuración', url: 'settings', icon: 'settings-outline' },
   ];
 
   public labels = ['Chat 1', 'Chat 2', 'Chat 3', 'Chat 4', 'Chat 5', 'Chat 6'];

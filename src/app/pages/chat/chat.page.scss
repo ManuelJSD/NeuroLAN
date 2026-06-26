@@ -1,3 +1,384 @@
-.message-content {
-  white-space: pre-wrap;
+/* ==========================================================================
+   1. VARIABLES & GLOBALS
+   (Paleta de colores inspirada en temas oscuros modernos como Catppuccin)
+   ========================================================================== */
+$bg-color: #1e1e2e;
+$chat-bg: #1e1e2e;
+$user-bubble-bg: #89b4fa;
+$user-bubble-text: #11111b;
+$ai-bubble-bg: transparent;
+$ai-bubble-text: #cdd6f4;
+$border-color: #45475a;
+$input-bg: #313244;
+$font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: $bg-color;
+  font-family: $font-family;
+}
+
+/* ==========================================================================
+   2. LAYOUT WRAPPERS
+   ========================================================================== */
+.chat-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  background: $chat-bg;
+}
+
+/* Header (Selector de modelo y tokens) */
+.chat-header {
+  flex-shrink: 0;
+  padding: 12px 16px;
+  border-bottom: 1px solid $border-color;
+  background: rgba(30, 30, 46, 0.95);
+  backdrop-filter: blur(10px);
+  z-index: 10;
+  
+  .header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 800px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .model-select {
+    --background: transparent;
+    --padding-start: 0;
+    font-weight: 600;
+    color: #cdd6f4;
+    font-size: 1.1rem;
+    max-width: 250px;
+    
+    /* Cambiar el color de la línea de selección de Ionic (incluso cuando es válido) */
+    --highlight-color-focused: #89b4fa;
+    --highlight-color-valid: #89b4fa;
+    --highlight-color-invalid: #f38ba8;
+  }
+
+  .tokens-chip {
+    margin: 0;
+    --background: rgba(137, 180, 250, 0.1);
+    --color: #89b4fa;
+    border: 1px solid rgba(137, 180, 250, 0.2);
+    font-size: 0.8rem;
+    font-weight: 600;
+    border-radius: 8px;
+  }
+}
+
+/* Content Area (Scroll) */
+.chat-content {
+  flex: 1 1 auto;
+  --background: transparent;
+
+  .messages-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 32px 16px 60px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+}
+
+/* Footer (Área de Input Fija) */
+.chat-footer {
+  flex-shrink: 0;
+  padding: 16px;
+  background: linear-gradient(180deg, transparent, $bg-color 25%);
+  
+  .input-wrapper {
+    display: flex;
+    align-items: flex-end;
+    max-width: 800px;
+    margin: 0 auto;
+    background: $input-bg;
+    border: 1px solid $border-color;
+    border-radius: 16px;
+    padding: 6px 10px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+    &:focus-within {
+      border-color: #89b4fa;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    }
+  }
+
+  .chat-input {
+    --background: transparent;
+    --color: #cdd6f4;
+    --padding-top: 14px;
+    --padding-bottom: 14px;
+    --padding-start: 14px;
+    --placeholder-color: #a6adc8;
+    margin: 0;
+    flex: 1;
+    font-size: 1rem;
+    line-height: 1.5;
+    
+    /* Color del cursor y de la línea de Ionic (incluso cuando es válido) */
+    caret-color: #89b4fa;
+    --highlight-color-focused: #89b4fa;
+    --highlight-color-valid: #89b4fa;
+    --highlight-color-invalid: #f38ba8;
+  }
+
+  .send-btn {
+    --color: #89b4fa;
+    margin: 0 4px 6px 0;
+    height: 40px;
+    width: 40px;
+    
+    &::part(native) {
+      padding: 0;
+      border-radius: 10px;
+    }
+
+    &:hover {
+      --background: rgba(137, 180, 250, 0.1);
+    }
+    
+    &[disabled] {
+      opacity: 0.4;
+    }
+    
+    .send-icon {
+      width: 20px;
+      height: 20px;
+      transition: transform 0.2s ease;
+    }
+    
+    &:active .send-icon {
+      transform: scale(0.9) translate(2px, -2px);
+    }
+  }
+}
+
+/* ==========================================================================
+   3. MESSAGES & BUBBLES
+   ========================================================================== */
+.message-wrapper {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  opacity: 0;
+
+  .avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  }
+
+  .ai-avatar {
+    background: #313244;
+    color: #cdd6f4;
+    border: 1px solid #45475a;
+  }
+
+  .user-avatar {
+    background: $user-bubble-bg;
+    color: $user-bubble-text;
+  }
+
+  .message-bubble {
+    flex: 1;
+    min-width: 0; /* Evita que el markdown rompa el flexbox */
+    display: flex;
+    flex-direction: column;
+  }
+
+  .message-sender {
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: #bac2de;
+    letter-spacing: 0.5px;
+  }
+
+  .message-text {
+    white-space: pre-wrap;
+    line-height: 1.6;
+    color: #cdd6f4;
+    font-size: 1.05rem;
+  }
+
+  /* Variación: Usuario */
+  &.user {
+    flex-direction: row-reverse;
+    
+    .message-bubble {
+      background: $user-bubble-bg;
+      color: $user-bubble-text;
+      padding: 14px 18px;
+      border-radius: 16px 4px 16px 16px;
+      max-width: 80%;
+      box-shadow: 0 4px 12px rgba(137, 180, 250, 0.15);
+      
+      .message-sender {
+        display: none; /* Ocultamos el nombre para burbujas propias, estilo iMessage/WhatsApp */
+      }
+      
+      .message-text {
+        color: $user-bubble-text;
+      }
+    }
+  }
+
+  /* Variación: Asistente */
+  &.assistant {
+    .message-bubble {
+      padding-top: 2px;
+    }
+  }
+}
+
+/* ==========================================================================
+   4. MARKDOWN STYLES (ASSISTANT)
+   ========================================================================== */
+.markdown-view {
+  color: #cdd6f4;
+  line-height: 1.7;
+  font-size: 1.05rem;
+  width: 100%;
+  word-wrap: break-word;
+
+  ::ng-deep {
+    p { margin-top: 0; margin-bottom: 1.2em; }
+    p:last-child { margin-bottom: 0; }
+    
+    pre {
+      background: #11111b; /* Fondo más oscuro para bloques de código */
+      padding: 16px;
+      border-radius: 12px;
+      overflow-x: auto;
+      border: 1px solid #313244;
+      margin: 16px 0;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+      
+      code {
+        background: transparent;
+        padding: 0;
+        font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+        font-size: 0.9em;
+        color: #cdd6f4;
+      }
+    }
+
+    /* Código en línea */
+    code {
+      background: #313244;
+      padding: 3px 6px;
+      border-radius: 6px;
+      font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+      font-size: 0.9em;
+      color: #f38ba8;
+    }
+
+    ul, ol {
+      padding-left: 24px;
+      margin-bottom: 1.2em;
+    }
+
+    li { margin-bottom: 8px; }
+
+    blockquote {
+      border-left: 4px solid #89b4fa;
+      margin: 16px 0;
+      padding: 10px 16px;
+      color: #bac2de;
+      background: rgba(137, 180, 250, 0.05);
+      border-radius: 0 8px 8px 0;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      border-radius: 8px;
+      overflow: hidden;
+      
+      th, td {
+        border: 1px solid #45475a;
+        padding: 10px 14px;
+        text-align: left;
+      }
+      th {
+        background: #313244;
+        font-weight: 600;
+      }
+    }
+
+    a {
+      color: #89b4fa;
+      text-decoration: none;
+      &:hover { text-decoration: underline; }
+    }
+  }
+}
+
+/* ==========================================================================
+   5. STATES (THINKING, ERRORS)
+   ========================================================================== */
+.thinking-bubble {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center;
+  gap: 12px;
+  background: rgba(49, 50, 68, 0.6);
+  padding: 12px 18px;
+  border-radius: 16px;
+  width: fit-content;
+  border: 1px solid #45475a;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+
+  .thinking-text {
+    font-size: 0.95rem;
+    color: #bac2de;
+    font-weight: 500;
+  }
+  
+  .custom-spinner {
+    width: 24px;
+    height: 24px;
+    color: #89b4fa;
+  }
+}
+
+.error-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
+  
+  .error-chip {
+    --background: rgba(243, 139, 168, 0.1);
+    --color: #f38ba8;
+    border: 1px solid rgba(243, 139, 168, 0.3);
+    font-weight: 500;
+    font-size: 0.9rem;
+    padding: 16px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(243, 139, 168, 0.1);
+  }
+}
+
+/* Animations */
+@keyframes fadeIn {
+  0% { opacity: 0; transform: translateY(15px); }
+  100% { opacity: 1; transform: translateY(0); }
 }

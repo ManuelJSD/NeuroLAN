@@ -1,55 +1,82 @@
-<ion-list>
-  <ion-item>
-    <ion-select placeholder="Models" [(ngModel)]="selectedModelKey">
-      <ion-select-option *ngFor="let model of models" [value]="model.id">{{ model.id }}</ion-select-option>
-    </ion-select>
-  </ion-item>
-</ion-list>
+<div class="chat-wrapper">
+  <!-- Header Section -->
+  <header class="chat-header">
+    <div class="header-content">
+      <ion-select class="model-select" interface="popover" placeholder="Select Model" [(ngModel)]="selectedModelKey">
+        <ion-select-option *ngFor="let model of models" [value]="model.id">{{ model.id }}</ion-select-option>
+      </ion-select>
 
-<div *ngIf="usage">
-  <ion-chip>
-    <ion-label>
-      Total tokens: {{ usage.total_tokens }} | Prompt: {{ usage.prompt_tokens }} | Completion: {{ usage.completion_tokens }}
-    </ion-label>
-  </ion-chip>
-</div>
+      <ion-chip class="tokens-chip" *ngIf="usage">
+        <ion-label>Tokens: {{ usage.total_tokens }}</ion-label>
+      </ion-chip>
+    </div>
+  </header>
 
-<ion-content>
+  <!-- Scrollable Chat Content -->
+  <ion-content class="chat-content">
+    <div class="messages-container">
+      
+      <!-- Messages Loop -->
+      <div class="message-wrapper" *ngFor="let msg of messages" [ngClass]="msg.role">
+        
+        <!-- Avatar para AI -->
+        <div class="avatar ai-avatar" *ngIf="msg.role === 'assistant'">
+          <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="ai-icon"><path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2z"></path><path d="M9 14v-2"></path><path d="M15 14v-2"></path></svg>
+        </div>
+        
+        <!-- Avatar para Usuario -->
+        <div class="avatar user-avatar" *ngIf="msg.role === 'user'">
+          <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="user-icon"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        </div>
 
-  <ion-list>
-    <ion-item *ngFor="let msg of messages" [class.user]="msg.role === 'user'" [class.assistant]="msg.role === 'assistant'">
-      <ion-label>
-        <h3>{{ msg.role === 'user' ? 'You' : 'Assistant' }}</h3>
-        <markdown *ngIf="msg.role === 'assistant'" [data]="msg.content"></markdown>
-        <p *ngIf="msg.role === 'user'" class="message-content">{{ msg.content }}</p>
-      </ion-label>
-    </ion-item>
-  </ion-list>
+        <!-- Contenido de la burbuja -->
+        <div class="message-bubble">
+          <div class="message-sender">{{ msg.role === 'user' ? 'Tú' : 'Asistente' }}</div>
+          
+          <markdown class="markdown-view" *ngIf="msg.role === 'assistant'" [data]="msg.content"></markdown>
+          <div class="message-text" *ngIf="msg.role === 'user'">{{ msg.content }}</div>
+        </div>
+      </div>
 
-  <ion-item lines="none" *ngIf="isSending">
-    <ion-label>Thinking...</ion-label>
-    <ion-spinner name="dots" slot="end"></ion-spinner>
-  </ion-item>
+      <!-- Thinking Indicator -->
+      <div class="message-wrapper assistant" *ngIf="isSending">
+        <div class="avatar ai-avatar">
+           <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="ai-icon"><path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2z"></path><path d="M9 14v-2"></path><path d="M15 14v-2"></path></svg>
+        </div>
+        <div class="message-bubble thinking-bubble">
+          <span class="thinking-text">Pensando...</span>
+          <ion-spinner name="dots" class="custom-spinner"></ion-spinner>
+        </div>
+      </div>
 
-  <ion-item *ngIf="errorMessage" color="danger">
-    <ion-label>{{ errorMessage }}</ion-label>
-  </ion-item>
+      <!-- Error State -->
+      <div class="error-container" *ngIf="errorMessage">
+        <ion-chip color="danger" class="error-chip">
+          <ion-label>{{ errorMessage }}</ion-label>
+        </ion-chip>
+      </div>
+      
+    </div>
+  </ion-content>
 
-  <div class="chat-input">
-    <ion-item lines="none">
+  <!-- Footer Section -->
+  <footer class="chat-footer">
+    <div class="input-wrapper">
       <ion-textarea
+        class="chat-input"
         autoGrow="true"
+        rows="1"
         [(ngModel)]="userInput"
-        placeholder="Write your message..."
+        placeholder="Escribe tu mensaje..."
       ></ion-textarea>
-    </ion-item>
-    <ion-button
-      expand="block"
-      (click)="sendMessage()"
-      [disabled]="isSending"
-    >
-      Send
-    </ion-button>
-  </div>
-
-</ion-content>
+      <ion-button
+        class="send-btn"
+        fill="clear"
+        (click)="sendMessage()"
+        [disabled]="isSending || !userInput"
+      >
+        <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="send-icon"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+      </ion-button>
+    </div>
+  </footer>
+</div>

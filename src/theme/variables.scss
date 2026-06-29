@@ -1,2 +1,199 @@
-// For information on how to create your own theme, please refer to:
-// https://ionicframework.com/docs/theming/
+// ============================================================
+// NeuroLAN Design System — Catppuccin Mocha Dark
+// ============================================================
+
+// --- Color Palette ---
+// Base
+$crust:    #11111b;
+$mantle:   #181825;
+$base:     #1e1e2e;
+$surface0: #313244;
+$surface1: #45475a;
+$surface2: #585b70;
+$overlay0: #6c7086;
+$overlay1: #7f849c;
+$overlay2: #9399b2;
+$subtext0: #a6adc8;
+$subtext1: #bac2de;
+$text:     #cdd6f4;
+
+// Accent Colors
+$blue:     #89b4fa;
+$lavender: #b4befe;
+$sapphire: #74c7ec;
+$sky:      #89dceb;
+$teal:     #94e2d5;
+$green:    #a6e3a1;
+$yellow:   #f9e2af;
+$peach:    #fab387;
+$red:      #f38ba8;
+$maroon:   #eba0ac;
+$pink:     #f5c2e7;
+$mauve:    #cba6f7;
+$flamingo: #f2cdcd;
+$rosewater:#f5e0dc;
+
+// ============================================================
+// Ionic CSS Variables — Dark Mode
+// ============================================================
+
+:root {
+  // Primary Brand Color
+  --ion-color-primary:         #{$blue};
+  --ion-color-primary-rgb:     137, 180, 250;
+  --ion-color-primary-contrast: #{$crust};
+  --ion-color-primary-contrast-rgb: 17, 17, 27;
+  --ion-color-primary-shade:   #6d91c7;
+  --ion-color-primary-tint:    #95bbfb;
+
+  // Secondary
+  --ion-color-secondary:       #{$mauve};
+  --ion-color-secondary-rgb:   203, 166, 247;
+  --ion-color-secondary-contrast: #{$crust};
+  --ion-color-secondary-contrast-rgb: 17, 17, 27;
+  --ion-color-secondary-shade: #a385c5;
+  --ion-color-secondary-tint:  #d0aff8;
+
+  // Tertiary
+  --ion-color-tertiary:        #{$lavender};
+  --ion-color-tertiary-rgb:    180, 190, 254;
+  --ion-color-tertiary-contrast: #{$crust};
+  --ion-color-tertiary-contrast-rgb: 17, 17, 27;
+  --ion-color-tertiary-shade:  #8f97cb;
+  --ion-color-tertiary-tint:   #bbc5fe;
+
+  // Success
+  --ion-color-success:         #{$green};
+  --ion-color-success-rgb:     166, 227, 161;
+  --ion-color-success-contrast: #{$crust};
+  --ion-color-success-contrast-rgb: 17, 17, 27;
+  --ion-color-success-shade:   #83b67e;
+  --ion-color-success-tint:    #afe6ab;
+
+  // Warning
+  --ion-color-warning:         #{$yellow};
+  --ion-color-warning-rgb:     249, 226, 175;
+  --ion-color-warning-contrast: #{$crust};
+  --ion-color-warning-contrast-rgb: 17, 17, 27;
+  --ion-color-warning-shade:   #c7b58c;
+  --ion-color-warning-tint:    #fae5b2;
+
+  // Danger
+  --ion-color-danger:          #{$red};
+  --ion-color-danger-rgb:      243, 139, 168;
+  --ion-color-danger-contrast: #{$crust};
+  --ion-color-danger-contrast-rgb: 17, 17, 27;
+  --ion-color-danger-shade:    #c36e86;
+  --ion-color-danger-tint:     #f497b0;
+
+  // Medium / Light / Dark
+  --ion-color-medium:          #{$overlay0};
+  --ion-color-medium-rgb:      108, 112, 134;
+  --ion-color-medium-contrast: #{$text};
+  --ion-color-medium-contrast-rgb: 205, 214, 244;
+  --ion-color-medium-shade:    #565869;
+  --ion-color-medium-tint:     #7b7f8d;
+
+  --ion-color-light:           #{$surface0};
+  --ion-color-light-rgb:       49, 50, 68;
+  --ion-color-light-contrast:  #{$text};
+  --ion-color-light-contrast-rgb: 205, 214, 244;
+  --ion-color-light-shade:     #272836;
+  --ion-color-light-tint:      #454658;
+
+  --ion-color-dark:            #{$text};
+  --ion-color-dark-rgb:        205, 214, 244;
+  --ion-color-dark-contrast:   #{$crust};
+  --ion-color-dark-contrast-rgb: 17, 17, 27;
+  --ion-color-dark-shade:      #a3abc4;
+  --ion-color-dark-tint:       #d2d9f5;
+}
+
+// ============================================================
+// Dark Mode Background System
+// ============================================================
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ion-background-color:            #{$base};
+    --ion-background-color-rgb:        30, 30, 46;
+
+    --ion-text-color:                  #{$text};
+    --ion-text-color-rgb:              205, 214, 244;
+
+    --ion-border-color:                #{$surface1};
+
+    --ion-item-background:             #{$base};
+    --ion-item-color:                  #{$text};
+
+    --ion-toolbar-background:          #{$mantle};
+    --ion-toolbar-color:               #{$text};
+
+    --ion-card-background:             #{$surface0};
+
+    --ion-tab-bar-background:          #{$mantle};
+    --ion-tab-bar-color:               #{$subtext0};
+    --ion-tab-bar-color-selected:      #{$blue};
+
+    --ion-backdrop-color:              #{$crust};
+    --ion-backdrop-opacity:            0.7;
+
+    // Background steps
+    --ion-background-color-step-50:    #{$mantle};
+    --ion-background-color-step-100:   #{$surface0};
+    --ion-background-color-step-150:   #{$surface1};
+    --ion-background-color-step-200:   #{$surface2};
+    --ion-background-color-step-250:   #{$overlay0};
+    --ion-background-color-step-300:   #{$overlay1};
+    --ion-background-color-step-350:   #{$overlay2};
+    --ion-background-color-step-400:   #{$subtext0};
+    --ion-background-color-step-450:   #{$subtext1};
+    --ion-background-color-step-500:   #{$text};
+    --ion-background-color-step-550:   #dde2f5;
+    --ion-background-color-step-600:   #e1e5f6;
+    --ion-background-color-step-650:   #e5e8f7;
+    --ion-background-color-step-700:   #e9ebf8;
+    --ion-background-color-step-750:   #edeef9;
+    --ion-background-color-step-800:   #f1f2fa;
+    --ion-background-color-step-850:   #f5f5fb;
+    --ion-background-color-step-900:   #f9f9fd;
+    --ion-background-color-step-950:   #fcfcfe;
+    --ion-background-color-step-1000:  #ffffff;
+
+    // Typography
+    --ion-font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+}
+
+// Force dark always (no system preference needed)
+:root {
+  --ion-background-color:            #{$base};
+  --ion-background-color-rgb:        30, 30, 46;
+
+  --ion-text-color:                  #{$text};
+  --ion-text-color-rgb:              205, 214, 244;
+
+  --ion-border-color:                #{$surface1};
+
+  --ion-item-background:             #{$base};
+  --ion-item-color:                  #{$text};
+
+  --ion-toolbar-background:          #{$mantle};
+  --ion-toolbar-color:               #{$text};
+
+  --ion-card-background:             #{$surface0};
+
+  --ion-tab-bar-background:          #{$mantle};
+  --ion-tab-bar-color:               #{$subtext0};
+  --ion-tab-bar-color-selected:      #{$blue};
+
+  --ion-backdrop-color:              #{$crust};
+  --ion-backdrop-opacity:            0.7;
+
+  --ion-background-color-step-50:    #{$mantle};
+  --ion-background-color-step-100:   #{$surface0};
+  --ion-background-color-step-150:   #{$surface1};
+
+  // Typography
+  --ion-font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}

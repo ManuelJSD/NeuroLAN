@@ -1,10 +1,12 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonSelect, IonSelectOption, IonContent, IonLabel, IonButton, IonTextarea, IonSpinner, IonChip } from "@ionic/angular/standalone";
+import { IonSelect, IonSelectOption, IonContent, IonLabel, IonButton, IonTextarea, IonSpinner, IonChip, IonMenuButton, IonIcon } from "@ionic/angular/standalone";
 import { LmStudioService } from 'src/app/core/services/lm-studio';
 import { ChatMessage, OpenAIModel, UsageTokens } from 'src/app/core/models/lmstudio.model';
 import { MarkdownComponent } from 'ngx-markdown';
+import { addIcons } from 'ionicons';
+import { createOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-chat',
@@ -13,11 +15,14 @@ import { MarkdownComponent } from 'ngx-markdown';
   standalone: true,
   imports: [IonChip, IonButton, IonLabel, IonContent,
     CommonModule,
+    DecimalPipe,
     FormsModule,
     IonSelect,
     IonSelectOption,
     IonTextarea,
     IonSpinner,
+    IonMenuButton,
+    IonIcon,
     MarkdownComponent],
 })
 export class ChatPage implements OnInit {
@@ -31,6 +36,9 @@ export class ChatPage implements OnInit {
   isSending = false;
   errorMessage: string | null = null;
 
+  constructor() {
+    addIcons({ createOutline });
+  }
   ngOnInit(): void {
     this.loadModels();
   }
@@ -44,6 +52,14 @@ export class ChatPage implements OnInit {
       },
       error: (err) => console.error(err),
     })
+  }
+
+  newChat() {
+    this.messages = [];
+    this.userInput = '';
+    this.usage = undefined;
+    this.errorMessage = null;
+    this.isSending = false;
   }
 
   sendMessage() {
@@ -89,6 +105,13 @@ export class ChatPage implements OnInit {
       }
     });
 
+  }
+
+  onEnterKey(event: KeyboardEvent) {
+    if (!event.shiftKey) {
+      event.preventDefault();
+      this.sendMessage();
+    }
   }
 
 }

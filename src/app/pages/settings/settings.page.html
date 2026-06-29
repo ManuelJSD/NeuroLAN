@@ -1,31 +1,80 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>settings</ion-title>
-  </ion-toolbar>
-</ion-header>
+<div class="settings-wrapper">
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">settings</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <!-- Page Header -->
+  <header class="settings-header">
+    <div class="header-content">
+      <div class="header-icon">
+        <ion-icon name="settings-outline"></ion-icon>
+      </div>
+      <div class="header-text">
+        <h1 class="header-title">Configuración</h1>
+        <p class="header-subtitle">Ajusta los parámetros de conexión</p>
+      </div>
+    </div>
+  </header>
 
-<form [formGroup]="settingsForm">
-<ion-list>
-  <ion-item>
-    <ion-input label="Server Address" formControlName="serverAddress" placeholder="http://localhost:11434"></ion-input>
-  </ion-item>
-</ion-list>
+  <ion-content class="settings-content">
+    <div class="settings-container">
 
-<ion-button expand="block" (click)="saveSettings()">Save</ion-button>
-</form>
+      <!-- Connection Card -->
+      <div class="settings-card">
+        <div class="card-header">
+          <div class="card-icon">
+            <ion-icon name="server-outline"></ion-icon>
+          </div>
+          <div class="card-header-text">
+            <h2 class="card-title">Servidor LM Studio</h2>
+            <p class="card-subtitle">Dirección del servidor de modelos de IA local</p>
+          </div>
+        </div>
 
+        <form [formGroup]="settingsForm" class="settings-form">
+          <div class="field-group">
+            <label class="field-label" for="serverAddress">URL del Servidor</label>
+            <div class="field-input-wrapper">
+              <ion-icon name="globe-outline" class="field-prefix-icon"></ion-icon>
+              <ion-input
+                id="serverAddress"
+                class="field-input"
+                formControlName="serverAddress"
+                placeholder="http://127.0.0.1:1234"
+              ></ion-input>
+            </div>
+            <p class="field-hint">Asegúrate de que LM Studio esté en ejecución con el servidor activado.</p>
+          </div>
+
+          <ion-button
+            class="save-button"
+            expand="block"
+            (click)="saveSettings()"
+          >
+            <ion-icon name="checkmark-circle-outline" slot="start"></ion-icon>
+            Guardar Configuración
+          </ion-button>
+        </form>
+      </div>
+
+      <!-- Info Card -->
+      <div class="settings-card info-card">
+        <div class="info-row">
+          <ion-icon name="information-circle-outline" class="info-icon"></ion-icon>
+          <div class="info-text">
+            <strong>¿Cómo configurar LM Studio?</strong>
+            <p>Abre LM Studio → "Local Server" → Activa el servidor → Copia la URL que aparece.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </ion-content>
+
+  <!-- Toast -->
   <ion-toast
     [isOpen]="isToastOpen"
     [message]="toastMessage"
-    [duration]="5000"
+    [duration]="3000"
     (didDismiss)="setOpen(false)"
+    position="bottom"
   ></ion-toast>
 
-</ion-content>
+</div>

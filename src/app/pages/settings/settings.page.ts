@@ -3,15 +3,13 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import {
   IonContent,
-  IonHeader,
-  IonTitle,
-  IonToolbar,
-  IonList,
-  IonItem,
   IonInput,
   IonButton,
-  IonToast
+  IonToast,
+  IonIcon
 } from '@ionic/angular/standalone';
+import { addIcons } from 'ionicons';
+import { settingsOutline, serverOutline, globeOutline, checkmarkCircleOutline, informationCircleOutline } from 'ionicons/icons';
 import { SettingsService } from 'src/app/core/services/settings';
 
 @Component({
@@ -19,17 +17,14 @@ import { SettingsService } from 'src/app/core/services/settings';
   templateUrl: './settings.page.html',
   styleUrls: ['./settings.page.scss'],
   standalone: true,
-  imports: [IonButton,
+  imports: [
     CommonModule,
     ReactiveFormsModule,
     IonInput,
-    IonItem,
-    IonList,
     IonContent,
-    IonHeader,
-    IonTitle,
-    IonToolbar,
-  IonToast
+    IonButton,
+    IonToast,
+    IonIcon,
   ]
 })
 export class SettingsPage implements OnInit {
@@ -39,13 +34,15 @@ export class SettingsPage implements OnInit {
   isToastOpen: boolean = false;
   toastMessage: string = '';
 
-  baseUrl: string |null = '';
+  baseUrl: string | null = '';
 
   settingsForm = this.formBuilder.group({
     serverAddress: [''],
   });
 
-  constructor() { }
+  constructor() {
+    addIcons({ settingsOutline, serverOutline, globeOutline, checkmarkCircleOutline, informationCircleOutline });
+  }
 
   ngOnInit() {
     this.getSettings();
@@ -60,13 +57,12 @@ export class SettingsPage implements OnInit {
     this.baseUrl = this.settingsForm.value.serverAddress ?? null;
 
     if (!this.baseUrl) {
-      this.setOpen(true, 'No URL base was specified');
+      this.setOpen(true, '⚠️ No se especificó una URL de servidor');
       return;
     }
 
     this.settingsService.setBaseUrl(this.baseUrl);
-
-    this.setOpen(true, 'Settings saved correctly');
+    this.setOpen(true, '✅ Configuración guardada correctamente');
   }
 
   setOpen(isOpen: boolean, message?: string) {

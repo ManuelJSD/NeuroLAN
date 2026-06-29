@@ -42,6 +42,41 @@ src/
 
 ## Technologies
 
-- **Ionic**: Cross‑platform framework for building mobile and desktop apps with web technologies.[web:116][web:92]  
-- **Angular**: Component‑based web framework for building modern applications.[web:24]  
-- **TypeScript**: Typed superset of JavaScript that improves code safety and maintainability.[web:27]
+- **Ionic**: Cross‑platform framework for building mobile and desktop apps with web technologies.
+- **Angular**: Component‑based web framework for building modern applications.
+- **TypeScript**: Typed superset of JavaScript that improves code safety and maintainability.
+
+## Development and Builds
+
+### Web Development
+To run the application locally in the browser:
+```bash
+npm install
+npm start
+```
+
+### Android Development
+Capacitor is used to port the application to Android. The native platform has been initialized in the `android/` directory.
+
+#### Requirements
+1. **Android Studio** installed on your system.
+2. Android SDK configured.
+
+#### Syncing Changes
+Every time you make changes to the Angular code, you need to rebuild the web app and sync it with Capacitor:
+```bash
+# 1. Compile the Angular project (outputs to www/)
+npm run build
+
+# 2. Sync compiled files and plugins with the native Android project
+npx cap sync
+```
+
+#### Compiling and Running on Android
+To open the native project in Android Studio to run it on an emulator/device or build the APK:
+```bash
+npx cap open android
+```
+Inside Android Studio:
+- Select a virtual device (Emulator) or connect a physical Android device and click the **Run** button.
+- To generate the APK: go to **Build** > **Build Bundle(s) / APK(s)** > **Build APK(s)**. The built APK will be located at `android/app/build/outputs/apk/debug/app-debug.apk`.

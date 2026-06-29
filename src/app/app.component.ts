@@ -1,21 +1,21 @@
 
 import { Component } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { IonApp, IonSplitPane, IonMenu, IonContent, IonList, IonListHeader, IonNote, IonMenuToggle, IonItem, IonIcon, IonLabel, IonRouterOutlet, IonRouterLink } from '@ionic/angular/standalone';
+import { IonApp, IonSplitPane, IonMenu, IonContent, IonMenuToggle, IonItem, IonIcon, IonLabel, IonRouterOutlet } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { settingsOutline } from 'ionicons/icons';
+import { settingsOutline, timeOutline, chatbubbleOutline, addCircleOutline, chatbubblesOutline } from 'ionicons/icons';
 import { LmStudioService } from './core/services/lm-studio';
-import { ChatPage } from './pages/chat/chat.page';
 
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
   styleUrls: ['./app.component.scss'],
-  imports: [RouterLink, RouterLinkActive, IonApp, IonSplitPane, IonMenu, IonContent, IonList, IonListHeader, IonMenuToggle, IonItem, IonIcon, IonLabel, IonRouterLink, IonRouterOutlet, ChatPage]
+  imports: [RouterLink, RouterLinkActive, IonApp, IonSplitPane, IonMenu, IonContent, IonMenuToggle, IonItem, IonIcon, IonLabel, IonRouterOutlet]
 })
 export class AppComponent {
 
   public appPages = [
+    { title: 'Chat', url: 'chat', icon: 'chatbubbles-outline' },
     { title: 'Configuración', url: 'settings', icon: 'settings-outline' },
   ];
 
@@ -29,7 +29,7 @@ export class AppComponent {
   }
 
   constructor(private lmStudio: LmStudioService) {
-    addIcons({ settingsOutline });
+    addIcons({ settingsOutline, timeOutline, chatbubbleOutline, addCircleOutline, chatbubblesOutline });
     this.loadModels();
   }
 

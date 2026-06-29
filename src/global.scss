@@ -1,12 +1,6 @@
 /*
  * App Global CSS
  * ----------------------------------------------------------------------------
- * Put style rules here that you want to apply globally. These styles are for
- * the entire app and not just one component. Additionally, this file can be
- * used as an entry point to import other CSS/Sass files to be included in the
- * output CSS.
- * For more information on global stylesheets, visit the documentation:
- * https://ionicframework.com/docs/layout/global-stylesheets
  */
 
 /* Core CSS required for Ionic components to work properly */
@@ -18,20 +12,106 @@
 @import "@ionic/angular/css/typography.css";
 @import "@ionic/angular/css/display.css";
 
-/* Optional CSS utils that can be commented out */
+/* Optional CSS utils */
 @import "@ionic/angular/css/padding.css";
 @import "@ionic/angular/css/float-elements.css";
 @import "@ionic/angular/css/text-alignment.css";
 @import "@ionic/angular/css/text-transformation.css";
 @import "@ionic/angular/css/flex-utils.css";
 
-/**
- * Ionic Dark Mode
- * -----------------------------------------------------
- * For more info, please see:
- * https://ionicframework.com/docs/theming/dark-mode
- */
 
-/* @import "@ionic/angular/css/palettes/dark.always.css"; */
-/* @import "@ionic/angular/css/palettes/dark.class.css"; */
-@import '@ionic/angular/css/palettes/dark.system.css';
+/* Ionic Dark Mode — always dark */
+@import '@ionic/angular/css/palettes/dark.always.css';
+
+/* ============================================================
+   Global Base Styles
+   ============================================================ */
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================================
+   Custom Scrollbar (Webkit)
+   ============================================================ */
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #45475a;
+  border-radius: 999px;
+  transition: background 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #585b70;
+}
+
+/* ============================================================
+   Ionic Component Overrides
+   ============================================================ */
+
+ion-app {
+  background: #1e1e2e;
+}
+
+// Split pane — sin bordes extraños
+ion-split-pane {
+  --border: none;
+  --side-max-width: 280px;
+  --side-min-width: 240px;
+}
+
+// Popover — glassmorphism dark
+ion-popover {
+  --background: #313244;
+  --backdrop-opacity: 0.5;
+  --box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5);
+  --border-radius: 12px;
+}
+
+ion-popover::part(content) {
+  border: 1px solid #45475a;
+  border-radius: 12px;
+}
+
+// Select popover
+.select-interface-option.sc-ion-select-popover-h {
+  color: #cdd6f4;
+}
+
+// Toast — dark glassmorphism
+ion-toast {
+  --background: #313244;
+  --color: #cdd6f4;
+  --border-radius: 12px;
+  --box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  --border-color: #45475a;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+}
+
+// List headers
+ion-list-header {
+  font-family: 'Inter', sans-serif;
+}
+
+// Ionic toolbar sin sombra
+ion-toolbar {
+  --border-width: 0 !important;
+  --box-shadow: none;
+}

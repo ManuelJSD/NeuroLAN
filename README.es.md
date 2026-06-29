@@ -42,7 +42,41 @@ src/
 
 ## Tecnologías
 
-- **Ionic**: Framework multiplataforma para crear aplicaciones móviles y de escritorio con tecnologías web.[web:116][web:92]  
-- **Angular**: Framework basado en componentes para construir aplicaciones web modernas.[web:24]  
-- **TypeScript**: Superconjunto tipado de JavaScript que mejora la seguridad y mantenibilidad del código.[web:27]
-Con esto tienes la parte de documentación bastante redonda. ¿Te apetece que el siguiente paso sea diseñar las interfaces de lmstudio.model.ts para empezar ya con la conexión a LM Studio?
+- **Ionic**: Framework multiplataforma para crear aplicaciones móviles y de escritorio con tecnologías web.
+- **Angular**: Framework basado en componentes para construir aplicaciones web modernas.
+- **TypeScript**: Superconjunto tipado de JavaScript que mejora la seguridad y mantenibilidad del código.
+
+## Desarrollo y Compilación
+
+### Desarrollo Web
+Para ejecutar la aplicación localmente en el navegador:
+```bash
+npm install
+npm start
+```
+
+### Desarrollo Android
+Se utiliza Capacitor para portar la aplicación a Android. El soporte nativo ya ha sido inicializado en el directorio `android/`.
+
+#### Requisitos
+1. **Android Studio** instalado en tu sistema.
+2. SDK de Android configurado.
+
+#### Sincronización de Cambios
+Cada vez que realices cambios en el código de Angular, necesitas reconstruir la aplicación web y sincronizarla con Capacitor:
+```bash
+# 1. Compilar el proyecto Angular (genera la carpeta www/)
+npm run build
+
+# 2. Sincronizar los archivos compilados y plugins con el proyecto nativo de Android
+npx cap sync
+```
+
+#### Compilación y Ejecución en Android
+Para abrir el proyecto nativo en Android Studio, desde donde podrás ejecutarlo en un emulador/dispositivo o compilar el APK:
+```bash
+npx cap open android
+```
+Dentro de Android Studio:
+- Conecta un dispositivo Android físico o inicia un emulador y haz clic en el botón verde **Run** (Ejecutar).
+- Para generar el archivo APK ejecutable: ve a **Build** > **Build Bundle(s) / APK(s)** > **Build APK(s)**. El APK compilado se guardará en la ruta `android/app/build/outputs/apk/debug/app-debug.apk`.

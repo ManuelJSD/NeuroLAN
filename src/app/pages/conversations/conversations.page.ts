@@ -1,18 +1,21 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar } from '@ionic/angular/standalone';
+import { IonContent, IonIcon } from '@ionic/angular/standalone';
+import { addIcons } from 'ionicons';
+import { chatbubblesOutline, arrowBackOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-conversations',
   templateUrl: './conversations.page.html',
   styleUrls: ['./conversations.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule]
+  imports: [IonContent, IonIcon, CommonModule]
 })
 export class ConversationsPage implements OnInit {
 
-  constructor() { }
+  constructor() {
+    addIcons({ chatbubblesOutline, arrowBackOutline });
+  }
 
   ngOnInit() {
   }

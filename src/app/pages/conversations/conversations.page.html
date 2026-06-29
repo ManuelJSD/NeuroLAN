@@ -1,13 +1,60 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>conversations</ion-title>
-  </ion-toolbar>
-</ion-header>
+<div class="conversations-wrapper">
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">conversations</ion-title>
-    </ion-toolbar>
-  </ion-header>
-</ion-content>
+  <!-- Page Header -->
+  <header class="conv-header">
+    <div class="header-content">
+      <div class="header-icon">
+        <ion-icon name="chatbubbles-outline"></ion-icon>
+      </div>
+      <div class="header-text">
+        <h1 class="header-title">Conversaciones</h1>
+        <p class="header-subtitle">Tu historial de chats guardados</p>
+      </div>
+    </div>
+  </header>
+
+  <ion-content class="conv-content">
+    <div class="conv-container">
+
+      <!-- Empty State -->
+      <div class="empty-state">
+        <div class="empty-illustration">
+          <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Chat bubble 1 -->
+            <rect x="8" y="14" width="44" height="28" rx="10" fill="rgba(137,180,250,0.12)" stroke="rgba(137,180,250,0.3)" stroke-width="1.5"/>
+            <!-- Chat bubble lines -->
+            <rect x="16" y="22" width="22" height="3" rx="1.5" fill="rgba(137,180,250,0.4)"/>
+            <rect x="16" y="29" width="14" height="3" rx="1.5" fill="rgba(137,180,250,0.25)"/>
+            <!-- Bubble tail -->
+            <path d="M18 42 L12 50 L28 42 Z" fill="rgba(137,180,250,0.12)" stroke="rgba(137,180,250,0.3)" stroke-width="1.5" stroke-linejoin="round"/>
+
+            <!-- Chat bubble 2 (reply) -->
+            <rect x="28" y="38" width="44" height="24" rx="10" fill="rgba(203,166,247,0.1)" stroke="rgba(203,166,247,0.25)" stroke-width="1.5"/>
+            <!-- Chat bubble 2 lines -->
+            <rect x="36" y="46" width="18" height="3" rx="1.5" fill="rgba(203,166,247,0.4)"/>
+            <rect x="36" y="53" width="26" height="3" rx="1.5" fill="rgba(203,166,247,0.25)"/>
+            <!-- Bubble tail 2 -->
+            <path d="M62 62 L68 70 L52 62 Z" fill="rgba(203,166,247,0.1)" stroke="rgba(203,166,247,0.25)" stroke-width="1.5" stroke-linejoin="round"/>
+
+            <!-- Sparkles -->
+            <circle cx="68" cy="16" r="2.5" fill="rgba(137,180,250,0.5)"/>
+            <circle cx="10" cy="58" r="2" fill="rgba(203,166,247,0.4)"/>
+            <circle cx="6" cy="30" r="1.5" fill="rgba(116,199,236,0.4)"/>
+          </svg>
+        </div>
+
+        <h2 class="empty-title">Sin conversaciones aún</h2>
+        <p class="empty-description">
+          Tus conversaciones guardadas aparecerán aquí.<br>
+          ¡Empieza un nuevo chat!
+        </p>
+
+        <div class="empty-cta">
+          <ion-icon name="arrow-back-outline"></ion-icon>
+          <span>Ve al chat para comenzar</span>
+        </div>
+      </div>
+
+    </div>
+  </ion-content>
+</div>

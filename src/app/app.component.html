@@ -27,7 +27,7 @@
 
         <!-- Nav Section -->
         <nav class="menu-nav">
-          <p class="menu-section-label">Navegación</p>
+          <p class="menu-section-label">Navigation</p>
           <ul class="menu-list">
             @for (p of appPages; track p; let i = $index) {
               <li class="menu-list-item">
@@ -56,15 +56,10 @@
         <div class="menu-history">
           <p class="menu-section-label">
             <ion-icon name="time-outline" class="section-icon"></ion-icon>
-            Conversaciones Recientes
+            Recent Conversations
           </p>
           <ul class="history-list">
-            @for (label of labels; track label) {
-              <li class="history-item">
-                <ion-icon name="chatbubble-outline" class="history-icon"></ion-icon>
-                <span class="history-label">{{ label }}</span>
-              </li>
-            }
+              <app-conversations></app-conversations>
           </ul>
         </div>
 

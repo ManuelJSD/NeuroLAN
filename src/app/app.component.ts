@@ -5,18 +5,19 @@ import { IonApp, IonSplitPane, IonMenu, IonContent, IonMenuToggle, IonItem, IonI
 import { addIcons } from 'ionicons';
 import { settingsOutline, timeOutline, chatbubbleOutline, addCircleOutline, chatbubblesOutline } from 'ionicons/icons';
 import { LmStudioService } from './core/services/lm-studio';
+import { ConversationsPage } from "./pages/conversations/conversations.page";
 
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
   styleUrls: ['./app.component.scss'],
-  imports: [RouterLink, RouterLinkActive, IonApp, IonSplitPane, IonMenu, IonContent, IonMenuToggle, IonItem, IonIcon, IonLabel, IonRouterOutlet]
+  imports: [RouterLink, RouterLinkActive, IonApp, IonSplitPane, IonMenu, IonContent, IonMenuToggle, IonItem, IonIcon, IonLabel, IonRouterOutlet, ConversationsPage]
 })
 export class AppComponent {
 
   public appPages = [
     { title: 'Chat', url: 'chat', icon: 'chatbubbles-outline' },
-    { title: 'Configuración', url: 'settings', icon: 'settings-outline' },
+    { title: 'Settings', url: 'settings', icon: 'settings-outline' },
   ];
 
   public labels = ['Chat 1', 'Chat 2', 'Chat 3', 'Chat 4', 'Chat 5', 'Chat 6'];

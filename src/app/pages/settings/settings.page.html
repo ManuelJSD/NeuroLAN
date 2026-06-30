@@ -7,8 +7,8 @@
         <ion-icon name="settings-outline"></ion-icon>
       </div>
       <div class="header-text">
-        <h1 class="header-title">Configuración</h1>
-        <p class="header-subtitle">Ajusta los parámetros de conexión</p>
+        <h1 class="header-title">Settings</h1>
+        <p class="header-subtitle">Adjust the connection parameters</p>
       </div>
     </div>
   </header>
@@ -23,14 +23,14 @@
             <ion-icon name="server-outline"></ion-icon>
           </div>
           <div class="card-header-text">
-            <h2 class="card-title">Servidor LM Studio</h2>
-            <p class="card-subtitle">Dirección del servidor de modelos de IA local</p>
+            <h2 class="card-title">LM Studio Server</h2>
+            <p class="card-subtitle">Local AI model server address</p>
           </div>
         </div>
 
         <form [formGroup]="settingsForm" class="settings-form">
           <div class="field-group">
-            <label class="field-label" for="serverAddress">URL del Servidor</label>
+            <label class="field-label" for="serverAddress">Server URL</label>
             <div class="field-input-wrapper">
               <ion-icon name="globe-outline" class="field-prefix-icon"></ion-icon>
               <ion-input
@@ -40,7 +40,7 @@
                 placeholder="http://127.0.0.1:1234"
               ></ion-input>
             </div>
-            <p class="field-hint">Asegúrate de que LM Studio esté en ejecución con el servidor activado.</p>
+            <p class="field-hint">Make sure LM Studio is running with the server enabled.</p>
           </div>
 
           <ion-button
@@ -49,7 +49,7 @@
             (click)="saveSettings()"
           >
             <ion-icon name="checkmark-circle-outline" slot="start"></ion-icon>
-            Guardar Configuración
+            Save Settings
           </ion-button>
         </form>
       </div>
@@ -59,8 +59,8 @@
         <div class="info-row">
           <ion-icon name="information-circle-outline" class="info-icon"></ion-icon>
           <div class="info-text">
-            <strong>¿Cómo configurar LM Studio?</strong>
-            <p>Abre LM Studio → "Local Server" → Activa el servidor → Copia la URL que aparece.</p>
+            <strong>How to set up LM Studio?</strong>
+            <p>Open LM Studio → "Local Server" → Enable the server → Copy the URL shown.</p>
           </div>
         </div>
       </div>

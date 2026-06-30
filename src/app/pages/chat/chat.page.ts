@@ -7,13 +7,18 @@ import { ChatMessage, OpenAIModel, UsageTokens } from 'src/app/core/models/lmstu
 import { MarkdownComponent } from 'ngx-markdown';
 import { addIcons } from 'ionicons';
 import { createOutline } from 'ionicons/icons';
+import { ConversationService } from 'src/app/core/services/conversation';
 
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.page.html',
   styleUrls: ['./chat.page.scss'],
   standalone: true,
-  imports: [IonChip, IonButton, IonLabel, IonContent,
+  imports: [
+    IonChip,
+    IonButton,
+    IonLabel,
+    IonContent,
     CommonModule,
     DecimalPipe,
     FormsModule,
@@ -26,7 +31,10 @@ import { createOutline } from 'ionicons/icons';
     MarkdownComponent],
 })
 export class ChatPage implements OnInit {
+
   private lmStudioService = inject(LmStudioService);
+  private conversationService = inject(ConversationService);
+
   models: OpenAIModel[] = [];
   selectedModelKey: string = '';
 
@@ -35,6 +43,8 @@ export class ChatPage implements OnInit {
   userInput: string = '';
   isSending = false;
   errorMessage: string | null = null;
+  currentConversationId: string = crypto.randomUUID();
+  currentConversationCreatedAt: number = Date.now();
 
   constructor() {
     addIcons({ createOutline });
@@ -60,28 +70,30 @@ export class ChatPage implements OnInit {
     this.usage = undefined;
     this.errorMessage = null;
     this.isSending = false;
+    this.currentConversationId = crypto.randomUUID();
+    this.currentConversationCreatedAt = Date.now();
   }
 
   sendMessage() {
 
     const userText = this.userInput.trim();
 
-    // ¿Texto vacio? Salir
+    // Exit if input is empty
     if (userText === '') return;
 
-    // Checkeo de modelo
+    // Check that a model is selected
     if (!this.selectedModelKey) {
-      this.errorMessage = 'Debes seleccionar un modelo';
+      this.errorMessage = 'You must select a model';
       return;
     }
 
-    //Insermos el mensaje del usuario
+    // Append the user's message
     this.messages.push({
       role: 'user',
       content: userText
     });
 
-    //Limpiamos el Input
+    // Clear the input
     this.userInput = '';
     this.isSending = true;
     this.errorMessage = null;
@@ -97,10 +109,18 @@ export class ChatPage implements OnInit {
         });
         this.usage = res.usage;
         this.isSending = false;
+
+        //Save Conversation
+        this.conversationService.saveConversation({
+          id: this.currentConversationId,
+          title: this.messages[0].content.substring(0, 50),
+          messages: this.messages,
+          createdAt: this.currentConversationCreatedAt,
+        });
       },
       error: (err) => {
         console.error(err);
-        this.errorMessage = 'Error al enviar el mensaje';
+        this.errorMessage = 'Failed to send message';
         this.isSending = false;
       }
     });

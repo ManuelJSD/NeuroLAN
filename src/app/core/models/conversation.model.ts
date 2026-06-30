@@ -1,8 +1,8 @@
 import { ChatMessage } from "./lmstudio.model";
 
 export interface Conversation {
-  id: number;
+  id: string;
   title: string;
-  createdAt: Date;
+  createdAt: number;
   messages: ChatMessage[];
 }

@@ -4,13 +4,13 @@
   <header class="chat-header">
     <div class="header-content">
 
-      <!-- Menu button (visible en mobile) -->
+      <!-- Menu button (visible on mobile) -->
       <ion-menu-button class="menu-btn" auto-hide="false"></ion-menu-button>
 
       <ion-select
         class="model-select"
         interface="popover"
-        placeholder="Seleccionar modelo"
+        placeholder="Select model"
         [(ngModel)]="selectedModelKey"
       >
         <ion-select-option *ngFor="let model of models" [value]="model.id">{{ model.id }}</ion-select-option>
@@ -21,10 +21,10 @@
           <ion-label>{{ usage.total_tokens | number }} tokens</ion-label>
         </ion-chip>
 
-        <!-- Nuevo Chat button -->
-        <button class="new-chat-header-btn" (click)="newChat()" title="Nuevo Chat">
+        <!-- New Chat button -->
+        <button class="new-chat-header-btn" (click)="newChat()" title="New Chat">
           <ion-icon name="create-outline"></ion-icon>
-          <span class="new-chat-label">Nuevo</span>
+          <span class="new-chat-label">New</span>
         </button>
       </div>
     </div>
@@ -37,8 +37,8 @@
       <!-- Empty State -->
       <div class="empty-state" *ngIf="messages.length === 0 && !isSending">
         <div class="empty-icon">🧠</div>
-        <h2>¡Hola! Soy NeuroLAN</h2>
-        <p>Selecciona un modelo de IA y escribe tu primer mensaje para comenzar la conversación.</p>
+        <h2>Hello! I'm NeuroLAN</h2>
+        <p>Select an AI model and type your first message to start a conversation.</p>
       </div>
 
       <!-- Messages Loop -->
@@ -63,7 +63,7 @@
 
         <!-- Bubble content -->
         <div class="message-bubble">
-          <div class="message-sender">{{ msg.role === 'user' ? 'Tú' : 'Asistente' }}</div>
+          <div class="message-sender">{{ msg.role === 'user' ? 'You' : 'Assistant' }}</div>
 
           <markdown class="markdown-view" *ngIf="msg.role === 'assistant'" [data]="msg.content"></markdown>
           <div class="message-text" *ngIf="msg.role === 'user'">{{ msg.content }}</div>
@@ -80,7 +80,7 @@
           </svg>
         </div>
         <div class="message-bubble thinking-bubble">
-          <span class="thinking-text">Pensando</span>
+          <span class="thinking-text">Thinking</span>
           <ion-spinner name="dots" class="custom-spinner"></ion-spinner>
         </div>
       </div>
@@ -103,7 +103,7 @@
         autoGrow="true"
         rows="1"
         [(ngModel)]="userInput"
-        placeholder="Escribe tu mensaje..."
+        placeholder="Type your message..."
         (keydown.enter)="onEnterKey($any($event))"
       ></ion-textarea>
       <ion-button

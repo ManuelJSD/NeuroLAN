@@ -57,12 +57,12 @@ export class SettingsPage implements OnInit {
     this.baseUrl = this.settingsForm.value.serverAddress ?? null;
 
     if (!this.baseUrl) {
-      this.setOpen(true, '⚠️ No se especificó una URL de servidor');
+      this.setOpen(true, '⚠️ No server URL was specified');
       return;
     }
 
     this.settingsService.setBaseUrl(this.baseUrl);
-    this.setOpen(true, '✅ Configuración guardada correctamente');
+    this.setOpen(true, '✅ Settings saved successfully');
   }
 
   setOpen(isOpen: boolean, message?: string) {

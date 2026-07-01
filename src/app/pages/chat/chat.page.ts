@@ -6,8 +6,9 @@ import { LmStudioService } from 'src/app/core/services/lm-studio';
 import { ChatMessage, OpenAIModel, UsageTokens } from 'src/app/core/models/lmstudio.model';
 import { MarkdownComponent } from 'ngx-markdown';
 import { addIcons } from 'ionicons';
-import { createOutline } from 'ionicons/icons';
+import { createOutline, refreshOutline } from 'ionicons/icons';
 import { ConversationService } from 'src/app/core/services/conversation';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-chat',
@@ -32,6 +33,7 @@ import { ConversationService } from 'src/app/core/services/conversation';
 })
 export class ChatPage implements OnInit {
 
+  private route = inject(ActivatedRoute);
   private lmStudioService = inject(LmStudioService);
   private conversationService = inject(ConversationService);
 
@@ -47,10 +49,17 @@ export class ChatPage implements OnInit {
   currentConversationCreatedAt: number = Date.now();
 
   constructor() {
-    addIcons({ createOutline });
+    addIcons({ createOutline, refreshOutline });
   }
   ngOnInit(): void {
     this.loadModels();
+
+    // We're trying to get the ID param to get data from conversation
+    const id = this.route.snapshot.paramMap.get('id');
+
+    if (id) {
+      this.loadConversation(id);
+    }
   }
 
   loadModels() {
@@ -72,6 +81,16 @@ export class ChatPage implements OnInit {
     this.isSending = false;
     this.currentConversationId = crypto.randomUUID();
     this.currentConversationCreatedAt = Date.now();
+  }
+
+  loadConversation(id: string) {
+    this.conversationService.getConversationsbyId(id).then(c => {
+      if (c) {
+        this.currentConversationId = c.id;
+        this.currentConversationCreatedAt = c.createdAt;
+        this.messages = c.messages;
+      }
+    })
   }
 
   sendMessage() {

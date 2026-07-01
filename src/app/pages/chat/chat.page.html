@@ -7,14 +7,20 @@
       <!-- Menu button (visible on mobile) -->
       <ion-menu-button class="menu-btn" auto-hide="false"></ion-menu-button>
 
-      <ion-select
-        class="model-select"
-        interface="popover"
-        placeholder="Select model"
-        [(ngModel)]="selectedModelKey"
-      >
-        <ion-select-option *ngFor="let model of models" [value]="model.id">{{ model.id }}</ion-select-option>
-      </ion-select>
+      <div class="model-selector-group">
+        <ion-select
+          class="model-select"
+          interface="popover"
+          placeholder="Select model"
+          [(ngModel)]="selectedModelKey"
+        >
+          <ion-select-option *ngFor="let model of models" [value]="model.id">{{ model.id }}</ion-select-option>
+        </ion-select>
+
+        <button class="reload-models-btn" (click)="loadModels()" title="Reload models">
+          <ion-icon name="refresh-outline" class="reload-icon"></ion-icon>
+        </button>
+      </div>
 
       <div class="header-right">
         <ion-chip class="tokens-chip" *ngIf="usage">

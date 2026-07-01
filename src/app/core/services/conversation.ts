@@ -40,4 +40,10 @@ export class ConversationService {
     return stored ?? [];
   }
 
+  async getConversationsbyId(id: string): Promise <Conversation | undefined>{
+    const conversations = await this.loadConversartions();
+
+    return conversations.find(c => c.id === id);
+  }
+
 }

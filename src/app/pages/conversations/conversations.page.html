@@ -1,6 +1,6 @@
 <div class="conversations-wrapper">
   @for (conversation of (conversations$ | async) ?? []; track conversation.id) {
-    <li class="history-item">
+    <li class="history-item" [routerLink]="['/chat', conversation.id]" routerLinkActive="active">
       <ion-icon name="chatbubble-outline" class="history-icon"></ion-icon>
       <span class="history-label">{{ conversation.title }}</span>
     </li>

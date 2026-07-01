@@ -5,16 +5,18 @@ import { addIcons } from 'ionicons';
 import { chatbubblesOutline, arrowBackOutline, chatbubbleOutline } from 'ionicons/icons';
 import { ConversationService } from 'src/app/core/services/conversation';
 import { Conversation } from 'src/app/core/models/conversation.model';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 
 @Component({
   selector: 'app-conversations',
   templateUrl: './conversations.page.html',
   styleUrls: ['./conversations.page.scss'],
   standalone: true,
-  imports: [IonIcon, AsyncPipe]
+  imports: [IonIcon, AsyncPipe, RouterLink, RouterLinkActive]
 })
 export class ConversationsPage {
 
+  private router = inject(Router);
   private conversationService = inject(ConversationService);
 
   // Observable that updates automatically whenever a conversation is saved

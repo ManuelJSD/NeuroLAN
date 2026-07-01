@@ -11,26 +11,26 @@
         <ion-select
           class="model-select"
           interface="popover"
-          placeholder="Select model"
+          [placeholder]="'CHAT.SELECT_MODEL' | translate"
           [(ngModel)]="selectedModelKey"
         >
           <ion-select-option *ngFor="let model of models" [value]="model.id">{{ model.id }}</ion-select-option>
         </ion-select>
 
-        <button class="reload-models-btn" (click)="loadModels()" title="Reload models">
+        <button class="reload-models-btn" (click)="loadModels()" [title]="'CHAT.RELOAD_MODELS' | translate">
           <ion-icon name="refresh-outline" class="reload-icon"></ion-icon>
         </button>
       </div>
 
       <div class="header-right">
         <ion-chip class="tokens-chip" *ngIf="usage">
-          <ion-label>{{ usage.total_tokens | number }} tokens</ion-label>
+          <ion-label>{{ usage.total_tokens | number }} {{ 'CHAT.TOKENS' | translate }}</ion-label>
         </ion-chip>
 
         <!-- New Chat button -->
-        <button class="new-chat-header-btn" (click)="newChat()" title="New Chat">
+        <button class="new-chat-header-btn" (click)="newChat()" [title]="'CHAT.NEW_CHAT' | translate">
           <ion-icon name="create-outline"></ion-icon>
-          <span class="new-chat-label">New</span>
+          <span class="new-chat-label">{{ 'CHAT.NEW_BTN' | translate }}</span>
         </button>
       </div>
     </div>
@@ -43,8 +43,8 @@
       <!-- Empty State -->
       <div class="empty-state" *ngIf="messages.length === 0 && !isSending">
         <div class="empty-icon">🧠</div>
-        <h2>Hello! I'm NeuroLAN</h2>
-        <p>Select an AI model and type your first message to start a conversation.</p>
+        <h2>{{ 'CHAT.WELCOME_TITLE' | translate }}</h2>
+        <p>{{ 'CHAT.WELCOME_SUBTITLE' | translate }}</p>
       </div>
 
       <!-- Messages Loop -->
@@ -69,7 +69,7 @@
 
         <!-- Bubble content -->
         <div class="message-bubble">
-          <div class="message-sender">{{ msg.role === 'user' ? 'You' : 'Assistant' }}</div>
+          <div class="message-sender">{{ (msg.role === 'user' ? 'CHAT.USER_ROLE' : 'CHAT.ASSISTANT_ROLE') | translate }}</div>
 
           <markdown class="markdown-view" *ngIf="msg.role === 'assistant'" [data]="msg.content"></markdown>
           <div class="message-text" *ngIf="msg.role === 'user'">{{ msg.content }}</div>
@@ -86,7 +86,7 @@
           </svg>
         </div>
         <div class="message-bubble thinking-bubble">
-          <span class="thinking-text">Thinking</span>
+          <span class="thinking-text">{{ 'CHAT.THINKING' | translate }}</span>
           <ion-spinner name="dots" class="custom-spinner"></ion-spinner>
         </div>
       </div>
@@ -109,7 +109,7 @@
         autoGrow="true"
         rows="1"
         [(ngModel)]="userInput"
-        placeholder="Type your message..."
+        [placeholder]="'CHAT.TYPE_MESSAGE' | translate"
         (keydown.enter)="onEnterKey($any($event))"
       ></ion-textarea>
       <ion-button

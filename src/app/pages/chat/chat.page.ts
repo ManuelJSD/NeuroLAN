@@ -6,9 +6,10 @@ import { LmStudioService } from 'src/app/core/services/lm-studio';
 import { ChatMessage, OpenAIModel, UsageTokens } from 'src/app/core/models/lmstudio.model';
 import { MarkdownComponent } from 'ngx-markdown';
 import { addIcons } from 'ionicons';
-import { createOutline, refreshOutline } from 'ionicons/icons';
+import { createOutline } from 'ionicons/icons';
 import { ConversationService } from 'src/app/core/services/conversation';
 import { ActivatedRoute } from '@angular/router';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-chat',
@@ -29,13 +30,16 @@ import { ActivatedRoute } from '@angular/router';
     IonSpinner,
     IonMenuButton,
     IonIcon,
-    MarkdownComponent],
+    MarkdownComponent,
+    TranslatePipe
+  ],
 })
 export class ChatPage implements OnInit {
 
   private route = inject(ActivatedRoute);
   private lmStudioService = inject(LmStudioService);
   private conversationService = inject(ConversationService);
+  private translateService = inject(TranslateService);
 
   models: OpenAIModel[] = [];
   selectedModelKey: string = '';
@@ -49,7 +53,7 @@ export class ChatPage implements OnInit {
   currentConversationCreatedAt: number = Date.now();
 
   constructor() {
-    addIcons({ createOutline, refreshOutline });
+    addIcons({ createOutline });
   }
   ngOnInit(): void {
     this.loadModels();
@@ -102,7 +106,7 @@ export class ChatPage implements OnInit {
 
     // Check that a model is selected
     if (!this.selectedModelKey) {
-      this.errorMessage = 'You must select a model';
+      this.errorMessage = this.translateService.instant('CHAT.ERROR_SELECT_MODEL');
       return;
     }
 
@@ -139,7 +143,7 @@ export class ChatPage implements OnInit {
       },
       error: (err) => {
         console.error(err);
-        this.errorMessage = 'Failed to send message';
+        this.errorMessage = this.translateService.instant('CHAT.ERROR_SEND_FAILED');
         this.isSending = false;
       }
     });

@@ -6,13 +6,14 @@ import { chatbubblesOutline, arrowBackOutline, chatbubbleOutline } from 'ionicon
 import { ConversationService } from 'src/app/core/services/conversation';
 import { Conversation } from 'src/app/core/models/conversation.model';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-conversations',
   templateUrl: './conversations.page.html',
   styleUrls: ['./conversations.page.scss'],
   standalone: true,
-  imports: [IonIcon, AsyncPipe, RouterLink, RouterLinkActive]
+  imports: [IonIcon, AsyncPipe, RouterLink, RouterLinkActive, TranslatePipe]
 })
 export class ConversationsPage {
 

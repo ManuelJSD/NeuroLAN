@@ -2,17 +2,7 @@
 // NeuroLAN Conversations Page — Premium Dark UI
 // ============================================================
 
-$base:     #1e1e2e;
-$mantle:   #181825;
-$surface0: #313244;
-$surface1: #45475a;
-$surface2: #585b70;
-$overlay0: #6c7086;
-$subtext0: #a6adc8;
-$subtext1: #bac2de;
-$text:     #cdd6f4;
-$blue:     #89b4fa;
-$mauve:    #cba6f7;
+@use '../../../theme/variables' as *;
 
 $font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 

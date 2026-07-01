@@ -32,13 +32,23 @@ export class SettingsService {
   }
 
   async setBaseUrl(baseUrl: string): Promise<void> {
-    const storage = await this.ensureStorage();
+    await this.ensureStorage();
     await this._storage?.set('base_url', baseUrl);
   }
 
   async getBaseUrl(): Promise<string | null> {
-    const storage = await this.ensureStorage();
+    await this.ensureStorage();
     return (await this._storage?.get('base_url')) ?? null;
+  }
+
+  async setLanguage(lang: string): Promise<void> {
+    await this.ensureStorage();
+    await this._storage?.set('language', lang);
+  }
+
+  async getLanguage(): Promise<string | null> {
+    const storage = await this.ensureStorage();
+    return (await this._storage?.get('language')) ?? null;
   }
 
 }

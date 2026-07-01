@@ -7,8 +7,8 @@
         <ion-icon name="settings-outline"></ion-icon>
       </div>
       <div class="header-text">
-        <h1 class="header-title">Settings</h1>
-        <p class="header-subtitle">Adjust the connection parameters</p>
+        <h1 class="header-title">{{ "SETTINGS.TITLE" | translate }}</h1>
+        <p class="header-subtitle">{{ "SETTINGS.SUBTITLE" | translate }}</p>
       </div>
     </div>
   </header>
@@ -23,14 +23,14 @@
             <ion-icon name="server-outline"></ion-icon>
           </div>
           <div class="card-header-text">
-            <h2 class="card-title">LM Studio Server</h2>
-            <p class="card-subtitle">Local AI model server address</p>
+            <h2 class="card-title">{{ "SETTINGS.SERVER_TITLE" | translate }}</h2>
+            <p class="card-subtitle">{{ "SETTINGS.SERVER_SUBTITLE" | translate }}</p>
           </div>
         </div>
 
         <form [formGroup]="settingsForm" class="settings-form">
           <div class="field-group">
-            <label class="field-label" for="serverAddress">Server URL</label>
+            <label class="field-label" for="serverAddress">{{ "SETTINGS.SERVER_URL" | translate }}</label>
             <div class="field-input-wrapper">
               <ion-icon name="globe-outline" class="field-prefix-icon"></ion-icon>
               <ion-input
@@ -40,7 +40,7 @@
                 placeholder="http://127.0.0.1:1234"
               ></ion-input>
             </div>
-            <p class="field-hint">Make sure LM Studio is running with the server enabled.</p>
+            <p class="field-hint">{{ "SETTINGS.SERVER_HINT" | translate }}</p>
           </div>
 
           <ion-button
@@ -49,7 +49,7 @@
             (click)="saveSettings()"
           >
             <ion-icon name="checkmark-circle-outline" slot="start"></ion-icon>
-            Save Settings
+            {{ "SETTINGS.SAVE_BUTTON" | translate }}
           </ion-button>
         </form>
       </div>
@@ -59,9 +59,41 @@
         <div class="info-row">
           <ion-icon name="information-circle-outline" class="info-icon"></ion-icon>
           <div class="info-text">
-            <strong>How to set up LM Studio?</strong>
-            <p>Open LM Studio → "Local Server" → Enable the server → Copy the URL shown.</p>
+            <strong>{{ "SETTINGS.INFO_TITLE" | translate }}</strong>
+            <p>{{ "SETTINGS.INFO_TEXT" | translate }}</p>
           </div>
+        </div>
+      </div>
+
+      <!-- Language Card -->
+      <div class="settings-card language-card">
+        <div class="card-header">
+          <div class="card-icon language-card-icon">
+            <ion-icon name="language-outline"></ion-icon>
+          </div>
+          <div class="card-header-text">
+            <h2 class="card-title">{{ "SETTINGS.LANGUAGE_TITLE" | translate }}</h2>
+            <p class="card-subtitle">{{ "SETTINGS.LANGUAGE_SUBTITLE" | translate }}</p>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">{{ "SETTINGS.LANGUAGE" | translate }}</label>
+          <div class="language-select-wrapper">
+            <ion-icon name="globe-outline" class="field-prefix-icon"></ion-icon>
+            <ion-select
+              class="language-select"
+              interface="popover"
+              [placeholder]="'SETTINGS.SELECT_LANGUAGE' | translate"
+              [value]="selectedlanguage"
+              (ionChange)="changeLanguage($event)"
+            >
+              @for (language of languages; track language.id) {
+                <ion-select-option [value]="language.id">{{ language.label }}</ion-select-option>
+              }
+            </ion-select>
+          </div>
+          <p class="field-hint">{{ "SETTINGS.SELECT_LANGUAGE" | translate }}</p>
         </div>
       </div>
 

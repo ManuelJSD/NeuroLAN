@@ -1,0 +1,47 @@
+{
+  "SETTINGS": {
+    "TITLE": "Settings",
+    "SUBTITLE": "Adjust the connection parameters",
+    "SERVER_TITLE": "LM Studio Server",
+    "SERVER_SUBTITLE": "Local AI model server address",
+    "SERVER_URL": "Server URL",
+    "SERVER_HINT": "Make sure LM Studio is running with the server enabled.",
+    "SAVE_BUTTON": "Save Settings",
+    "INFO_TITLE": "How to set up LM Studio?",
+    "INFO_TEXT": "Open LM Studio → \"Local Server\" → Enable the server → Copy the URL shown.",
+    "SELECT_LANGUAGE": "Select language",
+    "LANGUAGE": "Language",
+    "LANGUAGE_TITLE": "App Language",
+    "LANGUAGE_SUBTITLE": "Choose the interface display language",
+    "TOAST_ERROR": "⚠️ No server URL was specified",
+    "TOAST_SUCCESS": "✅ Settings saved successfully"
+  },
+  "MENU": {
+    "LOCAL_AI": "Local AI",
+    "NEW_CHAT": "New Chat",
+    "NAVIGATION": "Navigation",
+    "RECENT": "Recent Conversations",
+    "PAGES": {
+      "CHAT": "Chat",
+      "SETTINGS": "Settings"
+    }
+  },
+  "CHAT": {
+    "SELECT_MODEL": "Select model",
+    "RELOAD_MODELS": "Reload models",
+    "TOKENS": "tokens",
+    "NEW_CHAT": "New Chat",
+    "NEW_BTN": "New",
+    "WELCOME_TITLE": "Hello! I'm NeuroLAN",
+    "WELCOME_SUBTITLE": "Select an AI model and type your first message to start a conversation.",
+    "USER_ROLE": "You",
+    "ASSISTANT_ROLE": "Assistant",
+    "THINKING": "Thinking",
+    "TYPE_MESSAGE": "Type your message...",
+    "ERROR_SELECT_MODEL": "You must select a model",
+    "ERROR_SEND_FAILED": "Failed to send message"
+  },
+  "CONVERSATIONS": {
+    "EMPTY": "No conversations yet"
+  }
+}

@@ -6,11 +6,14 @@ import {
   IonInput,
   IonButton,
   IonToast,
-  IonIcon
+  IonIcon,
+  IonSelect,
+  IonSelectOption
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { settingsOutline, serverOutline, globeOutline, checkmarkCircleOutline, informationCircleOutline } from 'ionicons/icons';
+import { settingsOutline, serverOutline, globeOutline, checkmarkCircleOutline, informationCircleOutline, languageOutline } from 'ionicons/icons';
 import { SettingsService } from 'src/app/core/services/settings';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-settings',
@@ -20,28 +23,38 @@ import { SettingsService } from 'src/app/core/services/settings';
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    TranslatePipe,
     IonInput,
     IonContent,
     IonButton,
     IonToast,
     IonIcon,
+    IonSelect,
+    IonSelectOption,
   ]
 })
 export class SettingsPage implements OnInit {
 
   private settingsService = inject(SettingsService);
+  private translateService = inject(TranslateService);
   private formBuilder = inject(FormBuilder);
   isToastOpen: boolean = false;
   toastMessage: string = '';
 
   baseUrl: string | null = '';
+  selectedlanguage: string | null = '';
+
+  languages = [
+    { id: 'en', label: 'English' },
+    { id: 'es', label: 'Español' },
+  ];
 
   settingsForm = this.formBuilder.group({
     serverAddress: [''],
   });
 
   constructor() {
-    addIcons({ settingsOutline, serverOutline, globeOutline, checkmarkCircleOutline, informationCircleOutline });
+    addIcons({ settingsOutline, serverOutline, globeOutline, checkmarkCircleOutline, informationCircleOutline, languageOutline });
   }
 
   ngOnInit() {
@@ -51,18 +64,27 @@ export class SettingsPage implements OnInit {
   async getSettings() {
     this.baseUrl = await this.settingsService.getBaseUrl();
     this.settingsForm.setValue({ serverAddress: this.baseUrl ?? 'http://127.0.0.1:1234' });
+
+    this.selectedlanguage = await this.settingsService.getLanguage();
+  }
+
+  changeLanguage(event: CustomEvent) {
+    const lang = event.detail.value as string;
+    this.selectedlanguage = lang;
+    this.translateService.use(lang);
+    this.settingsService.setLanguage(lang);
   }
 
   saveSettings() {
     this.baseUrl = this.settingsForm.value.serverAddress ?? null;
 
     if (!this.baseUrl) {
-      this.setOpen(true, '⚠️ No server URL was specified');
+      this.setOpen(true, this.translateService.instant('SETTINGS.TOAST_ERROR'));
       return;
     }
 
     this.settingsService.setBaseUrl(this.baseUrl);
-    this.setOpen(true, '✅ Settings saved successfully');
+    this.setOpen(true, this.translateService.instant('SETTINGS.TOAST_SUCCESS'));
   }
 
   setOpen(isOpen: boolean, message?: string) {
@@ -74,3 +96,4 @@ export class SettingsPage implements OnInit {
   }
 
 }
+

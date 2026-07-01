@@ -2,22 +2,7 @@
    NeuroLAN Chat Page — Premium Dark UI (Catppuccin Mocha)
    ========================================================================== */
 
-// Variables
-$crust:    #11111b;
-$mantle:   #181825;
-$base:     #1e1e2e;
-$surface0: #313244;
-$surface1: #45475a;
-$surface2: #585b70;
-$overlay0: #6c7086;
-$overlay1: #7f849c;
-$subtext0: #a6adc8;
-$subtext1: #bac2de;
-$text:     #cdd6f4;
-$blue:     #89b4fa;
-$mauve:    #cba6f7;
-$red:      #f38ba8;
-$green:    #a6e3a1;
+@use '../../../theme/variables' as *;
 
 $font-main: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
@@ -233,6 +218,7 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
 
 .chat-content {
   flex: 1 1 auto;
+  min-height: 0;
   --background: transparent;
   position: relative;
   z-index: 1;

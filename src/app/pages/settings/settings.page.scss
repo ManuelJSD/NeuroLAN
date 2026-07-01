@@ -2,21 +2,7 @@
 // NeuroLAN Settings Page — Premium Dark UI
 // ============================================================
 
-$crust:    #11111b;
-$mantle:   #181825;
-$base:     #1e1e2e;
-$surface0: #313244;
-$surface1: #45475a;
-$surface2: #585b70;
-$overlay0: #6c7086;
-$subtext0: #a6adc8;
-$subtext1: #bac2de;
-$text:     #cdd6f4;
-$blue:     #89b4fa;
-$mauve:    #cba6f7;
-$red:      #f38ba8;
-$green:    #a6e3a1;
-$yellow:   #f9e2af;
+@use '../../../theme/variables' as *;
 
 $font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
@@ -47,7 +33,7 @@ $font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-seri
     right: -60px;
     width: 300px;
     height: 300px;
-    background: radial-gradient(circle, rgba(203, 166, 247, 0.05) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(203, 166, 247, 0.09) 0%, transparent 70%);
     pointer-events: none;
   }
 }
@@ -102,6 +88,8 @@ $font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-seri
     color: $subtext0;
     margin: 0;
     font-family: $font;
+    line-height: 1.5;
+    letter-spacing: 0.1px;
   }
 }
 
@@ -111,6 +99,7 @@ $font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-seri
 
 .settings-content {
   flex: 1;
+  min-height: 0;
   --background: transparent;
 }
 
@@ -135,12 +124,12 @@ $font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-seri
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+  will-change: opacity, transform;
   animation: cardFadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   opacity: 0;
 
-  &:nth-child(2) {
-    animation-delay: 0.08s;
-  }
+  &:nth-child(2) { animation-delay: 0.08s; }
+  &:nth-child(3) { animation-delay: 0.16s; }
 }
 
 @keyframes cardFadeIn {
@@ -235,7 +224,8 @@ $font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-seri
   flex-shrink: 0;
   transition: color 0.2s ease;
 
-  .field-input-wrapper:focus-within & {
+  .field-input-wrapper:focus-within &,
+  .language-select-wrapper:focus-within & {
     color: $blue;
   }
 }
@@ -297,6 +287,13 @@ $font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-seri
   &:active::part(native) {
     transform: scale(0.98) translateY(0);
   }
+
+  &[disabled]::part(native) {
+    opacity: 0.4;
+    box-shadow: none;
+    transform: none;
+    cursor: not-allowed;
+  }
 }
 
 // ============================================================
@@ -341,4 +338,51 @@ $font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-seri
       font-family: $font;
     }
   }
+}
+
+// ============================================================
+// Language Card
+// ============================================================
+
+.language-card {
+  // Mauve accent instead of blue — visually distinct from server card
+  .language-card-icon {
+    background: rgba(203, 166, 247, 0.1);
+    border-color: rgba(203, 166, 247, 0.2);
+    color: $mauve;
+  }
+}
+
+.language-select-wrapper {
+  display: flex;
+  align-items: center;
+  background: rgba(24, 24, 37, 0.8);
+  border: 1px solid $surface1;
+  border-radius: 12px;
+  padding: 0 14px;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  gap: 10px;
+  cursor: pointer;
+
+  &:focus-within {
+    border-color: rgba(203, 166, 247, 0.6);
+    box-shadow: 0 0 0 3px rgba(203, 166, 247, 0.08);
+  }
+}
+
+.language-select {
+  --background:        transparent;
+  --color:             #{$text};
+  --placeholder-color: #{$overlay0};
+  --padding-start:     0;
+  --padding-end:       14px;
+  --padding-top:       14px;
+  --padding-bottom:    14px;
+  flex: 1;
+  font-size: 0.95rem;
+  font-family: $font;
+  font-weight: 500;
+
+  --highlight-color-focused: #{$mauve};
+  --highlight-color-valid:   #{$mauve};
 }

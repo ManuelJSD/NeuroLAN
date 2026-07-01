@@ -10,6 +10,8 @@ import { provideHttpClient } from '@angular/common/http';
 import { importProvidersFrom } from '@angular/core';
 
 import { MarkdownModule } from 'ngx-markdown';
+import { provideTranslateService } from '@ngx-translate/core';
+import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 
 bootstrapApplication(AppComponent, {
   providers: [
@@ -22,7 +24,14 @@ bootstrapApplication(AppComponent, {
       IonicStorageModule.forRoot({
         name: '__neurochat',
         driverOrder: [Drivers.IndexedDB, Drivers.LocalStorage],
-      })
-    )
+      }),
+    ),
+    provideTranslateService({
+      loader: provideTranslateHttpLoader({
+        prefix: './assets/i18n/',
+        suffix: '.json'
+      }),
+      fallbackLang: 'en'
+    }),
   ],
 });

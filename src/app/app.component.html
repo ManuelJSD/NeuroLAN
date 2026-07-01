@@ -11,7 +11,7 @@
           </div>
           <div class="brand-text">
             <span class="brand-name">NeuroLAN</span>
-            <span class="brand-subtitle">IA Local</span>
+            <span class="brand-subtitle">{{ 'MENU.LOCAL_AI' | translate }}</span>
           </div>
         </div>
 
@@ -20,14 +20,14 @@
           <ion-menu-toggle auto-hide="false">
             <a class="new-chat-btn" routerLink="/chat" routerDirection="root">
               <ion-icon name="add-circle-outline" class="new-chat-icon"></ion-icon>
-              <span>Nuevo Chat</span>
+              <span>{{ 'MENU.NEW_CHAT' | translate }}</span>
             </a>
           </ion-menu-toggle>
         </div>
 
         <!-- Nav Section -->
         <nav class="menu-nav">
-          <p class="menu-section-label">Navigation</p>
+          <p class="menu-section-label">{{ 'MENU.NAVIGATION' | translate }}</p>
           <ul class="menu-list">
             @for (p of appPages; track p; let i = $index) {
               <li class="menu-list-item">
@@ -43,7 +43,7 @@
                     <div class="menu-item-icon" slot="start">
                       <ion-icon [name]="p.icon"></ion-icon>
                     </div>
-                    <ion-label class="menu-item-label">{{ p.title }}</ion-label>
+                    <ion-label class="menu-item-label">{{ 'MENU.PAGES.' + p.title.toUpperCase() | translate }}</ion-label>
                     <div class="menu-item-indicator" slot="end"></div>
                   </ion-item>
                 </ion-menu-toggle>
@@ -56,7 +56,7 @@
         <div class="menu-history">
           <p class="menu-section-label">
             <ion-icon name="time-outline" class="section-icon"></ion-icon>
-            Recent Conversations
+            {{ 'MENU.RECENT' | translate }}
           </p>
           <ul class="history-list">
               <app-conversations></app-conversations>

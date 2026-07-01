@@ -6,7 +6,7 @@ import { LmStudioService } from 'src/app/core/services/lm-studio';
 import { ChatMessage, OpenAIModel, UsageTokens } from 'src/app/core/models/lmstudio.model';
 import { MarkdownComponent } from 'ngx-markdown';
 import { addIcons } from 'ionicons';
-import { createOutline } from 'ionicons/icons';
+import { createOutline, refreshOutline } from 'ionicons/icons';
 import { ConversationService } from 'src/app/core/services/conversation';
 import { ActivatedRoute } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
@@ -53,7 +53,7 @@ export class ChatPage implements OnInit {
   currentConversationCreatedAt: number = Date.now();
 
   constructor() {
-    addIcons({ createOutline });
+    addIcons({ createOutline, refreshOutline });
   }
   ngOnInit(): void {
     this.loadModels();

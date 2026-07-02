@@ -51,6 +51,7 @@ export class SettingsPage implements OnInit {
 
   settingsForm = this.formBuilder.group({
     serverAddress: [''],
+    languageSelect: [''],
   });
 
   constructor() {
@@ -63,9 +64,14 @@ export class SettingsPage implements OnInit {
 
   async getSettings() {
     this.baseUrl = await this.settingsService.getBaseUrl();
-    this.settingsForm.setValue({ serverAddress: this.baseUrl ?? 'http://127.0.0.1:1234' });
+    const lang = await this.settingsService.getLanguage();
+    this.selectedlanguage = lang ? lang : 'en';
 
-    this.selectedlanguage = await this.settingsService.getLanguage();
+    this.settingsForm.setValue({
+      serverAddress: this.baseUrl ?? 'http://127.0.0.1:1234',
+      languageSelect: this.selectedlanguage
+    });
+
   }
 
   changeLanguage(event: CustomEvent) {

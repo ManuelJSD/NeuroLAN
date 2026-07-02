@@ -80,3 +80,31 @@ npx cap open android
 Inside Android Studio:
 - Select a virtual device (Emulator) or connect a physical Android device and click the **Run** button.
 - To generate the APK: go to **Build** > **Build Bundle(s) / APK(s)** > **Build APK(s)**. The built APK will be located at `android/app/build/outputs/apk/debug/app-debug.apk`.
+
+## Releases
+
+This project is configured with a GitHub Actions workflow to automatically generate releases.
+
+### How to trigger a release
+
+**Option 1: Using Tags (Recommended)**
+1. Commit your changes and bump the version in `package.json` if needed.
+2. Create a git tag starting with `v` (e.g., `v1.0.0`):
+   ```bash
+   git tag v1.0.0
+   git push origin v1.0.0
+   ```
+3. The GitHub Actions workflow will automatically trigger and create the release.
+
+**Option 2: Manual Trigger**
+1. Go to the **Actions** tab in your GitHub repository.
+2. Select the **Generate Release** workflow on the left sidebar.
+3. Click the **Run workflow** dropdown on the right.
+4. Provide a tag name (e.g., `v1.0.0`) and click **Run workflow**.
+
+### Release Contents
+Once the workflow finishes, the release will include:
+- **Source code** (`.zip` and `.tar.gz`).
+- **Web Build** (`web-build.zip`): The compiled Angular app ready for web deployment.
+- **Android APK (Debug)** (`app-debug.apk`): An unsigned debug build for easy testing on Android devices.
+- **Android APK (Release)** (`app-release-unsigned.apk`): An unsigned release build.

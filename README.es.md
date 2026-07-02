@@ -80,3 +80,31 @@ npx cap open android
 Dentro de Android Studio:
 - Conecta un dispositivo Android físico o inicia un emulador y haz clic en el botón verde **Run** (Ejecutar).
 - Para generar el archivo APK ejecutable: ve a **Build** > **Build Bundle(s) / APK(s)** > **Build APK(s)**. El APK compilado se guardará en la ruta `android/app/build/outputs/apk/debug/app-debug.apk`.
+
+## Releases
+
+Este proyecto está configurado con un workflow de GitHub Actions para generar releases de forma automática.
+
+### Cómo generar una release
+
+**Opción 1: Usando Tags (Recomendado)**
+1. Haz commit de tus cambios y actualiza la versión en el `package.json` si es necesario.
+2. Crea un tag en git que empiece por `v` (ej. `v1.0.0`):
+   ```bash
+   git tag v1.0.0
+   git push origin v1.0.0
+   ```
+3. El workflow de GitHub Actions se disparará automáticamente y creará la release.
+
+**Opción 2: Activación Manual**
+1. Ve a la pestaña **Actions** en tu repositorio de GitHub.
+2. Selecciona el workflow **Generate Release** en la barra lateral izquierda.
+3. Haz clic en el botón desplegable **Run workflow** a la derecha.
+4. Introduce el nombre del tag (ej. `v1.0.0`) y haz clic en **Run workflow**.
+
+### Contenido de la Release
+Una vez que el workflow termine, la release incluirá:
+- **Código Fuente** (`.zip` y `.tar.gz`).
+- **Build Web** (`web-build.zip`): La aplicación Angular compilada y lista para su despliegue web.
+- **APK de Android (Debug)** (`app-debug.apk`): Build de depuración sin firmar, ideal para pruebas fáciles en dispositivos Android.
+- **APK de Android (Release)** (`app-release-unsigned.apk`): Build de producción sin firmar.

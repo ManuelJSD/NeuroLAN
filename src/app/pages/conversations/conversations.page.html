@@ -3,8 +3,21 @@
     <li class="history-item" [routerLink]="['/chat', conversation.id]" routerLinkActive="active">
       <ion-icon name="chatbubble-outline" class="history-icon"></ion-icon>
       <span class="history-label">{{ conversation.title }}</span>
+      <ion-icon name="trash-outline" class="delete-icon" (click)="presentDeleteConfirm(conversation.id); $event.stopPropagation()"></ion-icon>
+      <ion-icon name="create-outline" class="edit-icon"></ion-icon>
     </li>
   } @empty {
     <li class="history-empty">{{ 'CONVERSATIONS.EMPTY' | translate }}</li>
   }
 </div>
+
+<ion-alert
+  [isOpen]="isAlertOpen"
+  class="custom-alert"
+  header="{{ 'CHAT.ALERT_DELETE' | translate }}"
+  [buttons]="[
+    { text: 'CHAT.ALERT_NO' | translate, role: 'cancel' },
+    { text: 'CHAT.ALERT_YES' | translate, role: 'confirm' }
+  ]"
+  (didDismiss)="onAlertDismiss($event)">
+</ion-alert>

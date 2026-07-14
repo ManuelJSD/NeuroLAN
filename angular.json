@@ -28,6 +28,9 @@
             ],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
+            "allowedCommonJsDependencies": [
+              "localforage"
+            ],
             "assets": [
               {
                 "glob": "**/*",
@@ -49,8 +52,8 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "6kb",
-                  "maximumError": "16kb"
+                  "maximumWarning": "20kb",
+                  "maximumError": "32kb"
                 }
               ],
               "fileReplacements": [

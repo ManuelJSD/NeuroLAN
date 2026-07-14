@@ -46,4 +46,16 @@ export class ConversationService {
     return conversations.find(c => c.id === id);
   }
 
+  async deleteConversation(id: string): Promise <Conversation | undefined>{
+    const conversations = await this.loadConversartions();
+    const deleted = conversations.find(c => c.id === id);
+
+    if (deleted) {
+      const filtered = conversations.filter(c => c.id !== id);
+      await localforage.setItem(this.STORAGE_KEY, filtered);
+      this.conversationsSubject.next(filtered);
+    }
+    return deleted;
+  }
+
 }

@@ -39,7 +39,10 @@
     "THINKING": "Pensando",
     "TYPE_MESSAGE": "Escribe tu mensaje...",
     "ERROR_SELECT_MODEL": "Debes seleccionar un modelo",
-    "ERROR_SEND_FAILED": "Error al enviar el mensaje"
+    "ERROR_SEND_FAILED": "Error al enviar el mensaje",
+    "ALERT_DELETE": "¿Estás seguro de que quieres borrar la conversación?",
+    "ALERT_NO": "No",
+    "ALERT_YES": "Sí"
   },
   "CONVERSATIONS": {
     "EMPTY": "Aún no hay conversaciones"

@@ -44,12 +44,12 @@ export class ChatPage implements OnInit {
   models: OpenAIModel[] = [];
   selectedModelKey: string = '';
 
-  messages: ChatMessage[] = [];
+  messages: ChatMessage[] = []
   usage?: UsageTokens;
   userInput: string = '';
   isSending = false;
   errorMessage: string | null = null;
-  currentConversationId: string = crypto.randomUUID();
+  currentConversationId: string = this.generateId();
   currentConversationCreatedAt: number = Date.now();
 
   constructor() {
@@ -58,12 +58,15 @@ export class ChatPage implements OnInit {
   ngOnInit(): void {
     this.loadModels();
 
-    // We're trying to get the ID param to get data from conversation
-    const id = this.route.snapshot.paramMap.get('id');
-
+  // Subscribe to URL parameter changes.
+  this.route.paramMap.subscribe(params => {
+    const id = params.get('id');
     if (id) {
       this.loadConversation(id);
+    } else {
+      this.newChat(); // If there is no ID, clear the chat.
     }
+  });
   }
 
   loadModels() {
@@ -83,7 +86,7 @@ export class ChatPage implements OnInit {
     this.usage = undefined;
     this.errorMessage = null;
     this.isSending = false;
-    this.currentConversationId = crypto.randomUUID();
+    this.currentConversationId = this.generateId();
     this.currentConversationCreatedAt = Date.now();
   }
 
@@ -154,6 +157,17 @@ export class ChatPage implements OnInit {
     if (!event.shiftKey) {
       event.preventDefault();
       this.sendMessage();
+    }
+  }
+
+  private generateId() {
+    // Use randomUUID if available (secure context); otherwise, generate a random ID.
+    if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+      return crypto.randomUUID();
+
+    } else {
+      return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+
     }
   }
 

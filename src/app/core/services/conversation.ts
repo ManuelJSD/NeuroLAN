@@ -30,6 +30,8 @@ export class ConversationService {
       conversations.push(conversation);
     }
 
+    conversations.sort((a, b) => b.createdAt - a.createdAt);
+
     await localforage.setItem(this.STORAGE_KEY, conversations);
     // Notify all subscribers with the updated list
     this.conversationsSubject.next(conversations);
@@ -37,7 +39,9 @@ export class ConversationService {
 
   async loadConversartions(): Promise<Conversation[]> {
     const stored = await localforage.getItem<Conversation[]>(this.STORAGE_KEY);
-    return stored ?? [];
+    const conversations = stored ?? [];
+
+    return conversations.sort((a, b) => b.createdAt - a.createdAt);
   }
 
   async getConversationsbyId(id: string): Promise <Conversation | undefined>{

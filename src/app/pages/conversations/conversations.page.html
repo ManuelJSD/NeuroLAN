@@ -4,7 +4,7 @@
       <ion-icon name="chatbubble-outline" class="history-icon"></ion-icon>
       <span class="history-label">{{ conversation.title }}</span>
       <ion-icon name="trash-outline" class="delete-icon" (click)="presentDeleteConfirm(conversation.id); $event.stopPropagation()"></ion-icon>
-      <ion-icon name="create-outline" class="edit-icon"></ion-icon>
+      <ion-icon name="create-outline" class="edit-icon" (click)="presentEditConfirm(conversation.id); $event.stopPropagation()"></ion-icon>
     </li>
   } @empty {
     <li class="history-empty">{{ 'CONVERSATIONS.EMPTY' | translate }}</li>
@@ -12,12 +12,23 @@
 </div>
 
 <ion-alert
-  [isOpen]="isAlertOpen"
-  class="custom-alert"
+  [isOpen]="isDeleteAlertOpen"
+  class="delete-alert"
   header="{{ 'CHAT.ALERT_DELETE' | translate }}"
   [buttons]="[
     { text: 'CHAT.ALERT_NO' | translate, role: 'cancel' },
     { text: 'CHAT.ALERT_YES' | translate, role: 'confirm' }
   ]"
-  (didDismiss)="onAlertDismiss($event)">
+  (didDismiss)="onDeleteAlertDismiss($event)">
 </ion-alert>
+
+<ion-alert
+  [isOpen]="isEditAlertOpen"
+  class="present-alert"
+  header="{{ 'CHAT.ALERT_EDIT' | translate }}"
+  [inputs]="alertEditInputs"
+  [buttons]="[
+    { text: 'CHAT.ALERT_NO' | translate, role: 'cancel' },
+    { text: 'CHAT.ALERT_YES' | translate, role: 'confirm' }
+  ]"
+  (didDismiss)="onEditAlertDismiss($event)"></ion-alert>

@@ -20,8 +20,16 @@ export class ConversationsPage {
 
   private conversationService = inject(ConversationService);
 
-  isAlertOpen: boolean = false;
+  // Delete Alert State
+  isDeleteAlertOpen: boolean = false;
   private conversationIdToDelete: string | null = null;
+
+  // Edit Alert State
+  isEditAlertOpen: boolean = false;
+  private conversationIdToEdit: string | null = null;
+  private conversationTitleToEdit: string | null = null;
+
+  alertEditInputs = [{}];
 
   // Observable that updates automatically whenever a conversation is saved
   readonly conversations$ = this.conversationService.conversations$;
@@ -30,13 +38,14 @@ export class ConversationsPage {
     addIcons({ chatbubblesOutline, arrowBackOutline, chatbubbleOutline, trashOutline, createOutline });
   }
 
+  // Delete Alert Methods
   presentDeleteConfirm(id: string) {
     this.conversationIdToDelete = id;
-    this.isAlertOpen = true;
+    this.isDeleteAlertOpen = true;
   }
 
-  onAlertDismiss(event: any) {
-    this.isAlertOpen = false;
+  onDeleteAlertDismiss(event: any) {
+    this.isDeleteAlertOpen = false;
 
     if (event.detail.role === 'confirm' && this.conversationIdToDelete) {
       this.deleteConversation(this.conversationIdToDelete);
@@ -53,6 +62,32 @@ export class ConversationsPage {
     }
   }
 
+ //Edit Alert Methods
+  async presentEditConfirm(id: string) {
+  this.conversationIdToEdit = id;
+  this.isEditAlertOpen = true;
 
+  this.alertEditInputs = [
+    {
+      name: 'title',
+      type: 'text',
+      value: await this.conversationService.getConversationTitle(id)
+    }
+  ];
+ }
+
+ async onEditAlertDismiss(event: any) {
+  this.isEditAlertOpen = false;
+
+  if (event.detail.role === 'confirm' && this.conversationIdToEdit) {
+    const newTitle = event.detail.data?.values?.title?.trim();
+
+    if (newTitle) {
+      await this.conversationService.updateConversationTitle(this.conversationIdToEdit, newTitle);
+    }
+  }
+
+  this.conversationIdToEdit = null;
+ }
 
 }

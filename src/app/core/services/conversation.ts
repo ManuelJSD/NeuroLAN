@@ -58,4 +58,19 @@ export class ConversationService {
     return deleted;
   }
 
+  async getConversationTitle(id: string): Promise<string | null> {
+    const conversation = await this.getConversationsbyId(id);
+    return conversation?.title ?? null;
+  }
+
+  async updateConversationTitle(id: string, newTitle: string): Promise <void> {
+    const conversation = await this.getConversationsbyId(id);
+
+    if (conversation) {
+      conversation.title = newTitle;
+      await this.saveConversation(conversation);
+
+    }
+
+  }
 }

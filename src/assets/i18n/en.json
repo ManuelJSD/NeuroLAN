@@ -46,6 +46,9 @@
     "ALERT_YES": "Yes"
   },
   "CONVERSATIONS": {
-    "EMPTY": "No conversations yet"
+    "EMPTY": "No conversations yet",
+    "EDIT": "Edit",
+    "DELETE": "Delete",
+    "CANCEL": "Cancel"
   }
 }

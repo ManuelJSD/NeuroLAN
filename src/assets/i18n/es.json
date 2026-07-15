@@ -46,6 +46,9 @@
     "ALERT_YES": "Sí"
   },
   "CONVERSATIONS": {
-    "EMPTY": "Aún no hay conversaciones"
+    "EMPTY": "Aún no hay conversaciones",
+    "EDIT": "Editar",
+    "DELETE": "Eliminar",
+    "CANCEL": "Cancelar"
   }
 }

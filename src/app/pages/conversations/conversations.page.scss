@@ -235,3 +235,24 @@ $font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-seri
     font-size: 1rem;
   }
 }
+
+// ============================================================
+// Conversation Options (Three dots)
+// ============================================================
+
+.options-button {
+  margin-left: auto; /* Push button to the right end in flex containers */
+  --color: #{$overlay0}; /* Default subtle color */
+  --color-hover: #{$text}; /* Hover color */
+  height: 38px;
+  width: 38px;
+  --padding-start: 0;
+  --padding-end: 0;
+  margin-right: -4px; /* Fine adjustment */
+
+  ion-icon {
+    font-size: 1.15rem;
+  }
+}
+
+

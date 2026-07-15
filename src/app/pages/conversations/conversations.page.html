@@ -3,8 +3,9 @@
     <li class="history-item" [routerLink]="['/chat', conversation.id]" routerLinkActive="active">
       <ion-icon name="chatbubble-outline" class="history-icon"></ion-icon>
       <span class="history-label">{{ conversation.title }}</span>
-      <ion-icon name="trash-outline" class="delete-icon" (click)="presentDeleteConfirm(conversation.id); $event.stopPropagation()"></ion-icon>
-      <ion-icon name="create-outline" class="edit-icon" (click)="presentEditConfirm(conversation.id); $event.stopPropagation()"></ion-icon>
+      <ion-button class="options-button" fill="clear" (click)="presentActionSheet(conversation, $event)">
+        <ion-icon slot="icon-only" name="ellipsis-vertical-outline"></ion-icon>
+      </ion-button>
     </li>
   } @empty {
     <li class="history-empty">{{ 'CONVERSATIONS.EMPTY' | translate }}</li>

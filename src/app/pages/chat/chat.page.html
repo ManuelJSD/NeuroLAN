@@ -69,10 +69,13 @@
 
         <!-- Bubble content -->
         <div class="message-bubble">
-          <div class="message-sender">{{ (msg.role === 'user' ? 'CHAT.USER_ROLE' : 'CHAT.ASSISTANT_ROLE') | translate }}</div>
+          <div class="message-sender message-sender-assistant">{{ (msg.role === 'user' ? 'CHAT.USER_ROLE' : 'CHAT.ASSISTANT_ROLE') | translate }}</div>
 
           <markdown class="markdown-view" *ngIf="msg.role === 'assistant'" [data]="msg.content"></markdown>
           <div class="message-text" *ngIf="msg.role === 'user'">{{ msg.content }}</div>
+          <div class="message-meta" *ngIf="msg.responseTime !== undefined">
+            <span class="response-time">⏱️ {{ msg.responseTime | number:'1.1-2' }}s</span>
+          </div>
         </div>
       </div>
 

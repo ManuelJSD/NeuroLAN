@@ -14,6 +14,7 @@ export type ChatRole = 'system' | 'user' | 'assistant';
 export interface ChatMessage {
   role: ChatRole;
   content: string;
+  responseTime?: number;
 }
 
 export interface LmStudioChatRequest {

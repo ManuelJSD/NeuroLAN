@@ -398,6 +398,26 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
     font-family: $font-main;
   }
 
+  /* --- Message metadata --- */
+  .message-meta {
+    display: flex;
+    align-items: center;
+    margin-top: 8px;
+
+    .response-time {
+      font-size: 0.75rem;
+      font-family: $font-mono;
+      color: $subtext0;
+      background: rgba(49, 50, 68, 0.4);
+      padding: 3px 8px;
+      border-radius: 6px;
+      border: 1px solid rgba(69, 71, 90, 0.3);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+  }
+
   /* --- User variant --- */
   &.user {
     flex-direction: row-reverse;

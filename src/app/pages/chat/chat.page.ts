@@ -124,14 +124,18 @@ export class ChatPage implements OnInit {
     this.isSending = true;
     this.errorMessage = null;
 
+    const startTime = Date.now();
+
     this.lmStudioService.sendChat({
       model: this.selectedModelKey,
       messages: this.messages
     }).subscribe({
       next: (res) => {
+        const responseTime = (Date.now() - startTime)/1000;
         this.messages.push({
           role: 'assistant',
-          content: res.choices[0].message.content
+          content: res.choices[0].message.content,
+          responseTime: responseTime
         });
         this.usage = res.usage;
         this.isSending = false;

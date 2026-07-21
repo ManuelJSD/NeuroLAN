@@ -3,132 +3,127 @@
 </p>
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/6da96cb3-3e3e-4e26-800f-146f67f174df" alt="NeuroLAN logo" width="220" />
+  <img src="https://github.com/user-attachments/assets/6da96cb3-3e3e-4e26-800f-146f67f174df" alt="NeuroLAN logo" width="200" />
 </p>
 
 # NeuroLAN
 
-NeuroLAN is a cross‑platform chat application (Ionic + Angular) designed to interact with language models running locally in LM Studio within a home network.
-The app connects to the LM Studio server over LAN, lets you select the active model, and chat with a private AI without relying on any cloud services.
+NeuroLAN is a cross-platform chat application (Ionic + Angular) for running conversations with local AI models over your home network. It connects to any server that implements the OpenAI-compatible API — including **LM Studio**, **Ollama**, and similar tools — without sending any data to the cloud.
 
-In future iterations, NeuroLAN will add conversation history management, quick model switching, and basic configuration options, while keeping a _local‑first_ and privacy‑oriented approach.
+> No subscriptions. No cloud. Your hardware, your models, your data.
+
+## Screenshots
+
+**Web**
+
+<p align="center">
+  <img src="docs/screenshots/web.png" alt="Web screenshot" width="700" />
+</p>
+
+**Mobile**
+
+<p align="center">
+  <img src="docs/screenshots/mobile-menu.png" alt="Mobile - side menu" width="250" />
+  &nbsp;&nbsp;&nbsp;
+  <img src="docs/screenshots/mobile-chat.png" alt="Mobile - chat view" width="250" />
+</p>
+
+## Features
+
+- **OpenAI-compatible**: works with LM Studio, Ollama, and any server exposing `/v1/chat/completions`.
+- **Model selector**: pick which loaded model to talk to without leaving the chat.
+- **Conversation history**: conversations are saved locally and persist between sessions.
+- **Cross-platform**: runs in the browser, and as an Android app via Capacitor.
+- **Multilingual UI**: English and Spanish out of the box.
+- **Response timing**: shows how long each response took.
+- **Privacy-first**: no telemetry, no accounts, no external requests.
 
 ## Project structure
 
 ```text
 src/
  ├── app/
- │    ├── app.component.*
- │    ├── app.routes.ts
+ │    ├── app.component.*           # Root component and side menu
+ │    ├── app.routes.ts             # App routing
  │    ├── core/
  │    │    ├── models/
- │    │    │    ├── conversation.model.ts      # Interfaces for conversations (later)
- │    │    │    ├── lmstudio.model.ts         # Interfaces for models and chat
- │    │    ├── services/
- │    │         ├── conversation.service.ts   # Conversation management (later)
- │    │         ├── lm-studio.service.ts      # LM Studio connection
- │    ├── pages/
- │         ├── conversations/
- │         │    ├── conversations.component.* # Conversation list
- │         ├── chat/
- │         │    ├── chat.component.*          # Main chat view
- │         ├── settings/
- │              ├── settings.component.*      # Settings screen (later)
- │              ├── settings.routes.ts        # Settings routes (later)
+ │    │    │    ├── openai.model.ts        # OpenAI API request/response interfaces
+ │    │    │    └── conversation.model.ts  # Conversation data model
+ │    │    └── services/
+ │    │         ├── openai.ts             # OpenAI-compatible API client
+ │    │         ├── conversation.ts       # Conversation storage and management
+ │    │         └── settings.ts          # App settings (base URL, language, etc.)
+ │    └── pages/
+ │         ├── chat/                # Main chat view
+ │         ├── conversations/       # Conversation list (sidebar)
+ │         └── settings/            # Settings screen
  ├── assets/
- ├── environments/
- ├── theme/
+ │    └── i18n/                     # Translation files (en.json, es.json)
+ └── theme/
 ```
 
-## Technologies
+## Requirements
 
-- **Ionic**: Cross‑platform framework for building mobile and desktop apps with web technologies.
-- **Angular**: Component‑based web framework for building modern applications.
-- **TypeScript**: Typed superset of JavaScript that improves code safety and maintainability.
+- **Node.js** 18 or later.
+- A running local inference server with an OpenAI-compatible API:
+  - [LM Studio](https://lmstudio.ai) (default port: `1234`)
+  - [Ollama](https://ollama.com) (default port: `11434`)
 
-## Development and Builds
-
-### Web Development
-
-To run the application locally in the browser:
+## Getting started
 
 ```bash
+# Install dependencies
 npm install
+
+# Start the dev server
 npm start
 ```
 
-### Web Build
+Open `http://localhost:8100` in your browser. Before you can chat, go to **Settings** and enter the URL of your local inference server (e.g. `http://192.168.1.10:1234` for LM Studio or `http://192.168.1.10:11434` for Ollama). Once saved, the model selector will populate and you can start a conversation.
 
-To compile the application for production or web deployment:
+See [docs/setup.md](docs/setup.md) for a detailed step-by-step guide for LM Studio and Ollama.
 
-```bash
-npm run build
-```
+## Technologies
 
-This will compile the Angular application, ready to be hosted on any web server.
+- **[Ionic](https://ionicframework.com/)** — cross-platform UI framework.
+- **[Angular](https://angular.dev/)** — component-based web framework.
+- **[TypeScript](https://www.typescriptlang.org/)** — typed JavaScript.
+- **[Capacitor](https://capacitorjs.com/)** — native Android/iOS bridge.
+- **[LocalForage](https://localforage.github.io/localForage/)** — offline storage.
+- **[ngx-markdown](https://github.com/jfcere/ngx-markdown)** — Markdown rendering in chat.
 
-### Android Development
-
-Capacitor is used to port the application to Android. The native platform has been initialized in the `android/` directory.
-
-#### Requirements
-
-1. **Android Studio** installed on your system.
-2. Android SDK configured.
-
-#### Syncing Changes
-
-Every time you make changes to the Angular code, you need to rebuild the web app and sync it with Capacitor:
+## Android build
 
 ```bash
-# 1. Compile the Angular project (outputs to www/)
+# 1. Build the Angular app
 npm run build
 
-# 2. Sync compiled files and plugins with the native Android project
+# 2. Sync with Capacitor
 npx cap sync
-```
 
-#### Compiling and Running on Android
-
-To open the native project in Android Studio to run it on an emulator/device or build the APK:
-
-```bash
+# 3. Open in Android Studio
 npx cap open android
 ```
 
-Inside Android Studio:
-
-- Select a virtual device (Emulator) or connect a physical Android device and click the **Run** button.
-- To generate the APK: go to **Build** > **Build Bundle(s) / APK(s)** > **Build APK(s)**. The built APK will be located at `android/app/build/outputs/apk/debug/app-debug.apk`.
-
 ## Releases
 
-This project is configured with a GitHub Actions workflow to automatically generate releases.
+Releases are generated automatically via GitHub Actions when you push a tag:
 
-### How to trigger a release
+```bash
+git tag v1.1.0
+git push origin v1.1.0
+```
 
-**Option 1: Using Tags (Recommended)**
+Each release includes the web build (`web-build.zip`), a debug APK, and an unsigned release APK.
 
-1. Commit your changes and bump the version in `package.json` if needed.
-2. Create a git tag starting with `v` (e.g., `v1.0.0`):
-   ```bash
-   git tag v1.0.0
-   git push origin v1.0.0
-   ```
-3. The GitHub Actions workflow will automatically trigger and create the release.
+## Roadmap
 
-**Option 2: Manual Trigger**
+See [docs/TODO.md](docs/TODO.md) for the full list of planned features.
 
-1. Go to the **Actions** tab in your GitHub repository.
-2. Select the **Generate Release** workflow on the left sidebar.
-3. Click the **Run workflow** dropdown on the right.
-4. Provide a tag name (e.g., `v1.0.0`) and click **Run workflow**.
+## Architecture notes
 
-### Release Contents
+See [docs/architecture.md](docs/architecture.md) for an overview of the design decisions and how the codebase is organized.
 
-Once the workflow finishes, the release will include:
+## License
 
-- **Source code** (`.zip` and `.tar.gz`).
-- **Web Build** (`web-build.zip`): The compiled Angular app ready for web deployment.
-- **Android APK (Debug)** (`app-debug.apk`): An unsigned debug build for easy testing on Android devices.
-- **Android APK (Release)** (`app-release-unsigned.apk`): An unsigned release build.
+[GPL-3.0](LICENSE)

@@ -4,7 +4,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 import { IonApp, IonSplitPane, IonMenu, IonContent, IonMenuToggle, IonItem, IonIcon, IonLabel, IonRouterOutlet } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { settingsOutline, timeOutline, chatbubbleOutline, addCircleOutline, chatbubblesOutline } from 'ionicons/icons';
-import { LmStudioService } from './core/services/openai';
+import { OpenAIService } from './core/services/openai';
 import { SettingsService } from './core/services/settings';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { ConversationsPage } from "./pages/conversations/conversations.page";
@@ -38,12 +38,12 @@ export class AppComponent {
 
   public labels = ['Chat 1', 'Chat 2', 'Chat 3', 'Chat 4', 'Chat 5', 'Chat 6'];
 
-  private lmStudio = inject(LmStudioService);
+  private openAIService = inject(OpenAIService);
   private settingsService = inject(SettingsService);
   private translateService = inject(TranslateService);
 
   ngOnInit() {
-    this.lmStudio.getModels().subscribe({
+    this.openAIService.getModels().subscribe({
       next: rest => console.log(rest),
       error: err => console.error('Error getting models ', err),
     });

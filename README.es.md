@@ -3,132 +3,127 @@
 </p>
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/6da96cb3-3e3e-4e26-800f-146f67f174df" alt="NeuroLAN logo" width="220" />
+  <img src="https://github.com/user-attachments/assets/6da96cb3-3e3e-4e26-800f-146f67f174df" alt="NeuroLAN logo" width="200" />
 </p>
 
 # NeuroLAN
 
-NeuroLAN es una aplicación de chat multiplataforma (Ionic + Angular) pensada para interactuar con modelos de lenguaje ejecutados localmente en LM Studio dentro de la red doméstica.
-La aplicación permite conectarse al servidor de LM Studio en la LAN, seleccionar el modelo activo y mantener conversaciones con una IA privada sin depender de servicios en la nube.
+NeuroLAN es una aplicación de chat multiplataforma (Ionic + Angular) para conversar con modelos de IA locales a través de tu red doméstica. Se conecta a cualquier servidor con API compatible con OpenAI — incluyendo **LM Studio**, **Ollama** y similares — sin enviar ningún dato a la nube.
 
-En fases posteriores, NeuroLAN incorporará gestión de historiales de conversación, selección rápida de modelos y opciones básicas de configuración, manteniendo siempre un enfoque _local‑first_ y orientado a la privacidad.
+> Sin suscripciones. Sin nube. Tu hardware, tus modelos, tus datos.
+
+## Capturas de pantalla
+
+**Web**
+
+<p align="center">
+  <img src="docs/screenshots/web.png" alt="Captura web" width="700" />
+</p>
+
+**Móvil**
+
+<p align="center">
+  <img src="docs/screenshots/mobile-menu.png" alt="Móvil - menú lateral" width="250" />
+  &nbsp;&nbsp;&nbsp;
+  <img src="docs/screenshots/mobile-chat.png" alt="Móvil - vista de chat" width="250" />
+</p>
+
+## Características
+
+- **Compatible con OpenAI**: funciona con LM Studio, Ollama y cualquier servidor que exponga `/v1/chat/completions`.
+- **Selector de modelos**: elige el modelo cargado sin salir del chat.
+- **Historial de conversaciones**: las conversaciones se guardan localmente y persisten entre sesiones.
+- **Multiplataforma**: funciona en el navegador y como app Android mediante Capacitor.
+- **Interfaz multiidioma**: inglés y español incluidos.
+- **Tiempo de respuesta**: muestra cuánto tardó cada respuesta.
+- **Privacidad primero**: sin telemetría, sin cuentas, sin peticiones externas.
 
 ## Estructura del proyecto
 
 ```text
 src/
  ├── app/
- │    ├── app.component.*
- │    ├── app.routes.ts
+ │    ├── app.component.*           # Componente raíz y menú lateral
+ │    ├── app.routes.ts             # Rutas de la app
  │    ├── core/
  │    │    ├── models/
- │    │    │    ├── conversation.model.ts      # Interfaces para conversaciones (más adelante)
- │    │    │    ├── lmstudio.model.ts         # Interfaces para modelos y chat
- │    │    ├── services/
- │    │         ├── conversation.service.ts   # Servicio para manejar conversaciones (más adelante)
- │    │         ├── lm-studio.service.ts      # Conexión a LM Studio
- │    ├── pages/
- │         ├── conversations/
- │         │    ├── conversations.component.* # Lista de conversaciones
- │         ├── chat/
- │         │    ├── chat.component.*          # Vista principal de chat
- │         ├── settings/
- │              ├── settings.component.*      # Pantalla de configuración (más adelante)
- │              ├── settings.routes.ts        # Rutas de configuración (más adelante)
+ │    │    │    ├── openai.model.ts        # Interfaces de la API de OpenAI
+ │    │    │    └── conversation.model.ts  # Modelo de datos de conversación
+ │    │    └── services/
+ │    │         ├── openai.ts             # Cliente de la API compatible con OpenAI
+ │    │         ├── conversation.ts       # Almacenamiento y gestión de conversaciones
+ │    │         └── settings.ts          # Ajustes de la app (URL base, idioma, etc.)
+ │    └── pages/
+ │         ├── chat/                # Vista principal de chat
+ │         ├── conversations/       # Lista de conversaciones (barra lateral)
+ │         └── settings/            # Pantalla de ajustes
  ├── assets/
- ├── environments/
- ├── theme/
+ │    └── i18n/                     # Ficheros de traducción (en.json, es.json)
+ └── theme/
 ```
 
-## Tecnologías
+## Requisitos
 
-- **Ionic**: Framework multiplataforma para crear aplicaciones móviles y de escritorio con tecnologías web.
-- **Angular**: Framework basado en componentes para construir aplicaciones web modernas.
-- **TypeScript**: Superconjunto tipado de JavaScript que mejora la seguridad y mantenibilidad del código.
+- **Node.js** 18 o superior.
+- Un servidor de inferencia local con API compatible con OpenAI:
+  - [LM Studio](https://lmstudio.ai) (puerto por defecto: `1234`)
+  - [Ollama](https://ollama.com) (puerto por defecto: `11434`)
 
-## Desarrollo y Compilación
-
-### Desarrollo Web
-
-Para ejecutar la aplicación localmente en el navegador:
+## Primeros pasos
 
 ```bash
+# Instalar dependencias
 npm install
+
+# Iniciar el servidor de desarrollo
 npm start
 ```
 
-### Compilación Web
+Abre `http://localhost:8100` en el navegador. Antes de poder chatear, ve a **Ajustes** e introduce la URL de tu servidor de inferencia local (por ejemplo `http://192.168.1.10:1234` para LM Studio o `http://192.168.1.10:11434` para Ollama). Una vez guardada, el selector de modelos se cargará y podrás iniciar una conversación.
 
-Para compilar la aplicación para producción o despliegue web:
+Consulta [docs/setup.es.md](docs/setup.es.md) para una guía detallada de configuración paso a paso.
 
-```bash
-npm run build
-```
+## Tecnologías
 
-Esto compilará la aplicación Angular, lista para ser alojada en cualquier servidor web.
+- **[Ionic](https://ionicframework.com/)** — framework de UI multiplataforma.
+- **[Angular](https://angular.dev/)** — framework web basado en componentes.
+- **[TypeScript](https://www.typescriptlang.org/)** — JavaScript con tipado estático.
+- **[Capacitor](https://capacitorjs.com/)** — puente nativo para Android/iOS.
+- **[LocalForage](https://localforage.github.io/localForage/)** — almacenamiento offline.
+- **[ngx-markdown](https://github.com/jfcere/ngx-markdown)** — renderizado de Markdown en el chat.
 
-### Desarrollo Android
-
-Se utiliza Capacitor para portar la aplicación a Android. El soporte nativo ya ha sido inicializado en el directorio `android/`.
-
-#### Requisitos
-
-1. **Android Studio** instalado en tu sistema.
-2. SDK de Android configurado.
-
-#### Sincronización de Cambios
-
-Cada vez que realices cambios en el código de Angular, necesitas reconstruir la aplicación web y sincronizarla con Capacitor:
+## Compilación para Android
 
 ```bash
-# 1. Compilar el proyecto Angular (genera la carpeta www/)
+# 1. Compilar la app Angular
 npm run build
 
-# 2. Sincronizar los archivos compilados y plugins con el proyecto nativo de Android
+# 2. Sincronizar con Capacitor
 npx cap sync
-```
 
-#### Compilación y Ejecución en Android
-
-Para abrir el proyecto nativo en Android Studio, desde donde podrás ejecutarlo en un emulador/dispositivo o compilar el APK:
-
-```bash
+# 3. Abrir en Android Studio
 npx cap open android
 ```
 
-Dentro de Android Studio:
-
-- Conecta un dispositivo Android físico o inicia un emulador y haz clic en el botón verde **Run** (Ejecutar).
-- Para generar el archivo APK ejecutable: ve a **Build** > **Build Bundle(s) / APK(s)** > **Build APK(s)**. El APK compilado se guardará en la ruta `android/app/build/outputs/apk/debug/app-debug.apk`.
-
 ## Releases
 
-Este proyecto está configurado con un workflow de GitHub Actions para generar releases de forma automática.
+Las releases se generan automáticamente mediante GitHub Actions al crear un tag:
 
-### Cómo generar una release
+```bash
+git tag v1.1.0
+git push origin v1.1.0
+```
 
-**Opción 1: Usando Tags (Recomendado)**
+Cada release incluye el build web (`web-build.zip`), un APK de depuración y un APK de release sin firmar.
 
-1. Haz commit de tus cambios y actualiza la versión en el `package.json` si es necesario.
-2. Crea un tag en git que empiece por `v` (ej. `v1.0.0`):
-   ```bash
-   git tag v1.0.0
-   git push origin v1.0.0
-   ```
-3. El workflow de GitHub Actions se disparará automáticamente y creará la release.
+## Roadmap
 
-**Opción 2: Activación Manual**
+Consulta [docs/TODO.md](docs/TODO.md) para ver el listado completo de funcionalidades planificadas.
 
-1. Ve a la pestaña **Actions** en tu repositorio de GitHub.
-2. Selecciona el workflow **Generate Release** en la barra lateral izquierda.
-3. Haz clic en el botón desplegable **Run workflow** a la derecha.
-4. Introduce el nombre del tag (ej. `v1.0.0`) y haz clic en **Run workflow**.
+## Notas de arquitectura
 
-### Contenido de la Release
+Consulta [docs/architecture.es.md](docs/architecture.es.md) para un resumen de las decisiones de diseño y la organización del código.
 
-Una vez que el workflow termine, la release incluirá:
+## Licencia
 
-- **Código Fuente** (`.zip` y `.tar.gz`).
-- **Build Web** (`web-build.zip`): La aplicación Angular compilada y lista para su despliegue web.
-- **APK de Android (Debug)** (`app-debug.apk`): Build de depuración sin firmar, ideal para pruebas fáciles en dispositivos Android.
-- **APK de Android (Release)** (`app-release-unsigned.apk`): Build de producción sin firmar.
+[GPL-3.0](LICENSE)

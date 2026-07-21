@@ -4,7 +4,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 import { IonApp, IonSplitPane, IonMenu, IonContent, IonMenuToggle, IonItem, IonIcon, IonLabel, IonRouterOutlet } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { settingsOutline, timeOutline, chatbubbleOutline, addCircleOutline, chatbubblesOutline } from 'ionicons/icons';
-import { LmStudioService } from './core/services/lm-studio';
+import { LmStudioService } from './core/services/openai';
 import { SettingsService } from './core/services/settings';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { ConversationsPage } from "./pages/conversations/conversations.page";

@@ -2,8 +2,8 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule, DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonSelect, IonSelectOption, IonContent, IonLabel, IonButton, IonTextarea, IonSpinner, IonChip, IonMenuButton, IonIcon } from "@ionic/angular/standalone";
-import { LmStudioService } from 'src/app/core/services/lm-studio';
-import { ChatMessage, OpenAIModel, UsageTokens } from 'src/app/core/models/lmstudio.model';
+import { OpenAIService } from 'src/app/core/services/openai';
+import { ChatMessage, OpenAIModel, UsageTokens } from 'src/app/core/models/openai.model';
 import { MarkdownComponent } from 'ngx-markdown';
 import { addIcons } from 'ionicons';
 import { createOutline, refreshOutline } from 'ionicons/icons';
@@ -37,7 +37,7 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 export class ChatPage implements OnInit {
 
   private route = inject(ActivatedRoute);
-  private lmStudioService = inject(LmStudioService);
+  private openAIService = inject(OpenAIService);
   private conversationService = inject(ConversationService);
   private translateService = inject(TranslateService);
 
@@ -70,7 +70,7 @@ export class ChatPage implements OnInit {
   }
 
   loadModels() {
-    this.lmStudioService.getModels().subscribe({
+    this.openAIService.getModels().subscribe({
       next: (res) => {
         console.log(res);
         this.models = res.data;
@@ -126,7 +126,7 @@ export class ChatPage implements OnInit {
 
     const startTime = Date.now();
 
-    this.lmStudioService.sendChat({
+    this.openAIService.sendChat({
       model: this.selectedModelKey,
       messages: this.messages
     }).subscribe({

@@ -4,7 +4,7 @@ export interface OpenAIModel {
   owned_by: string;
 }
 
-export interface LmStudioModelsResponse {
+export interface OpenAIChatModelsResponse {
   object: string;
   data: OpenAIModel[];
 }
@@ -17,7 +17,7 @@ export interface ChatMessage {
   responseTime?: number;
 }
 
-export interface LmStudioChatRequest {
+export interface OpenAIChatRequest {
   model: string;
   messages: ChatMessage[];
   temperature?: number;
@@ -25,7 +25,7 @@ export interface LmStudioChatRequest {
   stream?: boolean;
 }
 
-export interface LmStudioChatChoice {
+export interface OpenAIChatChoice {
   index: number;
   message: ChatMessage;
 }
@@ -36,11 +36,11 @@ export interface UsageTokens {
   total_tokens: number;
 }
 
-export interface LmStudioChatResponse {
+export interface OpenAIChatResponse {
   id: string;
   object: string;
   created: number;
   model: string;
-  choices: LmStudioChatChoice[];
+  choices: OpenAIChatChoice[];
   usage?: UsageTokens;
 }

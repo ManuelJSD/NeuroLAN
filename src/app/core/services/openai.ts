@@ -2,16 +2,16 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { from, Observable, switchMap } from 'rxjs';
 import {
-  LmStudioModelsResponse,
-  LmStudioChatRequest,
-  LmStudioChatResponse,
-} from '../models/lmstudio.model';
+  OpenAIChatModelsResponse,
+  OpenAIChatRequest,
+  OpenAIChatResponse,
+} from '../models/openai.model';
 import { SettingsService } from './settings';
 
 @Injectable({
   providedIn: 'root',
 })
-export class LmStudioService {
+export class OpenAIService {
 
   private http = inject(HttpClient);
   private settingsService = inject(SettingsService);
@@ -30,23 +30,23 @@ export class LmStudioService {
     return cleanUrl;
   }
 
-  getModels(): Observable<LmStudioModelsResponse> {
+  getModels(): Observable<OpenAIChatModelsResponse> {
     return from(this.settingsService.getBaseUrl()).pipe(
       switchMap(baseUrl => {
         const cleanBaseUrl = this.getCleanUrl(baseUrl);
         const url = `${cleanBaseUrl}/v1/models`;
         console.log('Requesting models from:', url);
-        return this.http.get<LmStudioModelsResponse>(url);
+        return this.http.get<OpenAIChatModelsResponse>(url);
       })
     );
   }
-  sendChat(body: LmStudioChatRequest): Observable<LmStudioChatResponse> {
+  sendChat(body: OpenAIChatRequest): Observable<OpenAIChatResponse> {
     return from(this.settingsService.getBaseUrl()).pipe(
       switchMap(baseUrl => {
         const cleanBaseUrl = this.getCleanUrl(baseUrl);
         const url = `${cleanBaseUrl}/v1/chat/completions`;
         console.log('Sending chat to:', url);
-        return this.http.post<LmStudioChatResponse>(url, body);
+        return this.http.post<OpenAIChatResponse>(url, body);
       })
     );
   }

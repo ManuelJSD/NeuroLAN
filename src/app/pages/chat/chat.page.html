@@ -28,7 +28,7 @@
         </ion-chip>
 
         <!-- New Chat button -->
-        <button class="new-chat-header-btn" (click)="newChat()" [title]="'CHAT.NEW_CHAT' | translate">
+        <button class="new-chat-header-btn" routerLink="/chat" routerDirection="root" [title]="'CHAT.NEW_CHAT' | translate">
           <ion-icon name="create-outline"></ion-icon>
           <span class="new-chat-label">{{ 'CHAT.NEW_BTN' | translate }}</span>
         </button>

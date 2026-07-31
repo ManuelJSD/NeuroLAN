@@ -8,8 +8,9 @@ import { MarkdownComponent } from 'ngx-markdown';
 import { addIcons } from 'ionicons';
 import { createOutline, refreshOutline } from 'ionicons/icons';
 import { ConversationService } from 'src/app/core/services/conversation';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { filter } from 'rxjs/internal/operators/filter';
 
 @Component({
   selector: 'app-chat',
@@ -31,11 +32,13 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
     IonMenuButton,
     IonIcon,
     MarkdownComponent,
-    TranslatePipe
+    TranslatePipe,
+    RouterLink,
   ],
 })
 export class ChatPage implements OnInit {
 
+  private router = inject(Router);
   private route = inject(ActivatedRoute);
   private openAIService = inject(OpenAIService);
   private conversationService = inject(ConversationService);
@@ -55,18 +58,17 @@ export class ChatPage implements OnInit {
   constructor() {
     addIcons({ createOutline, refreshOutline });
   }
+
   ngOnInit(): void {
     this.loadModels();
 
-  // Subscribe to URL parameter changes.
-  this.route.paramMap.subscribe(params => {
-    const id = params.get('id');
-    if (id) {
-      this.loadConversation(id);
-    } else {
-      this.newChat(); // If there is no ID, clear the chat.
-    }
-  });
+    this.router.events.pipe(
+      filter(e => e instanceof NavigationEnd)
+    ).subscribe(() => {
+      const id = this.route.snapshot.paramMap.get('id');
+      if (id) { this.loadConversation(id); }
+      else { this.newChat(); }
+    });
   }
 
   loadModels() {

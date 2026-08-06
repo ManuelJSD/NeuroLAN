@@ -6,11 +6,9 @@ import {
   IonSelectOption,
   IonContent,
   IonLabel,
-  IonButton,
   IonTextarea,
   IonSpinner,
   IonChip,
-  IonMenuButton,
   IonIcon,
 } from '@ionic/angular/standalone';
 import { OpenAIService } from 'src/app/core/services/openai';
@@ -21,17 +19,11 @@ import {
 } from 'src/app/core/models/openai.model';
 import { MarkdownComponent } from 'ngx-markdown';
 import { addIcons } from 'ionicons';
-import { createOutline, refreshOutline } from 'ionicons/icons';
+import { createOutline, refreshOutline, menuOutline } from 'ionicons/icons';
 import { ConversationService } from 'src/app/core/services/conversation';
-import {
-  ActivatedRoute,
-  NavigationEnd,
-  Router,
-  RouterLink,
-  RouterLinkActive,
-} from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-import { filter } from 'rxjs/internal/operators/filter';
+import { UiService } from 'src/app/core/services/ui-service';
 
 @Component({
   selector: 'app-chat',
@@ -40,7 +32,6 @@ import { filter } from 'rxjs/internal/operators/filter';
   standalone: true,
   imports: [
     IonChip,
-    IonButton,
     IonLabel,
     IonContent,
     CommonModule,
@@ -50,15 +41,14 @@ import { filter } from 'rxjs/internal/operators/filter';
     IonSelectOption,
     IonTextarea,
     IonSpinner,
-    IonMenuButton,
     IonIcon,
     MarkdownComponent,
     TranslatePipe,
-    RouterLink,
   ],
 })
 export class ChatPage implements OnInit {
-  private router = inject(Router);
+  public uiService = inject(UiService);
+
   private route = inject(ActivatedRoute);
   private openAIService = inject(OpenAIService);
   private conversationService = inject(ConversationService);
@@ -76,7 +66,7 @@ export class ChatPage implements OnInit {
   currentConversationCreatedAt: number = Date.now();
 
   constructor() {
-    addIcons({ createOutline, refreshOutline });
+    addIcons({ createOutline, refreshOutline, menuOutline });
   }
 
   ngOnInit(): void {
@@ -86,26 +76,26 @@ export class ChatPage implements OnInit {
       const id = params.get('id');
 
       if (id) {
-        // 1. Intentamos cargar el historial si no es el chat actual
+        // 1. Try to load history if it's not the current chat
         if (this.currentConversationId !== id) {
           this.loadConversation(id);
         }
-        // 2. Comprobamos si Home nos acaba de mandar un mensaje por la memoria
+        // 2. Check if Home just sent a message through router state
         if (history.state && history.state.message) {
-          // Asignamos el ID directamente (ya que es un chat nuevo)
+          // Assign ID directly (since it's a new chat)
           this.currentConversationId = id;
 
           this.userInput = history.state.message;
           this.selectedModelKey = history.state.model;
 
-          // OBLIGATORIO: Limpiamos el state para que no se reenvíe si recargas la página con F5
+          // REQUIRED: Clear the state so it doesn't resend on F5 refresh
           history.state.message = null;
 
-          // Lanzamos la petición a OpenAI
+          // Send request to OpenAI
           this.sendMessage();
         }
       } else {
-        // Solo por seguridad, si llegas sin ID
+        // Fallback security check for missing ID
         this.newChat();
       }
     });

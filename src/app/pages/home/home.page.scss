@@ -66,7 +66,7 @@ $font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
   line-height: 1.1;
   color: $text;
 
-  /* Línea decorativa a la izquierda — el único toque visual */
+  /* Decorative left line — the only visual accent */
   padding-left: 1.25rem;
   border-left: 3px solid $teal;
 }
@@ -124,7 +124,7 @@ $font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
 }
 
 /* ============================================================
-   Barra inferior del input
+   Input bottom bar
    ============================================================ */
 
 .input-toolbar {

@@ -17,7 +17,7 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
 }
 
 /* ==========================================================================
-   1. LAYOUT WRAPPERS
+   1. LAYOUT WRAPPERS & FLOATING CONTROLS
    ========================================================================== */
 
 .chat-wrapper {
@@ -161,20 +161,6 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
       }
     }
   }
-
-  .tokens-chip {
-    margin: 0;
-    --background: rgba(148, 226, 213, 0.08);
-    --color: #{$teal};
-    border: 1px solid rgba(148, 226, 213, 0.2);
-    font-size: 0.78rem;
-    font-weight: 600;
-    border-radius: 6px;
-    padding: 0 4px;
-    font-family: $font-mono;
-    letter-spacing: 0.3px;
-    height: 28px;
-  }
 }
 
 /* ==========================================================================
@@ -220,78 +206,137 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
     pointer-events: none;
   }
 
-  .input-wrapper {
+  /* Identical to input-card in Home */
+  .input-card {
+    width: 100%;
+    background: $mantle;
+    border-radius: 8px;
+    border: 1px solid $surface1;
+    padding: 0.875rem 1rem 0.625rem;
     display: flex;
-    align-items: flex-end;
+    flex-direction: column;
+    gap: 0.625rem;
     max-width: 820px;
     margin: 0 auto;
-    background: $mantle;
-    border: 1px solid $surface1;
-    border-radius: 10px;
-    padding: 6px 8px 6px 6px;
-    transition: border-color 0.25s ease;
-    position: relative;
+    transition: border-color 0.2s ease;
 
     &:focus-within {
-      border-color: rgba(148, 226, 213, 0.45);
+      border-color: rgba(148, 226, 213, 0.5);
     }
   }
 
-  .chat-input {
-    --background:          transparent;
-    --color:               #{$text};
-    --padding-top:         14px;
-    --padding-bottom:      14px;
-    --padding-start:       14px;
-    --placeholder-color:   #{$overlay0};
-    margin: 0;
-    flex: 1;
-    font-size: 0.97rem;
-    line-height: 1.55;
-    font-family: $font-main;
-
-    caret-color:               $teal;
-    --highlight-color-focused: transparent;
-    --highlight-color-valid:   transparent;
-    --highlight-color-invalid: #{$red};
-  }
-
-  .send-btn {
-    --color: #{$teal};
+  /* Identical to main-input in Home */
+  .main-input {
+    --padding-start: 0;
+    --padding-end: 0;
+    --padding-top: 0;
+    --padding-bottom: 0;
     --background: transparent;
-    margin: 0 2px 4px 0;
-    height: 42px;
-    width: 42px;
+    --color: #{$text};
+    --placeholder-color: #{$overlay0};
+    --highlight-color-focused: #{$teal};
+    --highlight-color-valid:   #{$teal};
+    --highlight-color-invalid: #{$red};
+    font-size: 0.95rem;
+    font-family: $font-main;
+    line-height: 1.65;
+    width: 100%;
+    min-height: 28px;
+    max-height: 200px;
+    caret-color: $teal;
+  }
+
+  /* Identical to input-toolbar in Home */
+  .input-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding-top: 0.375rem;
+    border-top: 1px solid $surface0;
+  }
+
+  /* Identical to model-selector-wrapper in Home */
+  .model-selector-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  /* Identical to model-select in Home */
+  .model-select {
+    --padding-start: 0;
+    --padding-end: 0.25rem;
+    --color: #{$subtext0};
+    --placeholder-color: #{$overlay0};
+    font-size: 0.75rem;
+    font-family: $font-mono;
+    min-width: 80px;
+    max-width: 200px;
+  }
+
+  /* Identical to reload-btn in Home */
+  .reload-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $overlay0;
+    transition: color 0.15s ease;
+
+    &:hover {
+      color: $teal;
+    }
+
+    ion-icon {
+      font-size: 13px;
+    }
+  }
+
+  /* Token Counter Chip */
+  .tokens-chip {
+    margin: 0 8px 0 auto; /* Pushes the chip to the right, next to the send button */
+    --background: rgba(166, 173, 200, 0.06); /* $subtext0 opacity */
+    --color: #{$subtext0};
+    border: 1px solid rgba(166, 173, 200, 0.15);
+    font-size: 0.65rem;
+    font-weight: 600;
+    border-radius: 5px;
+    padding: 0 6px;
+    font-family: $font-mono;
+    letter-spacing: 0.05em;
+    height: 22px;
+    text-transform: uppercase;
+    pointer-events: none; /* Removes interactivity so it doesn't look like a button */
+  }
+
+  /* Identical to send-btn in Home */
+  .send-btn {
+    background: $teal;
+    border: none;
+    border-radius: 6px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
     flex-shrink: 0;
-    transition: transform 0.15s ease;
+    color: $crust;
+    transition: opacity 0.15s ease, transform 0.1s ease;
 
-    &::part(native) {
-      padding: 0;
-      border-radius: 8px;
-      background: rgba(148, 226, 213, 0.08);
-      transition: background 0.2s ease;
+    &:hover:not(:disabled) {
+      opacity: 0.85;
+      transform: scale(1.04);
     }
 
-    &:hover::part(native) {
-      background: rgba(148, 226, 213, 0.16);
-    }
-
-    &[disabled] {
-      opacity: 0.3;
-    }
-
-    &:active {
-      transform: scale(0.92);
-    }
-
-    .send-icon {
-      width: 18px;
-      height: 18px;
-      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-
-    &:not([disabled]):hover .send-icon {
-      transform: translate(2px, -2px) scale(1.05);
+    &:disabled {
+      opacity: 0.2;
+      cursor: default;
     }
   }
 }

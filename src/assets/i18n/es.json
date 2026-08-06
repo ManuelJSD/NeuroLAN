@@ -43,7 +43,8 @@
     "ALERT_DELETE": "¿Estás seguro de que quieres borrar la conversación?",
     "ALERT_EDIT": "Editar el título de la conversación",
     "ALERT_NO": "No",
-    "ALERT_YES": "Sí"
+    "ALERT_YES": "Sí",
+    "NO_MODELS": "No hay modelos disponibles"
   },
   "CONVERSATIONS": {
     "EMPTY": "Aún no hay conversaciones",

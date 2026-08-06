@@ -115,3 +115,40 @@ ion-toolbar {
   --border-width: 0 !important;
   --box-shadow: none;
 }
+
+/* ============================================================
+   Floating Sidebar Controls (Global)
+   ============================================================ */
+
+.floating-top-controls {
+  position: fixed;
+  top: calc(20px + env(safe-area-inset-top, 0px));
+  left: 20px;
+  z-index: 99999;
+  display: flex;
+}
+
+.icon-action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background: rgba(88, 91, 112, 0.15);
+  border: 1px solid rgba(88, 91, 112, 0.2);
+  color: #bac2de; /* Equivale a $subtext1 */
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: rgba(88, 91, 112, 0.25);
+    color: #cdd6f4; /* Equivale a $text */
+  }
+  
+  ion-icon, svg {
+    font-size: 1.2rem;
+  }
+}

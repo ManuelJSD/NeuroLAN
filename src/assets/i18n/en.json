@@ -43,7 +43,8 @@
     "ALERT_DELETE": "Are you sure you want to delete the conversation?",
     "ALERT_EDIT": "Edit the conversation title",
     "ALERT_NO": "No",
-    "ALERT_YES": "Yes"
+    "ALERT_YES": "Yes",
+    "NO_MODELS": "No models available"
   },
   "CONVERSATIONS": {
     "EMPTY": "No conversations yet",

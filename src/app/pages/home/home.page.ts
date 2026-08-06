@@ -9,9 +9,10 @@ import {
 } from '@ionic/angular/standalone';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { addIcons } from 'ionicons';
-import { refreshOutline } from 'ionicons/icons';
+import { menuOutline, refreshOutline } from 'ionicons/icons';
 import { OpenAIService } from 'src/app/core/services/openai';
 import { Router } from '@angular/router';
+import { UiService } from 'src/app/core/services/ui-service';
 
 @Component({
   selector: 'app-home',
@@ -29,6 +30,8 @@ import { Router } from '@angular/router';
   ],
 })
 export class HomePage implements OnInit {
+  public uiService = inject(UiService);
+
   private openAIService = inject(OpenAIService);
   private router = inject(Router);
   private translate = inject(TranslateService);
@@ -37,7 +40,7 @@ export class HomePage implements OnInit {
   selectedModelKey: string = '';
   userInput: string = '';
 
-  // Sugerencias de ejemplo — puedes adaptar los textos via i18n
+  // Example suggestions — you can adapt texts via i18n
   suggestions: string[] = [
     'HOME.SUGGESTIONS.CONCEPT',
     'HOME.SUGGESTIONS.CODE',
@@ -47,7 +50,7 @@ export class HomePage implements OnInit {
   ];
 
   constructor() {
-    addIcons({ refreshOutline });
+    addIcons({ menuOutline, refreshOutline });
   }
 
   ngOnInit() {

@@ -1,0 +1,281 @@
+@use '../../../theme/variables' as *;
+
+// ============================================================
+// NeuroLAN — Sidebar Menu Styles — Technical dark UI
+// ============================================================
+
+:host {
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+
+$font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+$font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+
+.menu-content {
+  --background: #{$mantle};
+  --padding-start: 0;
+  --padding-end: 0;
+  --padding-top: 0;
+  --padding-bottom: 0;
+
+  /* Custom Scrollbar for Windows/Chrome */
+  &::part(scroll)::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  &::part(scroll)::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::part(scroll)::-webkit-scrollbar-thumb {
+    background: rgba(148, 226, 213, 0.15); // Subtle teal
+    border-radius: 10px;
+  }
+
+  &::part(scroll)::-webkit-scrollbar-thumb:hover {
+    background: rgba(148, 226, 213, 0.35); // Teal on hover
+  }
+}
+
+.sidebar-sticky-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: $mantle;
+  /* Optional: a very soft shadow on scroll */
+  box-shadow: 0 4px 6px -4px rgba(0, 0, 0, 0.2);
+}
+
+// ============================================================
+// Branding Header
+// ============================================================
+
+.menu-brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 28px 20px 24px;
+  border-bottom: 1px solid $surface0;
+}
+
+.brand-logo-wrapper {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+}
+
+.brand-logo {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  position: relative;
+  z-index: 1;
+}
+
+.brand-logo-glow {
+  display: none;
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.brand-name {
+  font-family: $font;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: $text;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.brand-subtitle {
+  font-family: $font-mono;
+  font-size: 0.65rem;
+  font-weight: 500;
+  color: $teal;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  line-height: 1;
+  opacity: 0.7;
+}
+
+.icon-action-btn.collapse-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  background: transparent;
+  border: none;
+  color: $subtext0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-left: auto;
+
+  &:hover {
+    background: rgba(88, 91, 112, 0.2);
+    color: $text;
+  }
+
+  ion-icon {
+    font-size: 1.2rem;
+  }
+}
+
+// ============================================================
+// New Chat Button
+// ============================================================
+
+.new-chat-wrapper {
+  padding: 12px 12px 4px;
+}
+
+.new-chat-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 13px 18px;
+  background: rgba(148, 226, 213, 0.1);
+  border: 1px solid rgba(148, 226, 213, 0.25);
+  color: $teal;
+  border-radius: 8px;
+  font-family: $font;
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.18s ease, border-color 0.18s ease;
+  letter-spacing: 0.01em;
+
+  &:hover {
+    background: rgba(148, 226, 213, 0.16);
+    border-color: rgba(148, 226, 213, 0.4);
+  }
+
+  &:active {
+    transform: scale(0.97);
+  }
+
+  .new-chat-icon {
+    font-size: 1.1rem;
+    flex-shrink: 0;
+  }
+}
+
+// ============================================================
+// Navigation Section
+// ============================================================
+
+.menu-nav {
+  padding: 20px 12px 8px;
+}
+
+.menu-section-label {
+  font-family: $font-mono;
+  font-size: 0.62rem;
+  font-weight: 600;
+  color: $overlay0;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0 8px;
+  margin: 0 0 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  .section-icon {
+    font-size: 0.85rem;
+    color: $overlay0;
+  }
+}
+
+.menu-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.menu-list-item {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.menu-item {
+  --background: transparent;
+  --color: #{$subtext1};
+  --padding-start: 10px;
+  --padding-end: 10px;
+  --inner-padding-end: 10px;
+  --min-height: 46px;
+  border-radius: 8px;
+  font-family: $font;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.18s ease, color 0.18s ease;
+
+  &::part(native) {
+    border-radius: 8px;
+    padding: 0 10px;
+  }
+
+  &:hover {
+    --background: rgba(148, 226, 213, 0.06);
+    --color: #{$text};
+  }
+
+  &.active-item {
+    --background: rgba(148, 226, 213, 0.1);
+    --color: #{$teal};
+
+    .menu-item-icon {
+      background: rgba(148, 226, 213, 0.12);
+      color: $teal;
+    }
+
+    .menu-item-indicator {
+      opacity: 1;
+    }
+  }
+}
+
+.menu-item-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 7px;
+  background: rgba(88, 91, 112, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $subtext0;
+  font-size: 1rem;
+  margin-right: 4px;
+  transition: background 0.18s ease, color 0.18s ease;
+  flex-shrink: 0;
+}
+
+.menu-item-label {
+  font-family: $font;
+}
+
+.menu-item-indicator {
+  width: 3px;
+  height: 16px;
+  border-radius: 2px;
+  background: $teal;
+  opacity: 0;
+  transition: opacity 0.18s ease;
+}

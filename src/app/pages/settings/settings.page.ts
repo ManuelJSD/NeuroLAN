@@ -1,3 +1,4 @@
+import { UiService } from './../../core/services/ui-service';
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
@@ -8,10 +9,17 @@ import {
   IonToast,
   IonIcon,
   IonSelect,
-  IonSelectOption
+  IonSelectOption,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { settingsOutline, serverOutline, globeOutline, checkmarkCircleOutline, informationCircleOutline, languageOutline } from 'ionicons/icons';
+import {
+  settingsOutline,
+  serverOutline,
+  globeOutline,
+  checkmarkCircleOutline,
+  informationCircleOutline,
+  languageOutline,
+} from 'ionicons/icons';
 import { SettingsService } from 'src/app/core/services/settings';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
@@ -31,9 +39,10 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
     IonIcon,
     IonSelect,
     IonSelectOption,
-  ]
+  ],
 })
 export class SettingsPage implements OnInit {
+  public uiService = inject(UiService);
 
   private settingsService = inject(SettingsService);
   private translateService = inject(TranslateService);
@@ -55,7 +64,14 @@ export class SettingsPage implements OnInit {
   });
 
   constructor() {
-    addIcons({ settingsOutline, serverOutline, globeOutline, checkmarkCircleOutline, informationCircleOutline, languageOutline });
+    addIcons({
+      settingsOutline,
+      serverOutline,
+      globeOutline,
+      checkmarkCircleOutline,
+      informationCircleOutline,
+      languageOutline,
+    });
   }
 
   ngOnInit() {
@@ -69,9 +85,8 @@ export class SettingsPage implements OnInit {
 
     this.settingsForm.setValue({
       serverAddress: this.baseUrl ?? 'http://127.0.0.1:1234',
-      languageSelect: this.selectedlanguage
+      languageSelect: this.selectedlanguage,
     });
-
   }
 
   changeLanguage(event: CustomEvent) {
@@ -100,6 +115,4 @@ export class SettingsPage implements OnInit {
       this.toastMessage = message;
     }
   }
-
 }
-

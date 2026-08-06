@@ -1,27 +1,27 @@
 /* ============================================================
-   Home Page — Estructura + diseño base
+   Home Page — Terminal-inspired, technical aesthetic
    ============================================================ */
 
 @use '../../../theme/variables' as *;
 
-$font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+$font-ui:   'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+$font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
 
 :host {
   display: flex;
   flex-direction: column;
   height: 100%;
   background: $base;
-  font-family: $font;
+  font-family: $font-ui;
   contain: layout style;
 }
 
-/* ion-content transparente para heredar el fondo de :host */
 .home-content {
   --background: transparent;
 }
 
 /* ============================================================
-   Wrapper — ocupa toda la pantalla y centra el contenido
+   Wrapper
    ============================================================ */
 
 .home-wrapper {
@@ -31,33 +31,7 @@ $font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-seri
   justify-content: center;
   min-height: 100%;
   width: 100%;
-  padding: 1.5rem;
-  position: relative;
-
-  /* Decoración radial — coherente con Chat y Settings */
-  &::before {
-    content: '';
-    position: absolute;
-    top: -80px;
-    right: -60px;
-    width: 360px;
-    height: 360px;
-    background: radial-gradient(circle, rgba(137, 180, 250, 0.05) 0%, transparent 70%);
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: 60px;
-    left: -80px;
-    width: 280px;
-    height: 280px;
-    background: radial-gradient(circle, rgba(203, 166, 247, 0.04) 0%, transparent 70%);
-    pointer-events: none;
-    z-index: 0;
-  }
+  padding: 2rem 1.5rem;
 }
 
 /* ============================================================
@@ -67,62 +41,64 @@ $font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-seri
 .home-main {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 2rem;
+  align-items: flex-start;
+  gap: 2.5rem;
   width: 100%;
-  max-width: 720px;
-  position: relative;
-  z-index: 1;
+  max-width: 680px;
 }
 
 /* ============================================================
-   Título de bienvenida
+   Título de bienvenida — tipografía editorial
    ============================================================ */
 
 .welcome-section {
-  text-align: center;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.75rem;
+  padding-left: 0;
 }
 
 .welcome-title {
-  font-size: clamp(1.75rem, 4vw, 2.5rem);
-  font-weight: 700;
-  letter-spacing: -0.02em;
+  font-size: clamp(2rem, 5vw, 2.75rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
   margin: 0;
-  line-height: 1.2;
+  line-height: 1.1;
   color: $text;
+
+  /* Línea decorativa a la izquierda — el único toque visual */
+  padding-left: 1.25rem;
+  border-left: 3px solid $teal;
 }
 
 .welcome-subtitle {
-  font-size: 0.9rem;
-  font-weight: 400;
+  font-size: 0.8rem;
+  font-weight: 500;
   margin: 0;
-  color: $subtext0;
+  color: $overlay0;
+  font-family: $font-mono;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding-left: 1.25rem;
 }
 
 /* ============================================================
-   Tarjeta principal de input
+   Input card — estética de terminal
    ============================================================ */
 
 .input-card {
   width: 100%;
-  background: rgba(49, 50, 68, 0.5);
-  border-radius: 18px;
-  border: 1px solid rgba(69, 71, 90, 0.6);
-  padding: 1rem 1.25rem 0.75rem;
+  background: $mantle;
+  border-radius: 8px;
+  border: 1px solid $surface1;
+  padding: 0.875rem 1rem 0.625rem;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.25);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  gap: 0.625rem;
+  transition: border-color 0.2s ease;
 
   &:focus-within {
-    border-color: rgba(137, 180, 250, 0.5);
-    box-shadow: 0 4px 32px rgba(137, 180, 250, 0.08), 0 0 0 3px rgba(137, 180, 250, 0.06);
+    border-color: rgba(148, 226, 213, 0.5);
   }
 }
 
@@ -134,21 +110,21 @@ $font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-seri
   --padding-bottom: 0;
   --background: transparent;
   --color: #{$text};
-  --placeholder-color: #{$subtext0};
-  --highlight-color-focused: #{$blue};
-  --highlight-color-valid:   #{$blue};
+  --placeholder-color: #{$overlay0};
+  --highlight-color-focused: #{$teal};
+  --highlight-color-valid:   #{$teal};
   --highlight-color-invalid: #{$red};
-  font-size: 1rem;
-  font-family: $font;
-  line-height: 1.6;
+  font-size: 0.95rem;
+  font-family: $font-ui;
+  line-height: 1.65;
   width: 100%;
   min-height: 28px;
   max-height: 200px;
-  caret-color: $blue;
+  caret-color: $teal;
 }
 
 /* ============================================================
-   Barra inferior del input (modelo + enviar)
+   Barra inferior del input
    ============================================================ */
 
 .input-toolbar {
@@ -156,32 +132,24 @@ $font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-seri
   align-items: center;
   justify-content: space-between;
   gap: 0.5rem;
+  padding-top: 0.375rem;
+  border-top: 1px solid $surface0;
 }
 
-/* Grupo: selector de modelo + botón recargar */
 .model-selector-wrapper {
   display: flex;
   align-items: center;
   gap: 0.25rem;
-  border-radius: 20px;
-  padding: 0.2rem 0.5rem;
-  background: transparent;
-  border: none;
-  transition: background 0.2s ease;
-
-  &:hover {
-    background: rgba(137, 180, 250, 0.07);
-  }
 }
 
 .model-select {
   --padding-start: 0;
   --padding-end: 0.25rem;
-  --color: #{$text};
-  --placeholder-color: #{$subtext0};
-  font-size: 0.8rem;
-  font-family: $font;
-  min-width: 100px;
+  --color: #{$subtext0};
+  --placeholder-color: #{$overlay0};
+  font-size: 0.75rem;
+  font-family: $font-mono;
+  min-width: 80px;
   max-width: 200px;
 }
 
@@ -190,80 +158,86 @@ $font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-seri
   border: none;
   cursor: pointer;
   padding: 4px;
-  border-radius: 6px;
+  border-radius: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
   color: $overlay0;
-  transition: color 0.15s ease, background 0.15s ease;
+  transition: color 0.15s ease;
 
   &:hover {
-    color: $text;
-    background: rgba(137, 180, 250, 0.07);
+    color: $teal;
   }
 
   ion-icon {
-    font-size: 14px;
+    font-size: 13px;
   }
 }
 
-/* Botón de enviar */
+/* Botón de enviar — teal, sin sombra */
 .send-btn {
-  background: $blue;
+  background: $teal;
   border: none;
-  border-radius: 10px;
-  width: 36px;
-  height: 36px;
+  border-radius: 6px;
+  width: 32px;
+  height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   flex-shrink: 0;
   color: $crust;
-  transition: opacity 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
-  box-shadow: 0 4px 14px rgba(137, 180, 250, 0.25);
+  transition: opacity 0.15s ease, transform 0.1s ease;
 
   &:hover:not(:disabled) {
-    opacity: 0.9;
-    transform: scale(1.05);
-    box-shadow: 0 6px 18px rgba(137, 180, 250, 0.35);
+    opacity: 0.85;
+    transform: scale(1.04);
   }
 
   &:disabled {
-    opacity: 0.25;
+    opacity: 0.2;
     cursor: default;
-    box-shadow: none;
   }
 }
 
 /* ============================================================
-   Sugerencias de prompts
+   Sugerencias — estilo comando
    ============================================================ */
 
 .suggestions-row {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
-  justify-content: center;
   width: 100%;
 }
 
 .suggestion-chip {
   background: transparent;
-  border: 1px solid rgba(69, 71, 90, 0.7);
-  border-radius: 999px;
-  padding: 0.4rem 1rem;
-  font-size: 0.8rem;
+  border: 1px solid $surface1;
+  border-radius: 4px;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.72rem;
+  font-family: $font-mono;
   color: $subtext0;
   cursor: pointer;
-  font-family: $font;
   transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
   white-space: nowrap;
+  letter-spacing: 0.02em;
+
+  &::before {
+    content: '> ';
+    color: $teal;
+    opacity: 0.6;
+  }
 
   &:hover {
     color: $text;
-    border-color: rgba(137, 180, 250, 0.4);
-    background: rgba(137, 180, 250, 0.06);
+    border-color: rgba(148, 226, 213, 0.35);
+    background: rgba(148, 226, 213, 0.04);
+
+    &::before {
+      opacity: 1;
+    }
   }
 }
 
@@ -281,25 +255,21 @@ $font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-seri
     height: 100%;
     padding: 0 1.25rem 1.5rem;
     justify-content: flex-start;
-    gap: 1rem;
+    gap: 1.5rem;
   }
 
-  /* El título baja hacia el centro de la pantalla */
   .welcome-section {
-    text-align: left;
-    padding-top: 22vh;
+    padding-top: 20vh;
   }
 
   .welcome-subtitle {
     display: none;
   }
 
-  /* El input se empuja al fondo */
   .input-card {
     margin-top: auto;
   }
 
-  /* Sugerencias: scroll horizontal, sin wrap */
   .suggestions-row {
     flex-wrap: nowrap;
     overflow-x: auto;

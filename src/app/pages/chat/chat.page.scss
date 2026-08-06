@@ -361,14 +361,15 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
   }
 
   .ai-avatar {
-    background: linear-gradient(135deg, $surface0 0%, #282840 100%);
-    color: $blue;
-    border: 1px solid rgba(137, 180, 250, 0.2);
+    background: $mantle;
+    color: $teal;
+    border: 1px solid rgba(148, 226, 213, 0.2);
   }
 
   .user-avatar {
-    background: linear-gradient(135deg, $blue 0%, #6d91c7 100%);
+    background: $teal;
     color: $crust;
+    border-radius: 8px;
   }
 
   // Bubble container
@@ -425,12 +426,12 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
     gap: 12px;
 
     .message-bubble {
-      background: linear-gradient(135deg, $blue 0%, #74c7ec 100%);
+      background: $teal;
       color: $crust;
       padding: 12px 16px;
-      border-radius: 18px 4px 18px 18px;
+      border-radius: 12px 3px 12px 12px;
       max-width: 78%;
-      box-shadow: 0 4px 16px rgba(137, 180, 250, 0.2);
+      box-shadow: none;
       flex: none;
 
       .message-sender {

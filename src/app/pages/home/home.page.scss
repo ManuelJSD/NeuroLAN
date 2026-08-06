@@ -252,14 +252,14 @@ $font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
   }
 
   .home-main {
-    height: 100%;
+    flex: 1; /* Permite que el contenedor se expanda ocupando todo el alto disponible */
     padding: 0 1.25rem 1.5rem;
     justify-content: flex-start;
     gap: 1.5rem;
   }
 
   .welcome-section {
-    padding-top: 20vh;
+    padding-top: 40vh;
   }
 
   .welcome-subtitle {

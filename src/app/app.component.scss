@@ -1,16 +1,17 @@
 // ============================================================
-// NeuroLAN — Sidebar Menu Styles
+// NeuroLAN — Sidebar Menu Styles — Technical dark UI
 // ============================================================
 
 @use '../theme/variables' as *;
 
-// Host — fill full height
+$font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+$font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+
 ion-menu.neuro-menu {
   --background: #{$mantle};
   --border: none;
 }
 
-// Menu content area
 .menu-content {
   --background: #{$mantle};
   --padding-start: 0;
@@ -53,27 +54,27 @@ ion-menu.neuro-menu {
 .brand-text {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 3px;
 }
 
 .brand-name {
-  font-family: 'Inter', sans-serif;
-  font-size: 1.2rem;
+  font-family: $font;
+  font-size: 1.15rem;
   font-weight: 700;
   color: $text;
-  letter-spacing: -0.3px;
+  letter-spacing: -0.02em;
   line-height: 1;
 }
 
 .brand-subtitle {
-  font-family: 'Inter', sans-serif;
-  font-size: 0.72rem;
+  font-family: $font-mono;
+  font-size: 0.65rem;
   font-weight: 500;
-  color: $blue;
-  letter-spacing: 1.5px;
+  color: $teal;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   line-height: 1;
-  opacity: 0.85;
+  opacity: 0.7;
 }
 
 // ============================================================
@@ -91,31 +92,29 @@ ion-menu.neuro-menu {
   gap: 10px;
   width: 100%;
   padding: 13px 18px;
-  background: linear-gradient(135deg, $blue 0%, #74c7ec 100%);
-  color: #11111b;
-  border-radius: 12px;
-  font-family: 'Inter', sans-serif;
-  font-size: 0.92rem;
+  background: rgba(148, 226, 213, 0.1);
+  border: 1px solid rgba(148, 226, 213, 0.25);
+  color: $teal;
+  border-radius: 8px;
+  font-family: $font;
+  font-size: 0.9rem;
   font-weight: 700;
   text-decoration: none;
   cursor: pointer;
-  box-shadow: 0 6px 20px rgba(137, 180, 250, 0.25);
-  transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
-  letter-spacing: 0.2px;
+  transition: background 0.18s ease, border-color 0.18s ease;
+  letter-spacing: 0.01em;
 
   &:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 10px 28px rgba(137, 180, 250, 0.35);
-    filter: brightness(1.05);
+    background: rgba(148, 226, 213, 0.16);
+    border-color: rgba(148, 226, 213, 0.4);
   }
 
   &:active {
-    transform: scale(0.97) translateY(0);
-    box-shadow: 0 4px 12px rgba(137, 180, 250, 0.2);
+    transform: scale(0.97);
   }
 
   .new-chat-icon {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     flex-shrink: 0;
   }
 }
@@ -129,11 +128,11 @@ ion-menu.neuro-menu {
 }
 
 .menu-section-label {
-  font-family: 'Inter', sans-serif;
-  font-size: 0.68rem;
+  font-family: $font-mono;
+  font-size: 0.62rem;
   font-weight: 600;
   color: $overlay0;
-  letter-spacing: 1.2px;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   padding: 0 8px;
   margin: 0 0 8px;
@@ -142,7 +141,7 @@ ion-menu.neuro-menu {
   gap: 6px;
 
   .section-icon {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     color: $overlay0;
   }
 }
@@ -157,7 +156,7 @@ ion-menu.neuro-menu {
 }
 
 .menu-list-item {
-  border-radius: 10px;
+  border-radius: 8px;
   overflow: hidden;
 }
 
@@ -167,31 +166,31 @@ ion-menu.neuro-menu {
   --padding-start: 10px;
   --padding-end: 10px;
   --inner-padding-end: 10px;
-  --min-height: 48px;
-  border-radius: 10px;
-  font-family: 'Inter', sans-serif;
-  font-size: 0.92rem;
+  --min-height: 46px;
+  border-radius: 8px;
+  font-family: $font;
+  font-size: 0.9rem;
   font-weight: 500;
   cursor: pointer;
-  transition: background 0.2s ease, color 0.2s ease;
+  transition: background 0.18s ease, color 0.18s ease;
 
   &::part(native) {
-    border-radius: 10px;
+    border-radius: 8px;
     padding: 0 10px;
   }
 
   &:hover {
-    --background: rgba(137, 180, 250, 0.07);
+    --background: rgba(148, 226, 213, 0.06);
     --color: #{$text};
   }
 
   &.active-item {
-    --background: rgba(137, 180, 250, 0.12);
-    --color: #{$blue};
+    --background: rgba(148, 226, 213, 0.1);
+    --color: #{$teal};
 
     .menu-item-icon {
-      background: rgba(137, 180, 250, 0.15);
-      color: $blue;
+      background: rgba(148, 226, 213, 0.12);
+      color: $teal;
     }
 
     .menu-item-indicator {
@@ -201,31 +200,31 @@ ion-menu.neuro-menu {
 }
 
 .menu-item-icon {
-  width: 34px;
-  height: 34px;
-  border-radius: 8px;
-  background: rgba(88, 91, 112, 0.3);
+  width: 32px;
+  height: 32px;
+  border-radius: 7px;
+  background: rgba(88, 91, 112, 0.25);
   display: flex;
   align-items: center;
   justify-content: center;
   color: $subtext0;
-  font-size: 1.1rem;
+  font-size: 1rem;
   margin-right: 4px;
-  transition: background 0.2s ease, color 0.2s ease;
+  transition: background 0.18s ease, color 0.18s ease;
   flex-shrink: 0;
 }
 
 .menu-item-label {
-  font-family: 'Inter', sans-serif;
+  font-family: $font;
 }
 
 .menu-item-indicator {
-  width: 4px;
-  height: 18px;
+  width: 3px;
+  height: 16px;
   border-radius: 2px;
-  background: $blue;
+  background: $teal;
   opacity: 0;
-  transition: opacity 0.2s ease;
+  transition: opacity 0.18s ease;
 }
 
 // ============================================================
@@ -234,7 +233,7 @@ ion-menu.neuro-menu {
 
 .menu-history {
   padding: 16px 12px 20px;
-  border-top: 1px solid rgba(69, 71, 90, 0.4);
+  border-top: 1px solid $surface0;
   margin-top: 8px;
 }
 
@@ -252,30 +251,30 @@ ion-menu.neuro-menu {
   align-items: center;
   gap: 10px;
   padding: 9px 10px;
-  border-radius: 8px;
+  border-radius: 7px;
   cursor: pointer;
   color: $subtext0;
   transition: background 0.18s ease, color 0.18s ease;
 
   &:hover {
-    background: rgba(88, 91, 112, 0.25);
+    background: rgba(88, 91, 112, 0.2);
     color: $text;
 
     .history-icon {
-      color: $blue;
+      color: $teal;
     }
   }
 }
 
 .history-icon {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   color: $surface2;
   flex-shrink: 0;
   transition: color 0.18s ease;
 }
 
 .history-label {
-  font-family: 'Inter', sans-serif;
+  font-family: $font;
   font-size: 0.875rem;
   font-weight: 400;
   white-space: nowrap;

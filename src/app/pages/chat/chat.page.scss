@@ -1,5 +1,5 @@
 /* ==========================================================================
-   NeuroLAN Chat Page — Premium Dark UI (Catppuccin Mocha)
+   NeuroLAN Chat Page — Technical dark UI
    ========================================================================== */
 
 @use '../../../theme/variables' as *;
@@ -26,32 +26,6 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
   height: 100%;
   width: 100%;
   background: $base;
-  position: relative;
-
-  // Subtle gradient background decoration
-  &::before {
-    content: '';
-    position: absolute;
-    top: -120px;
-    right: -80px;
-    width: 400px;
-    height: 400px;
-    background: radial-gradient(circle, rgba(137, 180, 250, 0.04) 0%, transparent 70%);
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: 80px;
-    left: -100px;
-    width: 300px;
-    height: 300px;
-    background: radial-gradient(circle, rgba(203, 166, 247, 0.03) 0%, transparent 70%);
-    pointer-events: none;
-    z-index: 0;
-  }
 }
 
 /* ==========================================================================
@@ -61,10 +35,8 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
 .chat-header {
   flex-shrink: 0;
   padding: calc(10px + env(safe-area-inset-top, 0px)) 20px 10px 20px;
-  border-bottom: 1px solid rgba(69, 71, 90, 0.6);
-  background: rgba(24, 24, 37, 0.9);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid $surface0;
+  background: $mantle;
   z-index: 10;
   position: relative;
 
@@ -81,7 +53,7 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
   .menu-btn {
     --color: #{$subtext1};
     flex-shrink: 0;
-    display: none; // Visible solo en mobile via media query
+    display: none;
 
     @media (max-width: 767px) {
       display: block;
@@ -95,26 +67,19 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
   }
 
   .model-select {
-    --background: rgba(49, 50, 68, 0.6);
-    --padding-start: 14px;
-    --padding-end: 10px;
+    --background: transparent;
+    --padding-start: 0;
+    --padding-end: 8px;
     --placeholder-color: #{$subtext0};
     font-weight: 600;
     color: $text;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     max-width: 280px;
-    border-radius: 10px;
-    border: 1px solid rgba(69, 71, 90, 0.6);
     font-family: $font-main;
-    transition: border-color 0.2s ease;
 
-    --highlight-color-focused: #{$blue};
-    --highlight-color-valid:   #{$blue};
+    --highlight-color-focused: #{$teal};
+    --highlight-color-valid:   #{$teal};
     --highlight-color-invalid: #{$red};
-
-    &:hover {
-      border-color: rgba(137, 180, 250, 0.4);
-    }
   }
 
   .header-right {
@@ -129,15 +94,15 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
     align-items: center;
     gap: 6px;
     padding: 7px 13px;
-    background: rgba(137, 180, 250, 0.1);
-    border: 1px solid rgba(137, 180, 250, 0.25);
-    border-radius: 9px;
-    color: $blue;
+    background: rgba(148, 226, 213, 0.08);
+    border: 1px solid rgba(148, 226, 213, 0.2);
+    border-radius: 8px;
+    color: $teal;
     font-family: $font-main;
     font-size: 0.82rem;
     font-weight: 600;
     cursor: pointer;
-    transition: background 0.18s ease, border-color 0.18s ease, transform 0.15s ease;
+    transition: background 0.18s ease, border-color 0.18s ease;
     white-space: nowrap;
 
     ion-icon {
@@ -145,13 +110,12 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
     }
 
     &:hover {
-      background: rgba(137, 180, 250, 0.18);
-      border-color: rgba(137, 180, 250, 0.45);
-      transform: translateY(-1px);
+      background: rgba(148, 226, 213, 0.14);
+      border-color: rgba(148, 226, 213, 0.4);
     }
 
     &:active {
-      transform: scale(0.95);
+      transform: scale(0.97);
     }
 
     .new-chat-label {
@@ -168,12 +132,12 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
     width: 34px;
     height: 34px;
     flex-shrink: 0;
-    background: rgba(203, 166, 247, 0.08);
-    border: 1px solid rgba(203, 166, 247, 0.25);
-    border-radius: 9px;
-    color: $mauve;
+    background: transparent;
+    border: 1px solid $surface1;
+    border-radius: 8px;
+    color: $subtext0;
     cursor: pointer;
-    transition: background 0.18s ease, border-color 0.18s ease, transform 0.15s ease;
+    transition: color 0.18s ease, border-color 0.18s ease;
 
     ion-icon {
       font-size: 1rem;
@@ -181,8 +145,8 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
     }
 
     &:hover {
-      background: rgba(203, 166, 247, 0.16);
-      border-color: rgba(203, 166, 247, 0.45);
+      color: $teal;
+      border-color: rgba(148, 226, 213, 0.35);
 
       ion-icon {
         transform: rotate(180deg);
@@ -200,12 +164,12 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
 
   .tokens-chip {
     margin: 0;
-    --background: rgba(137, 180, 250, 0.08);
-    --color: #{$blue};
-    border: 1px solid rgba(137, 180, 250, 0.25);
+    --background: rgba(148, 226, 213, 0.08);
+    --color: #{$teal};
+    border: 1px solid rgba(148, 226, 213, 0.2);
     font-size: 0.78rem;
     font-weight: 600;
-    border-radius: 8px;
+    border-radius: 6px;
     padding: 0 4px;
     font-family: $font-mono;
     letter-spacing: 0.3px;
@@ -243,8 +207,8 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
   padding: 12px 20px calc(20px + env(safe-area-inset-bottom, 0px));
   position: relative;
   z-index: 10;
+  background: $base;
 
-  // Fade mask above the footer
   &::before {
     content: '';
     position: absolute;
@@ -261,19 +225,15 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
     align-items: flex-end;
     max-width: 820px;
     margin: 0 auto;
-    background: $surface0;
+    background: $mantle;
     border: 1px solid $surface1;
-    border-radius: 18px;
+    border-radius: 10px;
     padding: 6px 8px 6px 6px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25), 0 2px 8px rgba(0, 0, 0, 0.15);
-    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+    transition: border-color 0.25s ease;
     position: relative;
 
     &:focus-within {
-      border-color: rgba(137, 180, 250, 0.6);
-      box-shadow:
-        0 8px 32px rgba(0, 0, 0, 0.3),
-        0 0 0 3px rgba(137, 180, 250, 0.08);
+      border-color: rgba(148, 226, 213, 0.45);
     }
   }
 
@@ -283,21 +243,21 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
     --padding-top:         14px;
     --padding-bottom:      14px;
     --padding-start:       14px;
-    --placeholder-color:   #{$subtext0};
+    --placeholder-color:   #{$overlay0};
     margin: 0;
     flex: 1;
     font-size: 0.97rem;
     line-height: 1.55;
     font-family: $font-main;
 
-    caret-color:               $blue;
-    --highlight-color-focused: #{$blue};
-    --highlight-color-valid:   #{$blue};
+    caret-color:               $teal;
+    --highlight-color-focused: transparent;
+    --highlight-color-valid:   transparent;
     --highlight-color-invalid: #{$red};
   }
 
   .send-btn {
-    --color: #{$blue};
+    --color: #{$teal};
     --background: transparent;
     margin: 0 2px 4px 0;
     height: 42px;
@@ -307,17 +267,17 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
 
     &::part(native) {
       padding: 0;
-      border-radius: 12px;
-      background: rgba(137, 180, 250, 0.1);
+      border-radius: 8px;
+      background: rgba(148, 226, 213, 0.08);
       transition: background 0.2s ease;
     }
 
     &:hover::part(native) {
-      background: rgba(137, 180, 250, 0.2);
+      background: rgba(148, 226, 213, 0.16);
     }
 
     &[disabled] {
-      opacity: 0.35;
+      opacity: 0.3;
     }
 
     &:active {
@@ -347,17 +307,15 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
   animation: msgFadeIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   opacity: 0;
 
-  // Avatar
   .avatar {
     width: 34px;
     height: 34px;
-    border-radius: 10px;
+    border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
     margin-top: 2px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
   }
 
   .ai-avatar {
@@ -372,7 +330,6 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
     border-radius: 8px;
   }
 
-  // Bubble container
   .message-bubble {
     flex: 1;
     min-width: 0;
@@ -380,18 +337,16 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
     flex-direction: column;
   }
 
-  // Sender label
   .message-sender {
-    font-size: 0.78rem;
+    font-size: 0.75rem;
     font-weight: 700;
     margin-bottom: 6px;
-    color: $subtext0;
-    letter-spacing: 0.6px;
+    color: $overlay0;
+    letter-spacing: 0.8px;
     text-transform: uppercase;
-    font-family: $font-main;
+    font-family: $font-mono;
   }
 
-  // Plain text
   .message-text {
     white-space: pre-wrap;
     line-height: 1.65;
@@ -400,20 +355,19 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
     font-family: $font-main;
   }
 
-  /* --- Message metadata --- */
   .message-meta {
     display: flex;
     align-items: center;
     margin-top: 8px;
 
     .response-time {
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       font-family: $font-mono;
-      color: $subtext0;
-      background: rgba(49, 50, 68, 0.4);
+      color: $overlay0;
+      background: $surface0;
       padding: 3px 8px;
-      border-radius: 6px;
-      border: 1px solid rgba(69, 71, 90, 0.3);
+      border-radius: 4px;
+      border: 1px solid $surface1;
       display: inline-flex;
       align-items: center;
       gap: 4px;
@@ -473,16 +427,13 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
     }
     p:last-child { margin-bottom: 0; }
 
-    // Code blocks
     pre {
       background: $crust;
       padding: 18px;
-      border-radius: 12px;
+      border-radius: 8px;
       overflow-x: auto;
       border: 1px solid $surface0;
       margin: 14px 0;
-      box-shadow: inset 0 2px 6px rgba(0,0,0,0.25), 0 4px 12px rgba(0,0,0,0.15);
-      position: relative;
 
       code {
         background: transparent;
@@ -494,18 +445,16 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
       }
     }
 
-    // Inline code
     code {
       background: rgba(49, 50, 68, 0.8);
       padding: 3px 7px;
-      border-radius: 6px;
+      border-radius: 4px;
       font-family: $font-mono;
       font-size: 0.875em;
-      color: $red;
-      border: 1px solid rgba(69, 71, 90, 0.5);
+      color: $teal;
+      border: 1px solid $surface1;
     }
 
-    // Lists
     ul, ol {
       padding-left: 22px;
       margin-bottom: 1em;
@@ -515,22 +464,20 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
       line-height: 1.65;
     }
 
-    // Blockquote
     blockquote {
-      border-left: 3px solid $blue;
+      border-left: 3px solid $teal;
       margin: 14px 0;
       padding: 10px 16px;
       color: $subtext1;
-      background: rgba(137, 180, 250, 0.05);
-      border-radius: 0 10px 10px 0;
+      background: rgba(148, 226, 213, 0.04);
+      border-radius: 0 6px 6px 0;
     }
 
-    // Tables
     table {
       width: 100%;
       border-collapse: collapse;
       margin: 14px 0;
-      border-radius: 10px;
+      border-radius: 8px;
       overflow: hidden;
       font-size: 0.9rem;
 
@@ -543,29 +490,27 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
         background: $surface0;
         font-weight: 600;
         color: $subtext1;
-        font-size: 0.82rem;
-        letter-spacing: 0.4px;
+        font-size: 0.8rem;
+        letter-spacing: 0.5px;
         text-transform: uppercase;
+        font-family: $font-mono;
       }
       tr:nth-child(even) td {
         background: rgba(49, 50, 68, 0.3);
       }
     }
 
-    // Links
     a {
-      color: $blue;
+      color: $teal;
       text-decoration: none;
-      border-bottom: 1px solid rgba(137, 180, 250, 0.3);
-      transition: border-color 0.2s ease, color 0.2s ease;
+      border-bottom: 1px solid rgba(148, 226, 213, 0.3);
+      transition: border-color 0.2s ease;
 
       &:hover {
-        color: #a3c4fb;
-        border-bottom-color: rgba(137, 180, 250, 0.8);
+        border-bottom-color: rgba(148, 226, 213, 0.8);
       }
     }
 
-    // Headings
     h1, h2, h3, h4 {
       color: $text;
       font-weight: 700;
@@ -578,14 +523,12 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
     h3 { font-size: 1.1rem; }
     h4 { font-size: 1rem; color: $subtext1; }
 
-    // Horizontal rule
     hr {
       border: none;
       border-top: 1px solid $surface1;
       margin: 1.5em 0;
     }
 
-    // Strong / Em
     strong { color: $text; font-weight: 700; }
     em     { color: $subtext1; }
   }
@@ -600,25 +543,24 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
   flex-direction: row !important;
   align-items: center;
   gap: 10px;
-  background: rgba(49, 50, 68, 0.5);
+  background: $surface0;
   padding: 10px 16px;
-  border-radius: 16px;
+  border-radius: 10px;
   width: fit-content;
-  border: 1px solid rgba(69, 71, 90, 0.6);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
-  backdrop-filter: blur(8px);
+  border: 1px solid $surface1;
 
   .thinking-text {
-    font-size: 0.88rem;
+    font-size: 0.85rem;
     color: $subtext1;
     font-weight: 500;
-    font-family: $font-main;
+    font-family: $font-mono;
+    letter-spacing: 0.02em;
   }
 
   .custom-spinner {
-    width: 20px;
-    height: 20px;
-    color: $blue;
+    width: 18px;
+    height: 18px;
+    color: $teal;
   }
 }
 
@@ -634,8 +576,7 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
     font-weight: 500;
     font-size: 0.87rem;
     padding: 14px 18px;
-    border-radius: 12px;
-    box-shadow: 0 4px 16px rgba(243, 139, 168, 0.08);
+    border-radius: 8px;
     font-family: $font-main;
   }
 }
@@ -656,21 +597,20 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
   opacity: 0;
 
   .empty-icon {
-    width: 64px;
-    height: 64px;
-    border-radius: 20px;
-    background: linear-gradient(135deg, rgba(137, 180, 250, 0.12) 0%, rgba(203, 166, 247, 0.08) 100%);
-    border: 1px solid rgba(137, 180, 250, 0.2);
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
+    background: $surface0;
+    border: 1px solid rgba(148, 226, 213, 0.15);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.8rem;
-    box-shadow: 0 8px 24px rgba(137, 180, 250, 0.1);
+    font-size: 1.6rem;
     margin-bottom: 8px;
   }
 
   h2 {
-    font-size: 1.25rem;
+    font-size: 1.2rem;
     font-weight: 700;
     color: $text;
     margin: 0;
@@ -678,7 +618,7 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
   }
 
   p {
-    font-size: 0.9rem;
+    font-size: 0.88rem;
     color: $subtext0;
     margin: 0;
     line-height: 1.6;
@@ -692,11 +632,6 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
    ========================================================================== */
 
 @keyframes msgFadeIn {
-  0%   { opacity: 0; transform: translateY(12px); }
+  0%   { opacity: 0; transform: translateY(10px); }
   100% { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes pulseGlow {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(137, 180, 250, 0.15); }
-  50%       { box-shadow: 0 0 0 8px rgba(137, 180, 250, 0); }
 }

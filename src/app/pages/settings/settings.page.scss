@@ -1,10 +1,11 @@
 // ============================================================
-// NeuroLAN Settings Page — Premium Dark UI
+// NeuroLAN Settings Page — Technical dark UI
 // ============================================================
 
 @use '../../../theme/variables' as *;
 
 $font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+$font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
 
 :host {
   display: flex;
@@ -24,19 +25,6 @@ $font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-seri
   flex-direction: column;
   height: 100%;
   background: $base;
-  position: relative;
-  overflow: hidden;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: -60px;
-    right: -60px;
-    width: 300px;
-    height: 300px;
-    background: radial-gradient(circle, rgba(203, 166, 247, 0.09) 0%, transparent 70%);
-    pointer-events: none;
-  }
 }
 
 // ============================================================
@@ -45,10 +33,9 @@ $font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-seri
 
 .settings-header {
   flex-shrink: 0;
-  padding: calc(28px + env(safe-area-inset-top, 0px)) 24px 24px;
-  border-bottom: 1px solid rgba(69, 71, 90, 0.5);
-  background: rgba(24, 24, 37, 0.85);
-  backdrop-filter: blur(12px);
+  padding: calc(24px + env(safe-area-inset-top, 0px)) 24px 20px;
+  border-bottom: 1px solid $surface0;
+  background: $mantle;
   position: relative;
   z-index: 5;
 
@@ -61,23 +48,23 @@ $font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-seri
   }
 
   .header-icon {
-    width: 48px;
-    height: 48px;
-    border-radius: 14px;
-    background: linear-gradient(135deg, rgba(203, 166, 247, 0.15) 0%, rgba(137, 180, 250, 0.1) 100%);
-    border: 1px solid rgba(203, 166, 247, 0.25);
+    width: 42px;
+    height: 42px;
+    border-radius: 8px;
+    background: rgba(148, 226, 213, 0.08);
+    border: 1px solid rgba(148, 226, 213, 0.18);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.4rem;
-    color: $mauve;
+    font-size: 1.3rem;
+    color: $teal;
     flex-shrink: 0;
-    box-shadow: 0 4px 16px rgba(203, 166, 247, 0.12);
   }
 
   .header-title {
-    font-size: 1.5rem;
+    font-size: 1.35rem;
     font-weight: 700;
+    letter-spacing: -0.02em;
     color: $text;
     margin: 0 0 2px;
     font-family: $font;
@@ -85,12 +72,12 @@ $font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-seri
   }
 
   .header-subtitle {
-    font-size: 0.85rem;
-    color: $subtext0;
+    font-size: 0.78rem;
+    color: $overlay0;
     margin: 0;
-    font-family: $font;
-    line-height: 1.5;
-    letter-spacing: 0.1px;
+    font-family: $font-mono;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
   }
 }
 
@@ -107,10 +94,10 @@ $font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-seri
 .settings-container {
   max-width: 640px;
   margin: 0 auto;
-  padding: 32px 24px 40px;
+  padding: 28px 24px 40px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 16px;
 }
 
 // ============================================================
@@ -118,23 +105,19 @@ $font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-seri
 // ============================================================
 
 .settings-card {
-  background: rgba(49, 50, 68, 0.5);
-  border: 1px solid rgba(69, 71, 90, 0.6);
-  border-radius: 18px;
-  padding: 24px;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
-  will-change: opacity, transform;
-  animation: cardFadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  background: $mantle;
+  border: 1px solid $surface0;
+  border-radius: 10px;
+  padding: 22px;
+  animation: cardFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   opacity: 0;
 
-  &:nth-child(2) { animation-delay: 0.08s; }
-  &:nth-child(3) { animation-delay: 0.16s; }
+  &:nth-child(2) { animation-delay: 0.06s; }
+  &:nth-child(3) { animation-delay: 0.12s; }
 }
 
 @keyframes cardFadeIn {
-  0%   { opacity: 0; transform: translateY(16px); }
+  0%   { opacity: 0; transform: translateY(12px); }
   100% { opacity: 1; transform: translateY(0); }
 }
 
@@ -143,35 +126,36 @@ $font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-seri
   display: flex;
   align-items: flex-start;
   gap: 14px;
-  margin-bottom: 24px;
-  padding-bottom: 20px;
-  border-bottom: 1px solid rgba(69, 71, 90, 0.4);
+  margin-bottom: 20px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid $surface0;
 }
 
 .card-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
-  background: rgba(137, 180, 250, 0.1);
-  border: 1px solid rgba(137, 180, 250, 0.2);
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: rgba(148, 226, 213, 0.08);
+  border: 1px solid rgba(148, 226, 213, 0.18);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.2rem;
-  color: $blue;
+  font-size: 1.1rem;
+  color: $teal;
   flex-shrink: 0;
 }
 
 .card-title {
-  font-size: 1.05rem;
+  font-size: 1rem;
   font-weight: 700;
   color: $text;
   margin: 0 0 3px;
   font-family: $font;
+  letter-spacing: -0.01em;
 }
 
 .card-subtitle {
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   color: $subtext0;
   margin: 0;
   font-family: $font;
@@ -195,39 +179,38 @@ $font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-seri
 }
 
 .field-label {
-  font-size: 0.8rem;
+  font-size: 0.72rem;
   font-weight: 600;
-  color: $subtext1;
-  letter-spacing: 0.5px;
+  color: $overlay1;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  font-family: $font;
+  font-family: $font-mono;
 }
 
 .field-input-wrapper {
   display: flex;
   align-items: center;
-  background: rgba(24, 24, 37, 0.8);
+  background: $base;
   border: 1px solid $surface1;
-  border-radius: 12px;
+  border-radius: 8px;
   padding: 0 14px;
-  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  transition: border-color 0.2s ease;
   gap: 10px;
 
   &:focus-within {
-    border-color: rgba(137, 180, 250, 0.6);
-    box-shadow: 0 0 0 3px rgba(137, 180, 250, 0.08);
+    border-color: rgba(148, 226, 213, 0.5);
   }
 }
 
 .field-prefix-icon {
   color: $overlay0;
-  font-size: 1.05rem;
+  font-size: 1rem;
   flex-shrink: 0;
   transition: color 0.2s ease;
 
   .field-input-wrapper:focus-within &,
   .language-select-wrapper:focus-within & {
-    color: $blue;
+    color: $teal;
   }
 }
 
@@ -237,19 +220,20 @@ $font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-seri
   --placeholder-color:   #{$overlay0};
   --padding-start:       0;
   --padding-end:         0;
-  --padding-top:         14px;
-  --padding-bottom:      14px;
+  --padding-top:         13px;
+  --padding-bottom:      13px;
   flex: 1;
-  font-size: 0.95rem;
-  font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+  font-size: 0.9rem;
+  font-family: $font-mono;
 
-  --highlight-color-focused: #{$blue};
-  --highlight-color-valid:   #{$blue};
+  --highlight-color-focused: transparent;
+  --highlight-color-valid:   transparent;
   --highlight-color-invalid: #{$red};
+  caret-color: $teal;
 }
 
 .field-hint {
-  font-size: 0.78rem;
+  font-size: 0.75rem;
   color: $overlay0;
   margin: 0;
   font-family: $font;
@@ -261,38 +245,30 @@ $font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-seri
 // ============================================================
 
 .save-button {
-  --background:       linear-gradient(135deg, #{$blue} 0%, #{$mauve} 100%);
-  --background-hover: linear-gradient(135deg, #6d91c7 0%, #a385c5 100%);
+  --background:       #{$teal};
+  --background-hover: rgba(148, 226, 213, 0.85);
   --color:            #{$crust};
-  --border-radius:    12px;
-  --padding-top:      16px;
-  --padding-bottom:   16px;
+  --border-radius:    8px;
+  --padding-top:      15px;
+  --padding-bottom:   15px;
   font-weight: 700;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   font-family: $font;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.02em;
   margin-top: 4px;
-  height: 52px;
+  height: 48px;
 
   &::part(native) {
-    border-radius: 12px;
-    box-shadow: 0 8px 24px rgba(137, 180, 250, 0.25);
-    transition: box-shadow 0.2s ease, transform 0.15s ease;
+    border-radius: 8px;
+    transition: opacity 0.15s ease;
   }
 
   &:hover::part(native) {
-    box-shadow: 0 12px 32px rgba(137, 180, 250, 0.35);
-    transform: translateY(-1px);
-  }
-
-  &:active::part(native) {
-    transform: scale(0.98) translateY(0);
+    opacity: 0.88;
   }
 
   &[disabled]::part(native) {
-    opacity: 0.4;
-    box-shadow: none;
-    transform: none;
+    opacity: 0.35;
     cursor: not-allowed;
   }
 }
@@ -302,9 +278,9 @@ $font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-seri
 // ============================================================
 
 .info-card {
-  background: rgba(137, 180, 250, 0.04);
-  border-color: rgba(137, 180, 250, 0.15);
-  padding: 18px 20px;
+  background: rgba(148, 226, 213, 0.03);
+  border-color: rgba(148, 226, 213, 0.12);
+  padding: 16px 18px;
 }
 
 .info-row {
@@ -313,8 +289,8 @@ $font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-seri
   align-items: flex-start;
 
   .info-icon {
-    font-size: 1.3rem;
-    color: $blue;
+    font-size: 1.2rem;
+    color: $teal;
     flex-shrink: 0;
     margin-top: 1px;
   }
@@ -324,7 +300,7 @@ $font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-seri
 
     strong {
       display: block;
-      font-size: 0.88rem;
+      font-size: 0.85rem;
       font-weight: 600;
       color: $subtext1;
       margin-bottom: 4px;
@@ -332,7 +308,7 @@ $font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-seri
     }
 
     p {
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       color: $overlay0;
       margin: 0;
       line-height: 1.55;
@@ -346,10 +322,9 @@ $font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-seri
 // ============================================================
 
 .language-card {
-  // Mauve accent instead of blue — visually distinct from server card
   .language-card-icon {
-    background: rgba(203, 166, 247, 0.1);
-    border-color: rgba(203, 166, 247, 0.2);
+    background: rgba(203, 166, 247, 0.08);
+    border-color: rgba(203, 166, 247, 0.18);
     color: $mauve;
   }
 }
@@ -357,17 +332,16 @@ $font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-seri
 .language-select-wrapper {
   display: flex;
   align-items: center;
-  background: rgba(24, 24, 37, 0.8);
+  background: $base;
   border: 1px solid $surface1;
-  border-radius: 12px;
+  border-radius: 8px;
   padding: 0 14px;
-  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  transition: border-color 0.2s ease;
   gap: 10px;
   cursor: pointer;
 
   &:focus-within {
-    border-color: rgba(203, 166, 247, 0.6);
-    box-shadow: 0 0 0 3px rgba(203, 166, 247, 0.08);
+    border-color: rgba(203, 166, 247, 0.5);
   }
 }
 
@@ -377,10 +351,10 @@ $font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-seri
   --placeholder-color: #{$overlay0};
   --padding-start:     0;
   --padding-end:       14px;
-  --padding-top:       14px;
-  --padding-bottom:    14px;
+  --padding-top:       13px;
+  --padding-bottom:    13px;
   flex: 1;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   font-family: $font;
   font-weight: 500;
 

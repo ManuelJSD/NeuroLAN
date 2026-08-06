@@ -50,5 +50,20 @@
     "EDIT": "Editar",
     "DELETE": "Eliminar",
     "CANCEL": "Cancelar"
+  },
+  "HOME": {
+    "TITLE": "¿En qué puedo ayudarte?",
+    "SUBTITLE": "IA local y privada",
+    "PLACEHOLDER": "Pregunta lo que sea...",
+    "SELECT_MODEL": "Modelo",
+    "RELOAD_MODELS": "Recargar modelos",
+    "SEND": "Enviar mensaje",
+    "SUGGESTIONS": {
+      "CONCEPT": "Explícame un concepto",
+      "CODE": "Escribe código para...",
+      "SUMMARY": "Resume este texto",
+      "BRAINSTORM": "Ayuda a generar ideas",
+      "TRANSLATE": "Traduce esto"
+    }
   }
 }

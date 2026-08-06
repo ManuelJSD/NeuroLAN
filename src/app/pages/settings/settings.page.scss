@@ -12,6 +12,7 @@ $font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-seri
   height: 100%;
   background: $base;
   font-family: $font;
+  contain: layout style;
 }
 
 // ============================================================

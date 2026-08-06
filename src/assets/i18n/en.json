@@ -50,5 +50,20 @@
     "EDIT": "Edit",
     "DELETE": "Delete",
     "CANCEL": "Cancel"
+  },
+  "HOME": {
+    "TITLE": "What can I help you with?",
+    "SUBTITLE": "Local & private AI",
+    "PLACEHOLDER": "Ask anything...",
+    "SELECT_MODEL": "Model",
+    "RELOAD_MODELS": "Reload models",
+    "SEND": "Send message",
+    "SUGGESTIONS": {
+      "CONCEPT": "Explain a concept",
+      "CODE": "Write code for...",
+      "SUMMARY": "Summarize this text",
+      "BRAINSTORM": "Help generate ideas",
+      "TRANSLATE": "Translate this"
+    }
   }
 }

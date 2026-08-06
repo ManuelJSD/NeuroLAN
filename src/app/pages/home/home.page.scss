@@ -1,0 +1,319 @@
+/* ============================================================
+   Home Page — Estructura + diseño base
+   ============================================================ */
+
+@use '../../../theme/variables' as *;
+
+$font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: $base;
+  font-family: $font;
+  contain: layout style;
+}
+
+/* ion-content transparente para heredar el fondo de :host */
+.home-content {
+  --background: transparent;
+}
+
+/* ============================================================
+   Wrapper — ocupa toda la pantalla y centra el contenido
+   ============================================================ */
+
+.home-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100%;
+  width: 100%;
+  padding: 1.5rem;
+  position: relative;
+
+  /* Decoración radial — coherente con Chat y Settings */
+  &::before {
+    content: '';
+    position: absolute;
+    top: -80px;
+    right: -60px;
+    width: 360px;
+    height: 360px;
+    background: radial-gradient(circle, rgba(137, 180, 250, 0.05) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 60px;
+    left: -80px;
+    width: 280px;
+    height: 280px;
+    background: radial-gradient(circle, rgba(203, 166, 247, 0.04) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+}
+
+/* ============================================================
+   Zona central
+   ============================================================ */
+
+.home-main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  width: 100%;
+  max-width: 720px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ============================================================
+   Título de bienvenida
+   ============================================================ */
+
+.welcome-section {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.welcome-title {
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 0;
+  line-height: 1.2;
+  color: $text;
+}
+
+.welcome-subtitle {
+  font-size: 0.9rem;
+  font-weight: 400;
+  margin: 0;
+  color: $subtext0;
+}
+
+/* ============================================================
+   Tarjeta principal de input
+   ============================================================ */
+
+.input-card {
+  width: 100%;
+  background: rgba(49, 50, 68, 0.5);
+  border-radius: 18px;
+  border: 1px solid rgba(69, 71, 90, 0.6);
+  padding: 1rem 1.25rem 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+  &:focus-within {
+    border-color: rgba(137, 180, 250, 0.5);
+    box-shadow: 0 4px 32px rgba(137, 180, 250, 0.08), 0 0 0 3px rgba(137, 180, 250, 0.06);
+  }
+}
+
+/* Textarea limpio */
+.main-input {
+  --padding-start: 0;
+  --padding-end: 0;
+  --padding-top: 0;
+  --padding-bottom: 0;
+  --background: transparent;
+  --color: #{$text};
+  --placeholder-color: #{$subtext0};
+  --highlight-color-focused: #{$blue};
+  --highlight-color-valid:   #{$blue};
+  --highlight-color-invalid: #{$red};
+  font-size: 1rem;
+  font-family: $font;
+  line-height: 1.6;
+  width: 100%;
+  min-height: 28px;
+  max-height: 200px;
+  caret-color: $blue;
+}
+
+/* ============================================================
+   Barra inferior del input (modelo + enviar)
+   ============================================================ */
+
+.input-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+/* Grupo: selector de modelo + botón recargar */
+.model-selector-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  border-radius: 20px;
+  padding: 0.2rem 0.5rem;
+  background: transparent;
+  border: none;
+  transition: background 0.2s ease;
+
+  &:hover {
+    background: rgba(137, 180, 250, 0.07);
+  }
+}
+
+.model-select {
+  --padding-start: 0;
+  --padding-end: 0.25rem;
+  --color: #{$text};
+  --placeholder-color: #{$subtext0};
+  font-size: 0.8rem;
+  font-family: $font;
+  min-width: 100px;
+  max-width: 200px;
+}
+
+.reload-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $overlay0;
+  transition: color 0.15s ease, background 0.15s ease;
+
+  &:hover {
+    color: $text;
+    background: rgba(137, 180, 250, 0.07);
+  }
+
+  ion-icon {
+    font-size: 14px;
+  }
+}
+
+/* Botón de enviar */
+.send-btn {
+  background: $blue;
+  border: none;
+  border-radius: 10px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  color: $crust;
+  transition: opacity 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
+  box-shadow: 0 4px 14px rgba(137, 180, 250, 0.25);
+
+  &:hover:not(:disabled) {
+    opacity: 0.9;
+    transform: scale(1.05);
+    box-shadow: 0 6px 18px rgba(137, 180, 250, 0.35);
+  }
+
+  &:disabled {
+    opacity: 0.25;
+    cursor: default;
+    box-shadow: none;
+  }
+}
+
+/* ============================================================
+   Sugerencias de prompts
+   ============================================================ */
+
+.suggestions-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+  width: 100%;
+}
+
+.suggestion-chip {
+  background: transparent;
+  border: 1px solid rgba(69, 71, 90, 0.7);
+  border-radius: 999px;
+  padding: 0.4rem 1rem;
+  font-size: 0.8rem;
+  color: $subtext0;
+  cursor: pointer;
+  font-family: $font;
+  transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+  white-space: nowrap;
+
+  &:hover {
+    color: $text;
+    border-color: rgba(137, 180, 250, 0.4);
+    background: rgba(137, 180, 250, 0.06);
+  }
+}
+
+/* ============================================================
+   Responsive
+   ============================================================ */
+
+@media (max-width: 480px) {
+  .home-wrapper {
+    padding: 0;
+    justify-content: flex-start;
+  }
+
+  .home-main {
+    height: 100%;
+    padding: 0 1.25rem 1.5rem;
+    justify-content: flex-start;
+    gap: 1rem;
+  }
+
+  /* El título baja hacia el centro de la pantalla */
+  .welcome-section {
+    text-align: left;
+    padding-top: 22vh;
+  }
+
+  .welcome-subtitle {
+    display: none;
+  }
+
+  /* El input se empuja al fondo */
+  .input-card {
+    margin-top: auto;
+  }
+
+  /* Sugerencias: scroll horizontal, sin wrap */
+  .suggestions-row {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    justify-content: flex-start;
+    padding-bottom: 0.25rem;
+    margin-left: -1.25rem;
+    margin-right: -1.25rem;
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+}

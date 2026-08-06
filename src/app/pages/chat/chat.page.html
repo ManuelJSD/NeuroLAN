@@ -1,132 +1,155 @@
 <div class="chat-wrapper">
 
-  <!-- Header Section -->
-  <header class="chat-header">
-    <div class="header-content">
+    <!-- Header Section -->
+    <header class="chat-header">
+      <div class="header-content">
 
-      <!-- Menu button (visible on mobile) -->
-      <ion-menu-button class="menu-btn" auto-hide="false"></ion-menu-button>
+        <!-- Menu button (visible on mobile) -->
+        <ion-menu-button class="menu-btn" auto-hide="false"></ion-menu-button>
 
-      <div class="model-selector-group">
-        <ion-select
-          class="model-select"
-          interface="popover"
-          [placeholder]="'CHAT.SELECT_MODEL' | translate"
-          [(ngModel)]="selectedModelKey"
-        >
-          <ion-select-option *ngFor="let model of models" [value]="model.id">{{ model.id }}</ion-select-option>
-        </ion-select>
+        <div class="model-selector-group">
+          <ion-select
+            class="model-select"
+            interface="popover"
+            [placeholder]="'CHAT.SELECT_MODEL' | translate"
+            [(ngModel)]="selectedModelKey"
+          >
+            @for (model of models; track model.id) {
+              <ion-select-option [value]="model.id">{{ model.id }}</ion-select-option>
+            }
+          </ion-select>
 
-        <button class="reload-models-btn" (click)="loadModels()" [title]="'CHAT.RELOAD_MODELS' | translate">
-          <ion-icon name="refresh-outline" class="reload-icon"></ion-icon>
-        </button>
-      </div>
-
-      <div class="header-right">
-        <ion-chip class="tokens-chip" *ngIf="usage">
-          <ion-label>{{ usage.total_tokens | number }} {{ 'CHAT.TOKENS' | translate }}</ion-label>
-        </ion-chip>
-
-        <!-- New Chat button -->
-        <button class="new-chat-header-btn" routerLink="/chat" routerDirection="root" [title]="'CHAT.NEW_CHAT' | translate">
-          <ion-icon name="create-outline"></ion-icon>
-          <span class="new-chat-label">{{ 'CHAT.NEW_BTN' | translate }}</span>
-        </button>
-      </div>
-    </div>
-  </header>
-
-  <!-- Scrollable Chat Content -->
-  <ion-content class="chat-content">
-    <div class="messages-container">
-
-      <!-- Empty State -->
-      <div class="empty-state" *ngIf="messages.length === 0 && !isSending">
-        <div class="empty-icon">🧠</div>
-        <h2>{{ 'CHAT.WELCOME_TITLE' | translate }}</h2>
-        <p>{{ 'CHAT.WELCOME_SUBTITLE' | translate }}</p>
-      </div>
-
-      <!-- Messages Loop -->
-      <div class="message-wrapper" *ngFor="let msg of messages" [ngClass]="msg.role">
-
-        <!-- Avatar AI -->
-        <div class="avatar ai-avatar" *ngIf="msg.role === 'assistant'">
-          <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2z"></path>
-            <path d="M9 14v-2"></path>
-            <path d="M15 14v-2"></path>
-          </svg>
+          <button class="reload-models-btn" (click)="loadModels()" [title]="'CHAT.RELOAD_MODELS' | translate">
+            <ion-icon name="refresh-outline" class="reload-icon" aria-hidden="true"></ion-icon>
+          </button>
         </div>
 
-        <!-- Avatar User -->
-        <div class="avatar user-avatar" *ngIf="msg.role === 'user'">
-          <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-            <circle cx="12" cy="7" r="4"></circle>
-          </svg>
+        <div class="header-right">
+          @if (usage) {
+            <ion-chip class="tokens-chip">
+              <ion-label>{{ usage.total_tokens | number }} {{ 'CHAT.TOKENS' | translate }}</ion-label>
+            </ion-chip>
+          }
+
+          <!-- New Chat button -->
+          <button class="new-chat-header-btn" routerLink="/chat" routerDirection="root" [title]="'CHAT.NEW_CHAT' | translate">
+            <ion-icon name="create-outline" aria-hidden="true"></ion-icon>
+            <span class="new-chat-label">{{ 'CHAT.NEW_BTN' | translate }}</span>
+          </button>
         </div>
+      </div>
+    </header>
 
-        <!-- Bubble content -->
-        <div class="message-bubble">
-          <div class="message-sender message-sender-assistant">{{ (msg.role === 'user' ? 'CHAT.USER_ROLE' : 'CHAT.ASSISTANT_ROLE') | translate }}</div>
+    <!-- Scrollable Chat Content -->
+    <ion-content class="chat-content">
+      <div class="messages-container">
 
-          <markdown class="markdown-view" *ngIf="msg.role === 'assistant'" [data]="msg.content"></markdown>
-          <div class="message-text" *ngIf="msg.role === 'user'">{{ msg.content }}</div>
-          <div class="message-meta" *ngIf="msg.responseTime !== undefined">
-            <span class="response-time">⏱️ {{ msg.responseTime | number:'1.1-2' }}s</span>
+        <!-- Empty State -->
+        @if (messages.length === 0 && !isSending) {
+          <div class="empty-state">
+            <div class="empty-icon">🧠</div>
+            <h2>{{ 'CHAT.WELCOME_TITLE' | translate }}</h2>
+            <p>{{ 'CHAT.WELCOME_SUBTITLE' | translate }}</p>
           </div>
-        </div>
-      </div>
+        }
 
-      <!-- Thinking Indicator -->
-      <div class="message-wrapper assistant" *ngIf="isSending">
-        <div class="avatar ai-avatar">
-          <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2z"></path>
-            <path d="M9 14v-2"></path>
-            <path d="M15 14v-2"></path>
+        <!-- Messages Loop -->
+        @for (msg of messages; track $index) {
+          <div class="message-wrapper" [ngClass]="msg.role">
+
+            <!-- Avatar AI -->
+            @if (msg.role === 'assistant') {
+              <div class="avatar ai-avatar">
+                <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2z"></path>
+                  <path d="M9 14v-2"></path>
+                  <path d="M15 14v-2"></path>
+                </svg>
+              </div>
+            }
+
+            <!-- Avatar User -->
+            @if (msg.role === 'user') {
+              <div class="avatar user-avatar">
+                <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+              </div>
+            }
+
+            <!-- Bubble content -->
+            <div class="message-bubble">
+              <div class="message-sender message-sender-assistant">{{ (msg.role === 'user' ? 'CHAT.USER_ROLE' : 'CHAT.ASSISTANT_ROLE') | translate }}</div>
+
+              @if (msg.role === 'assistant') {
+                <markdown class="markdown-view" [data]="msg.content"></markdown>
+              }
+              @if (msg.role === 'user') {
+                <div class="message-text">{{ msg.content }}</div>
+              }
+              @if (msg.responseTime !== undefined) {
+                <div class="message-meta">
+                  <span class="response-time">⏱️ {{ msg.responseTime | number:'1.1-2' }}s</span>
+                </div>
+              }
+            </div>
+          </div>
+        }
+
+        <!-- Thinking Indicator -->
+        @if (isSending) {
+          <div class="message-wrapper assistant">
+            <div class="avatar ai-avatar">
+              <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2z"></path>
+                <path d="M9 14v-2"></path>
+                <path d="M15 14v-2"></path>
+              </svg>
+            </div>
+            <div class="message-bubble thinking-bubble">
+              <span class="thinking-text">{{ 'CHAT.THINKING' | translate }}</span>
+              <ion-spinner name="dots" class="custom-spinner"></ion-spinner>
+            </div>
+          </div>
+        }
+
+        <!-- Error State -->
+        @if (errorMessage) {
+          <div class="error-container">
+            <ion-chip color="danger" class="error-chip">
+              <ion-label>⚠️ {{ errorMessage }}</ion-label>
+            </ion-chip>
+          </div>
+        }
+
+      </div>
+    </ion-content>
+
+    <!-- Footer Section -->
+    <footer class="chat-footer">
+      <div class="input-wrapper">
+        <ion-textarea
+          class="chat-input"
+          autoGrow="true"
+          rows="1"
+          [(ngModel)]="userInput"
+          [placeholder]="'CHAT.TYPE_MESSAGE' | translate"
+          (keydown.enter)="onEnterKey($any($event))"
+        ></ion-textarea>
+        <ion-button
+          class="send-btn"
+          fill="clear"
+          (click)="sendMessage()"
+          [disabled]="isSending || !userInput"
+        >
+          <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="send-icon" aria-hidden="true">
+            <line x1="22" y1="2" x2="11" y2="13"></line>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
           </svg>
-        </div>
-        <div class="message-bubble thinking-bubble">
-          <span class="thinking-text">{{ 'CHAT.THINKING' | translate }}</span>
-          <ion-spinner name="dots" class="custom-spinner"></ion-spinner>
-        </div>
+        </ion-button>
       </div>
-
-      <!-- Error State -->
-      <div class="error-container" *ngIf="errorMessage">
-        <ion-chip color="danger" class="error-chip">
-          <ion-label>⚠️ {{ errorMessage }}</ion-label>
-        </ion-chip>
-      </div>
-
-    </div>
-  </ion-content>
-
-  <!-- Footer Section -->
-  <footer class="chat-footer">
-    <div class="input-wrapper">
-      <ion-textarea
-        class="chat-input"
-        autoGrow="true"
-        rows="1"
-        [(ngModel)]="userInput"
-        [placeholder]="'CHAT.TYPE_MESSAGE' | translate"
-        (keydown.enter)="onEnterKey($any($event))"
-      ></ion-textarea>
-      <ion-button
-        class="send-btn"
-        fill="clear"
-        (click)="sendMessage()"
-        [disabled]="isSending || !userInput"
-      >
-        <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="send-icon">
-          <line x1="22" y1="2" x2="11" y2="13"></line>
-          <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-        </svg>
-      </ion-button>
-    </div>
-  </footer>
+    </footer>
 
 </div>
+

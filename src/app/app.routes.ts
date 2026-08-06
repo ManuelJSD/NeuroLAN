@@ -10,9 +10,13 @@ export const routes: Routes = [
     path: 'conversations',
     loadComponent: () => import('./pages/conversations/conversations.page').then(m => m.ConversationsPage)
   },
+  // {
+  //   path: 'chat',
+  //   loadComponent: () => import('./pages/chat/chat.page').then(m => m.ChatPage)
+  // },
   {
     path: 'chat',
-    loadComponent: () => import('./pages/chat/chat.page').then(m => m.ChatPage)
+    loadComponent: () => import('./pages/home/home.page').then(m => m.HomePage)
   },
   {
     path: 'chat/:id',

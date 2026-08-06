@@ -13,6 +13,7 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
   height: 100%;
   background: $base;
   font-family: $font-main;
+  contain: layout style;
 }
 
 /* ==========================================================================

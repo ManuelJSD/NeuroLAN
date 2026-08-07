@@ -26,6 +26,24 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
   height: 100%;
   width: 100%;
   background: $base;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: calc(45px + env(safe-area-inset-top, 0px));
+    background: linear-gradient(
+      to bottom,
+      $base 0%,
+      $base env(safe-area-inset-top, 0px),
+      transparent 100%
+    );
+    z-index: 5;
+    pointer-events: none;
+  }
 }
 
 /* ==========================================================================
@@ -167,6 +185,8 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
    3. CHAT CONTENT AREA
    ========================================================================== */
 
+
+
 .chat-content {
   flex: 1 1 auto;
   min-height: 0;
@@ -177,10 +197,14 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
   .messages-container {
     max-width: 820px;
     margin: 0 auto;
-    padding: calc(76px + env(safe-area-inset-top, 0px)) 20px 64px;
+    padding: 20px 20px 64px;
     display: flex;
     flex-direction: column;
     gap: 28px;
+
+    @media (min-width: 1024px) {
+      padding: calc(76px + env(safe-area-inset-top, 0px)) 20px 64px;
+    }
   }
 }
 

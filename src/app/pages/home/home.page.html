@@ -1,7 +1,7 @@
 <ion-content class="home-content">
   <div class="home-wrapper">
     <!-- Floating button: Only appears if the menu is closed. -->
-    @if (!uiService.isDesktopSidebarOpen()) {
+    @if (uiService.shouldShowToggleBtn()) {
     <div class="floating-top-controls">
       <button
         class="icon-action-btn"

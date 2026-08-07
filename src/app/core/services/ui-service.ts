@@ -40,6 +40,10 @@ export class UiService {
     return this.isDesktopSidebarOpen() && this.isLargeScreen();
   });
 
+  public shouldShowToggleBtn = computed(() => {
+    return !this.splitPaneCondition();
+  });
+
   public toggleDesktopSidebar() {
     if (this.isLargeScreen()) {
       // Large screens: Toggle the split pane directly

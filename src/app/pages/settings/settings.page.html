@@ -2,7 +2,7 @@
   <!-- Page Header -->
   <header class="settings-header">
     <!-- Floating button: Only appears if the menu is closed. -->
-    @if (!uiService.isDesktopSidebarOpen()) {
+    @if (uiService.shouldShowToggleBtn()) {
     <div class="floating-top-controls">
       <button
         class="icon-action-btn"

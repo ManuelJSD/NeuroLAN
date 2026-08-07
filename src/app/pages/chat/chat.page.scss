@@ -589,7 +589,7 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
   align-items: center;
   gap: 10px;
   background: $surface0;
-  padding: 10px 16px;
+  padding: 10px 16px !important;
   border-radius: 10px;
   width: fit-content;
   border: 1px solid $surface1;
@@ -600,6 +600,7 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
     font-weight: 500;
     font-family: $font-mono;
     letter-spacing: 0.02em;
+    line-height: 1;
   }
 
   .custom-spinner {

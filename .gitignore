@@ -72,3 +72,19 @@ Thumbs.db
 # Agents
 .agents/*
 skills-lock.json
+
+# Variables de entorno locales
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.env
+
+# Archivos de pnpm y yarn
+.pnpm-store/
+*-debug.log
+*-error.log
+
+# ESLint
+.eslintcache

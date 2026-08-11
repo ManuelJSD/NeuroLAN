@@ -10,6 +10,7 @@ import {
   IonIcon,
   IonSelect,
   IonSelectOption,
+  IonToggle,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
@@ -19,6 +20,7 @@ import {
   checkmarkCircleOutline,
   informationCircleOutline,
   languageOutline,
+  wifiOutline,
 } from 'ionicons/icons';
 import { SettingsService } from 'src/app/core/services/settings';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
@@ -29,6 +31,7 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
   styleUrls: ['./settings.page.scss'],
   standalone: true,
   imports: [
+    IonToggle,
     CommonModule,
     ReactiveFormsModule,
     TranslatePipe,
@@ -52,6 +55,7 @@ export class SettingsPage implements OnInit {
 
   baseUrl: string | null = '';
   selectedlanguage: string | null = '';
+  streaming: boolean = true;
 
   languages = [
     { id: 'en', label: 'English' },
@@ -71,6 +75,7 @@ export class SettingsPage implements OnInit {
       checkmarkCircleOutline,
       informationCircleOutline,
       languageOutline,
+      wifiOutline,
     });
   }
 
@@ -82,6 +87,10 @@ export class SettingsPage implements OnInit {
     this.baseUrl = await this.settingsService.getBaseUrl();
     const lang = await this.settingsService.getLanguage();
     this.selectedlanguage = lang ? lang : 'en';
+    const streaming = await this.settingsService.getStreamMode();
+    this.streaming = streaming ?? true;
+
+    console.log('Inicialización:', this.streaming);
 
     this.settingsForm.setValue({
       serverAddress: this.baseUrl ?? 'http://127.0.0.1:1234',
@@ -114,5 +123,12 @@ export class SettingsPage implements OnInit {
     if (message !== undefined) {
       this.toastMessage = message;
     }
+  }
+
+  setStreaming(streaming: boolean) {
+    this.streaming = streaming;
+    this.settingsService.setStreamMode(streaming);
+    this.setOpen(true, this.translateService.instant('SETTINGS.TOAST_SUCCESS'));
+    console.log('Seteado:', this.streaming);
   }
 }

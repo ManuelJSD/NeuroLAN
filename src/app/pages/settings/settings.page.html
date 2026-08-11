@@ -139,6 +139,34 @@
           <p class="field-hint">{{ "SETTINGS.SELECT_LANGUAGE" | translate }}</p>
         </div>
       </div>
+
+      <!-- Streaming Card -->
+      <div class="settings-card streaming-card">
+        <div class="card-header">
+          <div class="card-icon streaming-card-icon">
+            <ion-icon name="wifi-outline"></ion-icon>
+          </div>
+          <div class="card-header-text">
+            <h2 class="card-title">
+              {{ "SETTINGS.STREAMING_TITLE" | translate }}
+            </h2>
+            <p class="card-subtitle">
+              {{ "SETTINGS.STREAMING_SUBTITLE" | translate }}
+            </p>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <ion-toggle
+            labelPlacement="end"
+            [checked]="streaming"
+            (ionChange)="setStreaming($event.detail.checked)"
+            ><p class="field-hint">
+              {{ "SETTINGS.SWITCH_STREAMING" | translate }}
+            </p></ion-toggle
+          >
+        </div>
+      </div>
     </div>
   </ion-content>
 

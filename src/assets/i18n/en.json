@@ -14,7 +14,13 @@
     "LANGUAGE_TITLE": "App Language",
     "LANGUAGE_SUBTITLE": "Choose the interface display language",
     "TOAST_ERROR": "⚠️ No server URL was specified",
-    "TOAST_SUCCESS": "✅ Settings saved successfully"
+    "TOAST_SUCCESS": "✅ Settings saved successfully",
+    "STREAMING_TITLE": "Streaming",
+    "STREAMING_SUBTITLE": "Choose if you want to receive the messages in real time",
+    "STREAMING": "Streaming",
+    "SWITCH_STREAMING": "ENABLE/DISABLE Streaming",
+    "STREAMING_ON": "Streaming ENABLED",
+    "STREAMING_OFF": "Streaming DISABLED"
   },
   "MENU": {
     "LOCAL_AI": "Local AI",

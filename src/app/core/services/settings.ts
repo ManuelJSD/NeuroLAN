@@ -6,11 +6,10 @@ import { Storage } from '@ionic/storage-angular';
   providedIn: 'root',
 })
 export class SettingsService {
-
   private _storage: Storage | null = null;
   private _initPromise: Promise<Storage> | null = null;
 
-  constructor(private storage: Storage){
+  constructor(private storage: Storage) {
     this._initPromise = this.init();
   }
 
@@ -51,4 +50,13 @@ export class SettingsService {
     return (await this._storage?.get('language')) ?? null;
   }
 
+  async setStreamMode(isStream: boolean): Promise<void> {
+    await this.ensureStorage();
+    await this._storage?.set('stream_mode', isStream);
+  }
+
+  async getStreamMode(): Promise<boolean | null> {
+    const storage = await this.ensureStorage();
+    return (await this._storage?.get('stream_mode')) ?? null;
+  }
 }

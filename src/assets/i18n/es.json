@@ -14,7 +14,13 @@
     "LANGUAGE_TITLE": "Idioma de la App",
     "LANGUAGE_SUBTITLE": "Elige el idioma de visualización de la interfaz",
     "TOAST_ERROR": "⚠️ No se especificó la URL del servidor",
-    "TOAST_SUCCESS": "✅ Ajustes guardados correctamente"
+    "TOAST_SUCCESS": "✅ Ajustes guardados correctamente",
+    "STREAMING_TITLE": "Streaming",
+    "STREAMING_SUBTITLE": "Elige si quieres recibir los mensajes en tiempo real",
+    "STREAMING": "Streaming",
+    "SWITCH_STREAMING": "ACTIVAR/DESACTIVAR Streaming",
+    "STREAMING_ON": "Streaming Activado",
+    "STREAMING_OFF": "Streaming Desactivado"
   },
   "MENU": {
     "LOCAL_AI": "IA Local",

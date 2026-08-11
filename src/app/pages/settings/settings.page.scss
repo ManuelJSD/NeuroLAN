@@ -361,3 +361,22 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
   --highlight-color-focused: #{$mauve};
   --highlight-color-valid:   #{$mauve};
 }
+
+// ============================================================
+// Streaming Card
+// ============================================================
+
+.streaming-card {
+  .streaming-card-icon {
+    background: rgba(203, 166, 247, 0.08);
+    border-color: rgba(203, 166, 247, 0.18);
+    color: $mauve;
+  }
+  ion-toggle {
+    --track-background-checked: #{$mauve};
+    --handle-background-checked: #{$base};
+    font-family: $font;
+    font-size: 0.9rem;
+    color: $text;
+  }
+}

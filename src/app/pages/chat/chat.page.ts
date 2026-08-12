@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, NgZone, OnDestroy, OnInit, inject } from '@angular/core';
 import { CommonModule, DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
@@ -24,6 +24,8 @@ import { ConversationService } from 'src/app/core/services/conversation';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { UiService } from 'src/app/core/services/ui-service';
+import { SettingsService } from 'src/app/core/services/settings';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-chat',
@@ -46,13 +48,17 @@ import { UiService } from 'src/app/core/services/ui-service';
     TranslatePipe,
   ],
 })
-export class ChatPage implements OnInit {
+export class ChatPage implements OnInit, OnDestroy {
   public uiService = inject(UiService);
 
   private route = inject(ActivatedRoute);
   private openAIService = inject(OpenAIService);
+  private settingsService = inject(SettingsService);
   private conversationService = inject(ConversationService);
   private translateService = inject(TranslateService);
+  private ngZone = inject(NgZone);
+
+  private streamSubscription?: Subscription;
 
   models: OpenAIModel[] = [];
   selectedModelKey: string = '';
@@ -88,8 +94,7 @@ export class ChatPage implements OnInit {
           this.userInput = history.state.message;
           this.selectedModelKey = history.state.model;
 
-          // REQUIRED: Clear the state so it doesn't resend on F5 refresh
-          history.state.message = null;
+          history.replaceState({ ...history.state, message: null }, '');
 
           // Send request to OpenAI
           this.sendMessage();
@@ -132,7 +137,7 @@ export class ChatPage implements OnInit {
     });
   }
 
-  sendMessage() {
+  async sendMessage() {
     const userText = this.userInput.trim();
 
     // Exit if input is empty
@@ -159,38 +164,79 @@ export class ChatPage implements OnInit {
 
     const startTime = Date.now();
 
-    this.openAIService
-      .sendChat({
-        model: this.selectedModelKey,
-        messages: this.messages,
-      })
-      .subscribe({
-        next: (res) => {
-          const responseTime = (Date.now() - startTime) / 1000;
-          this.messages.push({
-            role: 'assistant',
-            content: res.choices[0].message.content,
-            responseTime: responseTime,
-          });
-          this.usage = res.usage;
-          this.isSending = false;
+    const streaming = (await this.settingsService.getStreamMode()) ?? true;
 
-          //Save Conversation
-          this.conversationService.saveConversation({
-            id: this.currentConversationId,
-            title: this.messages[0].content.substring(0, 50),
-            messages: this.messages,
-            createdAt: this.currentConversationCreatedAt,
-          });
-        },
-        error: (err) => {
-          console.error(err);
-          this.errorMessage = this.translateService.instant(
-            'CHAT.ERROR_SEND_FAILED',
-          );
-          this.isSending = false;
-        },
-      });
+    if (!streaming) {
+      this.openAIService
+        .sendChat({
+          model: this.selectedModelKey,
+          messages: this.messages,
+        })
+        .subscribe({
+          next: (res) => {
+            const responseTime = (Date.now() - startTime) / 1000;
+            this.messages.push({
+              role: 'assistant',
+              content: res.choices[0].message.content,
+              responseTime: responseTime,
+            });
+            this.usage = res.usage;
+            this.isSending = false;
+
+            //Save Conversation
+            this.conversationService.saveConversation({
+              id: this.currentConversationId,
+              title: this.messages[0].content.substring(0, 50),
+              messages: this.messages,
+              createdAt: this.currentConversationCreatedAt,
+            });
+          },
+          error: (err) => {
+            console.error(err);
+            this.errorMessage = this.translateService.instant(
+              'CHAT.ERROR_SEND_FAILED',
+            );
+            this.isSending = false;
+          },
+        });
+    } else {
+      const messagesToSend = [...this.messages];
+      this.messages.push({ role: 'assistant', content: '' });
+
+      this.streamSubscription = this.openAIService
+        .sendChatStream({
+          model: this.selectedModelKey,
+          messages: messagesToSend,
+        })
+        .subscribe({
+          next: (chunk) => {
+            this.ngZone.run(() => {
+              this.messages[this.messages.length - 1].content += chunk;
+            });
+          },
+          complete: () => {
+            this.isSending = false;
+
+            const responseTime = (Date.now() - startTime) / 1000;
+            this.messages[this.messages.length - 1].responseTime = responseTime;
+
+            //Save Conversation
+            this.conversationService.saveConversation({
+              id: this.currentConversationId,
+              title: this.messages[0].content.substring(0, 50),
+              messages: this.messages,
+              createdAt: this.currentConversationCreatedAt,
+            });
+          },
+          error: (err) => {
+            console.error(err);
+            this.errorMessage = this.translateService.instant(
+              'CHAT.ERROR_SEND_FAILED',
+            );
+            this.isSending = false;
+          },
+        });
+    }
   }
 
   onEnterKey(event: KeyboardEvent) {
@@ -198,6 +244,10 @@ export class ChatPage implements OnInit {
       event.preventDefault();
       this.sendMessage();
     }
+  }
+
+  ngOnDestroy() {
+    this.streamSubscription?.unsubscribe();
   }
 
   private generateId() {

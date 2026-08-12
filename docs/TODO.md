@@ -14,7 +14,8 @@
 
 ## v1.1 — Streaming and chat improvements
 
-- [ ] Response streaming (SSE), enabled by default with a toggle in Settings.
+- [x] Response streaming (SSE), enabled by default with a toggle in Settings.
+- [x] Delete all conversation history from Settings with a confirmation dialog.
 - [ ] Streaming metrics: Time to First Token (TTFT) and tokens per second (tok/s).
 - [ ] Copy message and code blocks to clipboard.
 - [ ] Search across conversation history.

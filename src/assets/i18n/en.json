@@ -21,8 +21,8 @@
     "SWITCH_STREAMING": "ENABLE/DISABLE Streaming",
     "STREAMING_ON": "Streaming ENABLED",
     "STREAMING_OFF": "Streaming DISABLED",
-    "DELETEHISTORY": "Delete conversation history.",
-    "DELETEHISTORY_SUBTITLE": "Deleting the conversation history will delete all conversation history.",
+    "DELETEHISTORY": "Clear history",
+    "DELETEHISTORY_SUBTITLE": "Deletes all messages and conversations saved on this device.",
     "ALERT_DELETE": "Are you sure you want to delete ALL conversations?"
   },
   "MENU": {

@@ -95,9 +95,21 @@
           <div class="message-text">{{ msg.content }}</div>
           } @if (msg.responseTime !== undefined) {
           <div class="message-meta">
-            <span class="response-time"
-              >⏱️ {{ msg.responseTime | number:'1.1-2' }}s</span
-            >
+            <span class="response-time" title="Tiempo total">
+              ⏱️ {{ msg.responseTime | number:'1.1-2' }}s
+            </span>
+            @if (msg.ttft !== undefined && msg.tokensPerSecond !== undefined) {
+            <span class="response-time" title="Time to First Token (Latencia)">
+              ⚡ {{ msg.ttft | number:'1.1-2' }}s
+            </span>
+            <span class="response-time" title="Velocidad de generación">
+              🚀 {{ msg.tokensPerSecond | number:'1.1-1' }} tok/s
+            </span>
+            } @if (msg.tokensCount !== undefined) {
+            <span class="response-time" title="Tokens consumidos">
+              📝 {{ msg.tokensCount }} tok
+            </span>
+            }
           </div>
           }
         </div>
@@ -186,10 +198,10 @@
           </button>
         </div>
 
-        @if (usage) {
+        @if (totalConversationTokens > 0) {
         <ion-chip class="tokens-chip">
           <ion-label
-            >{{ usage.total_tokens | number }} {{ 'CHAT.TOKENS' | translate
+            >{{ totalConversationTokens | number }} {{ 'CHAT.TOKENS' | translate
             }}</ion-label
           >
         </ion-chip>

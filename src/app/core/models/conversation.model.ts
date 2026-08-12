@@ -1,4 +1,4 @@
-import { ChatMessage } from "./openai.model";
+import { ChatMessage } from './openai.model';
 
 export interface Conversation {
   id: string;

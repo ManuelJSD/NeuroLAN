@@ -15,6 +15,9 @@ export interface ChatMessage {
   role: ChatRole;
   content: string;
   responseTime?: number;
+  ttft?: number;
+  tokensPerSecond?: number;
+  tokensCount?: number;
 }
 
 export interface OpenAIChatRequest {

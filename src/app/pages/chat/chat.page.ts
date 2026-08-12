@@ -64,8 +64,11 @@ export class ChatPage implements OnInit, OnDestroy {
   selectedModelKey: string = '';
 
   messages: ChatMessage[] = [];
-  usage?: UsageTokens;
   userInput: string = '';
+
+  get totalConversationTokens(): number {
+    return this.messages.reduce((total, msg) => total + (msg.tokensCount || 0), 0);
+  }
   isSending = false;
   errorMessage: string | null = null;
   currentConversationId: string = this.generateId();
@@ -120,7 +123,6 @@ export class ChatPage implements OnInit, OnDestroy {
   newChat() {
     this.messages = [];
     this.userInput = '';
-    this.usage = undefined;
     this.errorMessage = null;
     this.isSending = false;
     this.currentConversationId = this.generateId();
@@ -180,8 +182,10 @@ export class ChatPage implements OnInit, OnDestroy {
               content: res.choices[0].message.content,
               responseTime: responseTime,
             });
-            this.usage = res.usage;
             this.isSending = false;
+
+            this.messages[this.messages.length - 1].tokensCount =
+              res.usage?.completion_tokens;
 
             //Save Conversation
             this.conversationService.saveConversation({
@@ -200,8 +204,10 @@ export class ChatPage implements OnInit, OnDestroy {
           },
         });
     } else {
+      let tokenCount = 0;
       const messagesToSend = [...this.messages];
       this.messages.push({ role: 'assistant', content: '' });
+      let tokenStartTime = 0;
 
       this.streamSubscription = this.openAIService
         .sendChatStream({
@@ -213,12 +219,27 @@ export class ChatPage implements OnInit, OnDestroy {
             this.ngZone.run(() => {
               this.messages[this.messages.length - 1].content += chunk;
             });
+            if (tokenCount === 0) {
+              tokenStartTime = Date.now();
+            }
+            tokenCount++;
           },
           complete: () => {
             this.isSending = false;
 
             const responseTime = (Date.now() - startTime) / 1000;
             this.messages[this.messages.length - 1].responseTime = responseTime;
+
+            const ttft = (tokenStartTime - startTime) / 1000;
+            const tokenResponseTime = (Date.now() - tokenStartTime) / 1000;
+            const tokensPerSecond =
+              tokenResponseTime > 0 ? tokenCount / tokenResponseTime : 0;
+
+            this.messages[this.messages.length - 1].ttft = ttft;
+            this.messages[this.messages.length - 1].tokensPerSecond =
+              tokensPerSecond;
+
+            this.messages[this.messages.length - 1].tokensCount = tokenCount;
 
             //Save Conversation
             this.conversationService.saveConversation({

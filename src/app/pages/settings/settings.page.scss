@@ -380,3 +380,18 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
     color: $text;
   }
 }
+
+.delete-card {
+  .delete-card-icon {
+    background: rgba(255, 0, 0, 0.384);
+    border-color: rgb(255, 0, 0);
+    color: $mauve;
+  }
+  ion-toggle {
+    --track-background-checked: #{$mauve};
+    --handle-background-checked: #{$base};
+    font-family: $font;
+    font-size: 0.9rem;
+    color: $text;
+  }
+}

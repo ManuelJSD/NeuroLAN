@@ -167,6 +167,29 @@
           >
         </div>
       </div>
+
+      <!-- Delete Card -->
+      <div class="settings-card delete-card">
+        <div class="card-header">
+          <div class="card-icon delete-card-icon">
+            <ion-icon name="trash-outline"></ion-icon>
+          </div>
+          <div class="card-header-text">
+            <h2 class="card-title">
+              {{ "SETTINGS.DELETEHISTORY" | translate }}
+            </h2>
+            <p class="card-subtitle">
+              {{ "SETTINGS.DELETEHISTORY_SUBTITLE" | translate }}
+            </p>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <ion-button color="danger" (click)="deleteAllConversations()"
+            >{{ "SETTINGS.DELETEHISTORY" | translate }}</ion-button
+          >
+        </div>
+      </div>
     </div>
   </ion-content>
 
@@ -178,4 +201,16 @@
     (didDismiss)="setOpen(false)"
     position="bottom"
   ></ion-toast>
+
+  <ion-alert
+    [isOpen]="isDeleteAlertOpen"
+    class="delete-alert"
+    header="{{ 'SETTINGS.ALERT_DELETE' | translate }}"
+    [buttons]="[
+    { text: 'CHAT.ALERT_NO' | translate, role: 'cancel' },
+    { text: 'CHAT.ALERT_YES' | translate, role: 'confirm' }
+  ]"
+    (didDismiss)="onDeleteAlertDismiss($event)"
+  >
+  </ion-alert>
 </div>

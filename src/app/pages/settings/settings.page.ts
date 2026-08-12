@@ -11,6 +11,7 @@ import {
   IonSelect,
   IonSelectOption,
   IonToggle,
+  IonAlert,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
@@ -21,9 +22,11 @@ import {
   informationCircleOutline,
   languageOutline,
   wifiOutline,
+  trashOutline,
 } from 'ionicons/icons';
 import { SettingsService } from 'src/app/core/services/settings';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { ConversationService } from 'src/app/core/services/conversation';
 
 @Component({
   selector: 'app-settings',
@@ -31,6 +34,7 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
   styleUrls: ['./settings.page.scss'],
   standalone: true,
   imports: [
+    IonAlert,
     IonToggle,
     CommonModule,
     ReactiveFormsModule,
@@ -47,11 +51,14 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 export class SettingsPage implements OnInit {
   public uiService = inject(UiService);
 
+  private conversationService = inject(ConversationService);
   private settingsService = inject(SettingsService);
   private translateService = inject(TranslateService);
   private formBuilder = inject(FormBuilder);
   isToastOpen: boolean = false;
   toastMessage: string = '';
+
+  isDeleteAlertOpen: boolean = false;
 
   baseUrl: string | null = '';
   selectedlanguage: string | null = '';
@@ -76,6 +83,7 @@ export class SettingsPage implements OnInit {
       informationCircleOutline,
       languageOutline,
       wifiOutline,
+      trashOutline,
     });
   }
 
@@ -129,6 +137,21 @@ export class SettingsPage implements OnInit {
     this.streaming = streaming;
     this.settingsService.setStreamMode(streaming);
     this.setOpen(true, this.translateService.instant('SETTINGS.TOAST_SUCCESS'));
-    console.log('Seteado:', this.streaming);
+  }
+
+  async onDeleteAlertDismiss(event: any) {
+    this.isDeleteAlertOpen = false;
+
+    if (event.detail.role === 'confirm') {
+      await this.conversationService.deleteAllConversations();
+      this.setOpen(
+        true,
+        this.translateService.instant('SETTINGS.TOAST_SUCCESS'),
+      );
+    }
+  }
+
+  deleteAllConversations() {
+    this.isDeleteAlertOpen = true;
   }
 }

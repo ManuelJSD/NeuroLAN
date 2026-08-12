@@ -7,7 +7,6 @@ import localforage from 'localforage';
   providedIn: 'root',
 })
 export class ConversationService {
-
   private readonly STORAGE_KEY = 'conversations';
 
   // Reactive stream: emits the list whenever it changes
@@ -16,13 +15,15 @@ export class ConversationService {
 
   constructor() {
     // Initial load when the service starts up
-    this.loadConversartions().then(convs => this.conversationsSubject.next(convs));
+    this.loadConversartions().then((convs) =>
+      this.conversationsSubject.next(convs),
+    );
   }
 
   async saveConversation(conversation: Conversation) {
     const conversations = await this.loadConversartions();
 
-    const index = conversations.findIndex(c => c.id === conversation.id);
+    const index = conversations.findIndex((c) => c.id === conversation.id);
 
     if (index !== -1) {
       conversations[index] = conversation;
@@ -44,18 +45,18 @@ export class ConversationService {
     return conversations.sort((a, b) => b.createdAt - a.createdAt);
   }
 
-  async getConversationsbyId(id: string): Promise <Conversation | undefined>{
+  async getConversationsbyId(id: string): Promise<Conversation | undefined> {
     const conversations = await this.loadConversartions();
 
-    return conversations.find(c => c.id === id);
+    return conversations.find((c) => c.id === id);
   }
 
-  async deleteConversation(id: string): Promise <Conversation | undefined>{
+  async deleteConversation(id: string): Promise<Conversation | undefined> {
     const conversations = await this.loadConversartions();
-    const deleted = conversations.find(c => c.id === id);
+    const deleted = conversations.find((c) => c.id === id);
 
     if (deleted) {
-      const filtered = conversations.filter(c => c.id !== id);
+      const filtered = conversations.filter((c) => c.id !== id);
       await localforage.setItem(this.STORAGE_KEY, filtered);
       this.conversationsSubject.next(filtered);
     }
@@ -67,14 +68,17 @@ export class ConversationService {
     return conversation?.title ?? null;
   }
 
-  async updateConversationTitle(id: string, newTitle: string): Promise <void> {
+  async updateConversationTitle(id: string, newTitle: string): Promise<void> {
     const conversation = await this.getConversationsbyId(id);
 
     if (conversation) {
       conversation.title = newTitle;
       await this.saveConversation(conversation);
-
     }
+  }
 
+  async deleteAllConversations() {
+    await localforage.removeItem(this.STORAGE_KEY);
+    this.conversationsSubject.next([]);
   }
 }

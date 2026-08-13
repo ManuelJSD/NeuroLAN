@@ -268,6 +268,11 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
     min-height: 28px;
     max-height: 200px;
     caret-color: $teal;
+
+    ::ng-deep textarea {
+      overflow-y: auto;
+      max-height: 200px;
+    }
   }
 
   /* Identical to input-toolbar in Home */

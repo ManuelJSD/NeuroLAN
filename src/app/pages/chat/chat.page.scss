@@ -412,7 +412,7 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
       right: -8px;
       margin: 0;
       --color: #{$subtext0};
-      
+
       &:hover {
         --color: #{$teal};
       }
@@ -558,11 +558,13 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
     }
 
     table {
-      width: 100%;
+      display: block;
+      max-width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
       border-collapse: collapse;
       margin: 14px 0;
       border-radius: 8px;
-      overflow: hidden;
       font-size: 0.9rem;
 
       th, td {

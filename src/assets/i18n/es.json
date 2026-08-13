@@ -53,7 +53,9 @@
     "ALERT_EDIT": "Editar el título de la conversación",
     "ALERT_NO": "No",
     "ALERT_YES": "Sí",
-    "NO_MODELS": "No hay modelos disponibles"
+    "NO_MODELS": "No hay modelos disponibles",
+    "COPY_MESSAGE": "Copiar mensaje",
+    "CHAT.MESSAGE_COPIED": "Mensaje copiado al portapapeles"
   },
   "CONVERSATIONS": {
     "EMPTY": "Aún no hay conversaciones",

@@ -89,7 +89,16 @@
             | translate }}
           </div>
 
-          @if (msg.role === 'assistant') {
+          @if (msg.role === 'assistant') { @if (!isSending || !$last){
+          <ion-button
+            fill="clear"
+            size="small"
+            class="copy-btn"
+            (click)="copyMessage(msg.content)"
+            [title]="'CHAT.COPY_MESSAGE' | translate"
+            ><ion-icon slot="icon-only" name="copy-outline"></ion-icon
+          ></ion-button>
+          }
           <markdown class="markdown-view" [data]="msg.content"></markdown>
           } @if (msg.role === 'user') {
           <div class="message-text">{{ msg.content }}</div>
@@ -232,4 +241,10 @@
       </div>
     </div>
   </footer>
+  <ion-toast
+    [isOpen]="isCopyToastOpen"
+    message="{{ 'CHAT.MESSAGE_COPIED' | translate }}"
+    [duration]="2000"
+    (didDismiss)="isCopyToastOpen = false"
+  ></ion-toast>
 </div>

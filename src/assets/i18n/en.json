@@ -53,7 +53,9 @@
     "ALERT_EDIT": "Edit the conversation title",
     "ALERT_NO": "No",
     "ALERT_YES": "Yes",
-    "NO_MODELS": "No models available"
+    "NO_MODELS": "No models available",
+    "COPY_MESSAGE": "Copy message",
+    "MESSAGE_COPIED": "Message copied to clipboard"
   },
   "CONVERSATIONS": {
     "EMPTY": "No conversations yet",

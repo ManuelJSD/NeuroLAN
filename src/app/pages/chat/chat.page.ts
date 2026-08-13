@@ -10,6 +10,8 @@ import {
   IonSpinner,
   IonChip,
   IonIcon,
+  IonButton,
+  IonToast,
 } from '@ionic/angular/standalone';
 import { OpenAIService } from 'src/app/core/services/openai';
 import {
@@ -19,7 +21,12 @@ import {
 } from 'src/app/core/models/openai.model';
 import { MarkdownComponent } from 'ngx-markdown';
 import { addIcons } from 'ionicons';
-import { createOutline, refreshOutline, menuOutline } from 'ionicons/icons';
+import {
+  createOutline,
+  refreshOutline,
+  menuOutline,
+  copyOutline,
+} from 'ionicons/icons';
 import { ConversationService } from 'src/app/core/services/conversation';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
@@ -33,6 +40,8 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./chat.page.scss'],
   standalone: true,
   imports: [
+    IonToast,
+    IonButton,
     IonChip,
     IonLabel,
     IonContent,
@@ -67,15 +76,20 @@ export class ChatPage implements OnInit, OnDestroy {
   userInput: string = '';
 
   get totalConversationTokens(): number {
-    return this.messages.reduce((total, msg) => total + (msg.tokensCount || 0), 0);
+    return this.messages.reduce(
+      (total, msg) => total + (msg.tokensCount || 0),
+      0,
+    );
   }
   isSending = false;
   errorMessage: string | null = null;
   currentConversationId: string = this.generateId();
   currentConversationCreatedAt: number = Date.now();
 
+  isCopyToastOpen = false;
+
   constructor() {
-    addIcons({ createOutline, refreshOutline, menuOutline });
+    addIcons({ createOutline, refreshOutline, menuOutline, copyOutline });
   }
 
   ngOnInit(): void {
@@ -281,5 +295,10 @@ export class ChatPage implements OnInit, OnDestroy {
         Math.random().toString(36).substring(2, 15)
       );
     }
+  }
+
+  copyMessage(content: string) {
+    navigator.clipboard.writeText(content);
+    this.isCopyToastOpen = true;
   }
 }

@@ -29,7 +29,8 @@
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "allowedCommonJsDependencies": [
-              "localforage"
+              "localforage",
+              "clipboard"
             ],
             "assets": [
               {
@@ -39,7 +40,9 @@
               }
             ],
             "styles": ["src/global.scss", "src/theme/variables.scss"],
-            "scripts": [],
+            "scripts": [
+              "node_modules/clipboard/dist/clipboard.min.js"
+            ],
             "browser": "src/main.ts"
           },
           "configurations": {

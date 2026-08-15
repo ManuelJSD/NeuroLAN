@@ -17,7 +17,7 @@
 - [x] Response streaming (SSE), enabled by default with a toggle in Settings.
 - [x] Delete all conversation history from Settings with a confirmation dialog.
 - [x] Streaming metrics: Time to First Token (TTFT) and tokens per second (tok/s).
-- [ ] Copy message and code blocks to clipboard.
+- [x] Copy message and code blocks to clipboard.
 - [ ] Search across conversation history.
 - [ ] Import / export conversations (JSON or Markdown).
 

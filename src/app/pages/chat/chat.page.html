@@ -99,7 +99,12 @@
             ><ion-icon slot="icon-only" name="copy-outline"></ion-icon
           ></ion-button>
           }
-          <markdown class="markdown-view" [data]="msg.content"></markdown>
+          <markdown
+            class="markdown-view"
+            [data]="msg.content"
+            clipboard
+            [clipboardButtonTemplate]="copyCodeBtn"
+          ></markdown>
           } @if (msg.role === 'user') {
           <div class="message-text">{{ msg.content }}</div>
           } @if (msg.responseTime !== undefined) {
@@ -247,4 +252,14 @@
     [duration]="2000"
     (didDismiss)="isCopyToastOpen = false"
   ></ion-toast>
+
+  <ng-template #copyCodeBtn>
+    <button
+      class="code-copy-btn"
+      [title]="'CHAT.COPY_MESSAGE' | translate"
+      (click)="isCopyToastOpen = true"
+    >
+      <ion-icon name="copy-outline"></ion-icon>
+    </button>
+  </ng-template>
 </div>

@@ -55,7 +55,7 @@
     "ALERT_YES": "Sí",
     "NO_MODELS": "No hay modelos disponibles",
     "COPY_MESSAGE": "Copiar mensaje",
-    "CHAT.MESSAGE_COPIED": "Mensaje copiado al portapapeles"
+    "MESSAGE_COPIED": "Mensaje copiado al portapapeles"
   },
   "CONVERSATIONS": {
     "EMPTY": "Aún no hay conversaciones",

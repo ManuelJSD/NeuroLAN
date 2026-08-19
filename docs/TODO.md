@@ -12,7 +12,7 @@
 - [x] Loading states, error handling and auto-scroll.
 - [x] Rename services and models from LM Studio-specific to OpenAI-compatible naming.
 
-## v1.1 — Streaming and chat improvements
+## v1.1 — Streaming and chat UX
 
 - [x] Response streaming (SSE), enabled by default with a toggle in Settings.
 - [x] Delete all conversation history from Settings with a confirmation dialog.
@@ -20,29 +20,35 @@
 - [x] Copy message and code blocks to clipboard.
 - [ ] Search across conversation history.
 - [ ] Import / export conversations (JSON or Markdown).
+- [ ] Message editing, regeneration, and turn cancellation.
 
-## Model and server management
+## v1.2 — Model & System Management
 
 - [ ] Multiple server profiles (save several URLs/ports and switch between them).
 - [ ] View models currently loaded in memory (VRAM/RAM).
 - [ ] Load and unload models from memory.
 - [ ] Model details: quantization, disk size, estimated VRAM usage.
-
-## System monitoring
-
 - [ ] Real-time CPU and RAM usage.
 - [ ] GPU/VRAM monitoring (best-effort, depends on OS and drivers).
 - [ ] Backend connection status indicator.
+- [ ] Per-model saved parameters (temperature, system prompt, thinking level).
 
-## RAG and documents (future)
+## v1.3 — Advanced Chat & Multimodal
+
+- [ ] System prompt and per-conversation parameters (temperature, max tokens, top_p).
+- [ ] Voice input (Speech-to-Text) and response reading (Text-to-Speech).
+- [ ] Thinking traces UI: collapsible reasoning blocks and thinking level controls.
+- [ ] Multimodal support (drag and drop images for vision models).
+
+## v2.0 — Agents, Tools & Extensibility
+
+- [ ] Web search and external tool support (Function Calling).
+- [ ] Artifacts Sandbox: real-time preview environment for generated HTML/JS/CSS.
+- [ ] Visual inspection: allow vision models to take screenshots of the sandbox for autonomous styling.
+- [ ] Architecture extensible for other API protocols (e.g. Anthropic).
+
+## v2.x (Future) — RAG & Documents
 
 - [ ] Attach files to the chat (PDF, TXT, source code).
 - [ ] Local semantic search / RAG over documents.
 - [ ] Show sources and citations in responses.
-
-## Advanced settings and tools
-
-- [ ] System prompt and per-conversation parameters (temperature, max tokens, top_p).
-- [ ] Voice input (Speech-to-Text) and response reading (Text-to-Speech).
-- [ ] Web search and external tool support (Function Calling).
-- [ ] Architecture extensible for other API protocols (e.g. Anthropic).

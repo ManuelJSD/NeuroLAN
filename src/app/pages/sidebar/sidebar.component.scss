@@ -279,3 +279,22 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
   opacity: 0;
   transition: opacity 0.18s ease;
 }
+
+// ============================================================
+// Searchbar Styles
+// ============================================================
+.custom-searchbar {
+  padding: 0 12px 12px; // Espaciado lateral para alinear con los márgenes
+
+  --background: rgba(88, 91, 112, 0.15); // Fondo semi-transparente muy sutil
+  --color: #{$text};
+  --placeholder-color: #{$overlay0};
+  --icon-color: #{$subtext0};
+  --clear-button-color: #{$subtext0};
+  --border-radius: 8px;
+  --box-shadow: none; // Quitamos la sombra fea por defecto
+  // Efecto cuando el usuario pasa el ratón o hace click
+  &:hover, &.searchbar-has-focus {
+    --background: rgba(88, 91, 112, 0.25);
+  }
+}

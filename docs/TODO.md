@@ -18,7 +18,7 @@
 - [x] Delete all conversation history from Settings with a confirmation dialog.
 - [x] Streaming metrics: Time to First Token (TTFT) and tokens per second (tok/s).
 - [x] Copy message and code blocks to clipboard.
-- [ ] Search across conversation history.
+- [x] Search across conversation history.
 - [ ] Import / export conversations (JSON or Markdown).
 - [ ] Message editing, regeneration, and turn cancellation.
 

@@ -1,14 +1,23 @@
 <div class="conversations-wrapper">
-  @for (conversation of (conversations$ | async) ?? []; track conversation.id) {
-    <li class="history-item" [routerLink]="['/chat', conversation.id]" routerLinkActive="active">
-      <ion-icon name="chatbubble-outline" class="history-icon"></ion-icon>
-      <span class="history-label">{{ conversation.title }}</span>
-      <ion-button class="options-button" fill="clear" (click)="presentActionSheet(conversation, $event)">
-        <ion-icon slot="icon-only" name="ellipsis-vertical-outline"></ion-icon>
-      </ion-button>
-    </li>
+  @for (conversation of searchResults ?? (conversations$ | async) ?? []; track
+  conversation.id) {
+  <li
+    class="history-item"
+    [routerLink]="['/chat', conversation.id]"
+    routerLinkActive="active"
+  >
+    <ion-icon name="chatbubble-outline" class="history-icon"></ion-icon>
+    <span class="history-label">{{ conversation.title }}</span>
+    <ion-button
+      class="options-button"
+      fill="clear"
+      (click)="presentActionSheet(conversation, $event)"
+    >
+      <ion-icon slot="icon-only" name="ellipsis-vertical-outline"></ion-icon>
+    </ion-button>
+  </li>
   } @empty {
-    <li class="history-empty">{{ 'CONVERSATIONS.EMPTY' | translate }}</li>
+  <li class="history-empty">{{ 'CONVERSATIONS.EMPTY' | translate }}</li>
   }
 </div>
 
@@ -20,7 +29,8 @@
     { text: 'CHAT.ALERT_NO' | translate, role: 'cancel' },
     { text: 'CHAT.ALERT_YES' | translate, role: 'confirm' }
   ]"
-  (didDismiss)="onDeleteAlertDismiss($event)">
+  (didDismiss)="onDeleteAlertDismiss($event)"
+>
 </ion-alert>
 
 <ion-alert
@@ -32,4 +42,5 @@
     { text: 'CHAT.ALERT_NO' | translate, role: 'cancel' },
     { text: 'CHAT.ALERT_YES' | translate, role: 'confirm' }
   ]"
-  (didDismiss)="onEditAlertDismiss($event)"></ion-alert>
+  (didDismiss)="onEditAlertDismiss($event)"
+></ion-alert>

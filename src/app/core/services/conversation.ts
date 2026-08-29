@@ -81,4 +81,19 @@ export class ConversationService {
     await localforage.removeItem(this.STORAGE_KEY);
     this.conversationsSubject.next([]);
   }
+
+  async searchConversations(
+    query: string,
+  ): Promise<Conversation[] | undefined> {
+    const conversations = await this.loadConversartions();
+
+    return conversations.filter((conversation) => {
+      const titleMatches = conversation.title.toLowerCase().includes(query);
+
+      const messageMatches = conversation.messages.some((message) =>
+        message.content.toLowerCase().includes(query),
+      );
+      return titleMatches || messageMatches;
+    });
+  }
 }

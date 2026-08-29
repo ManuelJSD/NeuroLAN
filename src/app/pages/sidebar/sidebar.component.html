@@ -84,8 +84,16 @@
       <ion-icon name="time-outline" class="section-icon"></ion-icon>
       {{ "MENU.RECENT" | translate }}
     </p>
+    <ion-searchbar
+      class="custom-searchbar"
+      placeholder="{{ 'MENU.SEARCH' | translate }}"
+      animated="true"
+      show-clear-button="focus"
+      (ionInput)="searchInput($event)"
+      debounce="500"
+    ></ion-searchbar>
     <div class="history-list-wrapper">
-      <app-conversations></app-conversations>
+      <app-conversations [searchResults]="searchResult"></app-conversations>
     </div>
   </div>
 </ion-content>

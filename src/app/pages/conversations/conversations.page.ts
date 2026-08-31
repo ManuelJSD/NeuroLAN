@@ -17,6 +17,8 @@ import {
   closeOutline,
   downloadOutline,
   cloudUploadOutline,
+  documentTextOutline,
+  codeSlashOutline,
 } from 'ionicons/icons';
 import { ConversationService } from 'src/app/core/services/conversation';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
@@ -73,6 +75,8 @@ export class ConversationsPage {
       closeOutline,
       downloadOutline,
       cloudUploadOutline,
+      documentTextOutline,
+      codeSlashOutline,
     });
   }
 
@@ -136,9 +140,25 @@ export class ConversationsPage {
 
     const editLabel = this.translateService.instant('CONVERSATIONS.EDIT');
     const deleteLabel = this.translateService.instant('CONVERSATIONS.DELETE');
+    const exportJsonLabel = this.translateService.instant('CONVERSATIONS.EXPORT_JSON');
+    const exportMarkdownLabel = this.translateService.instant('CONVERSATIONS.EXPORT_MARKDOWN');
 
     const actionSheet = await this.actionSheetController.create({
       buttons: [
+        {
+          text: exportMarkdownLabel,
+          icon: 'document-text-outline',
+          handler: () => {
+            this.conversationService.exportSingleConversationToMarkdown(conversation.id);
+          },
+        },
+        {
+          text: exportJsonLabel,
+          icon: 'code-slash-outline',
+          handler: () => {
+            this.conversationService.exportSingleConversationToJson(conversation.id);
+          },
+        },
         {
           text: editLabel,
           icon: 'create-outline',

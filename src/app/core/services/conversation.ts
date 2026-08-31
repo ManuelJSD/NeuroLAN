@@ -101,6 +101,67 @@ export class ConversationService {
     });
   }
 
+  async exportSingleConversationToJson(id: string) {
+    const conversation = await this.getConversationsbyId(id);
+    if (!conversation) return;
+
+    // 1. Convert to JSON string
+    const jsonString = JSON.stringify(conversation, null, 2);
+
+    // 2. Create a Blob with the JSON string
+    const blob = new Blob([jsonString], { type: 'application/json' });
+
+    // 3. Create an object URL from the Blob
+    const url = window.URL.createObjectURL(blob);
+
+    // 4. Create a download link and trigger click
+    const safeName = conversation.title.replace(/[^a-zA-Z0-9]/g, '_');
+    const downloadLink = document.createElement('a');
+    downloadLink.href = url;
+    downloadLink.download = `neuro-lan-conversation-${safeName}-${Date.now()}.json`;
+    downloadLink.click();
+
+    // 5. Revoke the object URL to free memory
+    window.URL.revokeObjectURL(url);
+  }
+
+  private generateMarkdownContent(conversation: Conversation) {
+    let markdown = `# ${conversation.title}\n\n`;
+    markdown += `**Created:** ${new Date(conversation.createdAt).toLocaleString()}\n\n---\n\n`;
+
+    conversation.messages.forEach((message) => {
+      const roleLabel = message.role === 'user' ? 'You' : 'Assistant';
+      markdown += `### ${roleLabel}\n\n`;
+      markdown += `${message.content}\n\n`;
+    });
+
+    return markdown;
+  }
+
+  async exportSingleConversationToMarkdown(id: string) {
+    const conversation = await this.getConversationsbyId(id);
+    if (!conversation) return;
+
+    // 1. Convert to Markdown
+    const markdownContent = this.generateMarkdownContent(conversation);
+
+    // 2. Create a Blob with the Markdown content
+    const blob = new Blob([markdownContent], { type: 'text/markdown' });
+
+    // 3. Create an object URL from the Blob
+    const url = window.URL.createObjectURL(blob);
+
+    // 4. Create a download link and trigger click
+    const safeName = conversation.title.replace(/[^a-zA-Z0-9]/g, '_');
+    const downloadLink = document.createElement('a');
+    downloadLink.href = url;
+    downloadLink.download = `neuro-lan-conversation-${safeName}-${Date.now()}.md`;
+    downloadLink.click();
+
+    // 5. Revoke the object URL to free memory
+    window.URL.revokeObjectURL(url);
+  }
+
   async exportConversations() {
     // 1. Get all conversations
     const conversations = await this.loadConversartions();

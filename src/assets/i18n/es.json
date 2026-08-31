@@ -64,6 +64,8 @@
     "DELETE": "Eliminar",
     "CANCEL": "Cancelar",
     "EXPORT": "Exportar",
+    "EXPORT_JSON": "Exportar a JSON",
+    "EXPORT_MARKDOWN": "Exportar a Markdown",
     "IMPORT": "Importar",
     "IMPORT_SUCCESS": "Conversaciones importadas y fusionadas con éxito.",
     "IMPORT_ERROR_FORMAT": "El archivo importado no tiene un formato válido.",

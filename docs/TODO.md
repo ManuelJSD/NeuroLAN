@@ -19,7 +19,7 @@
 - [x] Streaming metrics: Time to First Token (TTFT) and tokens per second (tok/s).
 - [x] Copy message and code blocks to clipboard.
 - [x] Search across conversation history.
-- [ ] Import / export conversations (JSON or Markdown).
+- [x] Import / export conversations (JSON or Markdown).
 - [ ] Message editing, regeneration, and turn cancellation.
 
 ## v1.2 — Model & System Management

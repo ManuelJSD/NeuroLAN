@@ -21,6 +21,18 @@
   }
 </div>
 
+<!-- Import / Export Actions -->
+<div class="data-actions">
+  <button class="data-action-btn export-btn" (click)="exportConversations()">
+    <ion-icon name="download-outline"></ion-icon>
+    <span>{{ 'CONVERSATIONS.EXPORT' | translate }}</span>
+  </button>
+  <button class="data-action-btn import-btn" (click)="importConversations()">
+    <ion-icon name="cloud-upload-outline"></ion-icon>
+    <span>{{ 'CONVERSATIONS.IMPORT' | translate }}</span>
+  </button>
+</div>
+
 <ion-alert
   [isOpen]="isDeleteAlertOpen"
   class="delete-alert"
@@ -44,3 +56,4 @@
   ]"
   (didDismiss)="onEditAlertDismiss($event)"
 ></ion-alert>
+

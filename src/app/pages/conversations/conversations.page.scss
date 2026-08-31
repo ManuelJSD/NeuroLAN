@@ -256,4 +256,57 @@ $font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-seri
   }
 }
 
+// ============================================================
+// Import / Export Actions
+// ============================================================
 
+.data-actions {
+  display: flex;
+  gap: 8px;
+  padding: 10px 10px 6px;
+  border-top: 1px solid rgba(69, 71, 90, 0.45);
+  margin-top: 4px;
+}
+
+.data-action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  background: transparent;
+  font-family: $font;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  outline: none;
+  transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+
+  ion-icon {
+    font-size: 1.2rem;
+    flex-shrink: 0;
+  }
+
+  &.export-btn {
+    color: $blue;
+    border-color: rgba(137, 180, 250, 0.2);
+
+    &:hover {
+      background: rgba(137, 180, 250, 0.1);
+      border-color: rgba(137, 180, 250, 0.4);
+    }
+  }
+
+  &.import-btn {
+    color: $green;
+    border-color: rgba(166, 227, 161, 0.2);
+
+    &:hover {
+      background: rgba(166, 227, 161, 0.1);
+      border-color: rgba(166, 227, 161, 0.4);
+    }
+  }
+}

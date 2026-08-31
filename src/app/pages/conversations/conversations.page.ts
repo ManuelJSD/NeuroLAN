@@ -15,6 +15,8 @@ import {
   createOutline,
   ellipsisVerticalOutline,
   closeOutline,
+  downloadOutline,
+  cloudUploadOutline,
 } from 'ionicons/icons';
 import { ConversationService } from 'src/app/core/services/conversation';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
@@ -69,6 +71,8 @@ export class ConversationsPage {
       createOutline,
       ellipsisVerticalOutline,
       closeOutline,
+      downloadOutline,
+      cloudUploadOutline,
     });
   }
 
@@ -152,5 +156,13 @@ export class ConversationsPage {
       ],
     });
     await actionSheet.present();
+  }
+
+  exportConversations() {
+    this.conversationService.exportConversations();
+  }
+
+  importConversations() {
+    this.conversationService.importConversations();
   }
 }

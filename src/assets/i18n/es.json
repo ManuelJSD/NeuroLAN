@@ -62,7 +62,12 @@
     "EMPTY": "Aún no hay conversaciones",
     "EDIT": "Editar",
     "DELETE": "Eliminar",
-    "CANCEL": "Cancelar"
+    "CANCEL": "Cancelar",
+    "EXPORT": "Exportar",
+    "IMPORT": "Importar",
+    "IMPORT_SUCCESS": "Conversaciones importadas y fusionadas con éxito.",
+    "IMPORT_ERROR_FORMAT": "El archivo importado no tiene un formato válido.",
+    "IMPORT_ERROR_CORRUPT": "Error al procesar el archivo. Verifica que sea un JSON válido."
   },
   "HOME": {
     "TITLE": "¿En qué puedo ayudarte?",

@@ -219,8 +219,29 @@
             }}</ion-label
           >
         </ion-chip>
-        }
 
+        } @if (isSending) {
+        <!-- Stop Button -->
+        <button
+          class="stop-btn"
+          (click)="stopGeneration()"
+          [title]="'CHAT.STOP' | translate"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            width="18"
+            height="18"
+            stroke="currentColor"
+            stroke-width="2.5"
+            fill="none"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <rect x="4" y="4" width="16" height="16"></rect>
+          </svg>
+        </button>
+        } @else {
         <!-- Send Button -->
         <button
           class="send-btn"
@@ -243,6 +264,7 @@
             <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
           </svg>
         </button>
+        }
       </div>
     </div>
   </footer>

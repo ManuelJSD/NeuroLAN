@@ -67,7 +67,7 @@ export class ChatPage implements OnInit, OnDestroy {
   private translateService = inject(TranslateService);
   private ngZone = inject(NgZone);
 
-  private streamSubscription?: Subscription;
+  private activeSubscription?: Subscription;
 
   models: OpenAIModel[] = [];
   selectedModelKey: string = '';
@@ -183,7 +183,7 @@ export class ChatPage implements OnInit, OnDestroy {
     const streaming = (await this.settingsService.getStreamMode()) ?? true;
 
     if (!streaming) {
-      this.openAIService
+      this.activeSubscription = this.openAIService
         .sendChat({
           model: this.selectedModelKey,
           messages: this.messages,
@@ -223,7 +223,7 @@ export class ChatPage implements OnInit, OnDestroy {
       this.messages.push({ role: 'assistant', content: '' });
       let tokenStartTime = 0;
 
-      this.streamSubscription = this.openAIService
+      this.activeSubscription = this.openAIService
         .sendChatStream({
           model: this.selectedModelKey,
           messages: messagesToSend,
@@ -282,7 +282,7 @@ export class ChatPage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.streamSubscription?.unsubscribe();
+    this.activeSubscription?.unsubscribe();
   }
 
   private generateId() {
@@ -300,5 +300,21 @@ export class ChatPage implements OnInit, OnDestroy {
   copyMessage(content: string) {
     navigator.clipboard.writeText(content);
     this.isCopyToastOpen = true;
+  }
+
+  stopGeneration() {
+    if (this.activeSubscription) {
+      this.activeSubscription.unsubscribe();
+      this.isSending = false;
+
+      const lastMessage = this.messages[this.messages.length - 1];
+      if (
+        lastMessage &&
+        lastMessage.role === 'assistant' &&
+        !lastMessage.content
+      ) {
+        this.messages.pop();
+      }
+    }
   }
 }

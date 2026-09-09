@@ -344,7 +344,8 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
   }
 
   /* Identical to send-btn in Home */
-  .send-btn {
+  .send-btn,
+  .stop-btn {
     background: $teal;
     border: none;
     border-radius: 6px;

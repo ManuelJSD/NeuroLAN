@@ -107,8 +107,9 @@
           ></markdown>
           } @if (msg.role === 'user') {
           <div class="message-text">{{ msg.content }}</div>
-          } @if (msg.responseTime !== undefined) {
+          } @if (msg.responseTime !== undefined || (msg.role === 'assistant' && $last && !isSending)) {
           <div class="message-meta">
+            @if (msg.responseTime !== undefined) {
             <span class="response-time" title="Tiempo total">
               ⏱️ {{ msg.responseTime | number:'1.1-2' }}s
             </span>
@@ -123,6 +124,17 @@
             <span class="response-time" title="Tokens consumidos">
               📝 {{ msg.tokensCount }} tok
             </span>
+            }
+            }
+
+            @if (msg.role === 'assistant' && $last && !isSending) {
+            <button
+              class="regenerate-btn"
+              (click)="regenerateLastResponse()"
+              [title]="'CHAT.REGENERATE' | translate"
+            >
+              <ion-icon name="refresh-outline" aria-hidden="true"></ion-icon>
+            </button>
             }
           </div>
           }

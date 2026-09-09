@@ -57,7 +57,8 @@
     "NO_MODELS": "No hay modelos disponibles",
     "COPY_MESSAGE": "Copiar mensaje",
     "MESSAGE_COPIED": "Mensaje copiado al portapapeles",
-    "STOP": "Detener"
+    "STOP": "Detener",
+    "REGENERATE": "Regenerar respuesta"
   },
   "CONVERSATIONS": {
     "EMPTY": "Aún no hay conversaciones",

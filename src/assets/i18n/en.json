@@ -57,7 +57,8 @@
     "NO_MODELS": "No models available",
     "COPY_MESSAGE": "Copy message",
     "MESSAGE_COPIED": "Message copied to clipboard",
-    "STOP": "Stop"
+    "STOP": "Stop",
+    "REGENERATE": "Regenerate response"
   },
   "CONVERSATIONS": {
     "EMPTY": "No conversations yet",

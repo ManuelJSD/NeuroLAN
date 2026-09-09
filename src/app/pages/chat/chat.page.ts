@@ -175,6 +175,10 @@ export class ChatPage implements OnInit, OnDestroy {
 
     // Clear the input
     this.userInput = '';
+    await this.sendToAPI();
+  }
+
+  async sendToAPI() {
     this.isSending = true;
     this.errorMessage = null;
 
@@ -315,6 +319,26 @@ export class ChatPage implements OnInit, OnDestroy {
       ) {
         this.messages.pop();
       }
+
+      //Save conversation
+      this.conversationService.saveConversation({
+        id: this.currentConversationId,
+        title: this.messages[0].content.substring(0, 50),
+        messages: this.messages,
+        createdAt: this.currentConversationCreatedAt,
+      });
     }
+  }
+
+  regenerateLastResponse() {
+    if (this.isSending || this.messages.length === 0) return;
+
+    const lastMessage = this.messages[this.messages.length - 1];
+
+    if (lastMessage && lastMessage.role === 'assistant') {
+      this.messages.pop();
+    }
+
+    this.sendToAPI();
   }
 }

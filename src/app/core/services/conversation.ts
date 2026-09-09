@@ -4,6 +4,9 @@ import { TranslateService } from '@ngx-translate/core';
 import { BehaviorSubject } from 'rxjs';
 import { Conversation } from '../models/conversation.model';
 import localforage from 'localforage';
+import { Capacitor } from '@capacitor/core';
+import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
+import { Share } from '@capacitor/share';
 
 @Injectable({
   providedIn: 'root',
@@ -101,28 +104,43 @@ export class ConversationService {
     });
   }
 
+  private async exportFileNative(fileName: string, content: string): Promise<void> {
+    // Escribe el archivo en la carpeta de caché (no requiere permisos especiales)
+    const result = await Filesystem.writeFile({
+      path: fileName,
+      data: content,
+      directory: Directory.Cache,
+      encoding: Encoding.UTF8,
+    });
+
+    // Abre el diálogo nativo de "Compartir" del sistema operativo
+    await Share.share({
+      title: fileName,
+      url: result.uri,
+    });
+  }
+
   async exportSingleConversationToJson(id: string) {
     const conversation = await this.getConversationsbyId(id);
     if (!conversation) return;
 
-    // 1. Convert to JSON string
-    const jsonString = JSON.stringify(conversation, null, 2);
-
-    // 2. Create a Blob with the JSON string
-    const blob = new Blob([jsonString], { type: 'application/json' });
-
-    // 3. Create an object URL from the Blob
-    const url = window.URL.createObjectURL(blob);
-
-    // 4. Create a download link and trigger click
     const safeName = conversation.title.replace(/[^a-zA-Z0-9]/g, '_');
-    const downloadLink = document.createElement('a');
-    downloadLink.href = url;
-    downloadLink.download = `neuro-lan-conversation-${safeName}-${Date.now()}.json`;
-    downloadLink.click();
+    const fileName = `neuro-lan-conversation-${safeName}-${Date.now()}.json`;
+    const content = JSON.stringify(conversation, null, 2);
 
-    // 5. Revoke the object URL to free memory
-    window.URL.revokeObjectURL(url);
+    if (Capacitor.isNativePlatform()) {
+      // Android / iOS → escribir archivo y abrir diálogo de compartir
+      await this.exportFileNative(fileName, content);
+    } else {
+      // Web → comportamiento original con Blob
+      const blob = new Blob([content], { type: 'application/json' });
+      const url = window.URL.createObjectURL(blob);
+      const downloadLink = document.createElement('a');
+      downloadLink.href = url;
+      downloadLink.download = fileName;
+      downloadLink.click();
+      window.URL.revokeObjectURL(url);
+    }
   }
 
   private generateMarkdownContent(conversation: Conversation) {
@@ -142,47 +160,43 @@ export class ConversationService {
     const conversation = await this.getConversationsbyId(id);
     if (!conversation) return;
 
-    // 1. Convert to Markdown
-    const markdownContent = this.generateMarkdownContent(conversation);
-
-    // 2. Create a Blob with the Markdown content
-    const blob = new Blob([markdownContent], { type: 'text/markdown' });
-
-    // 3. Create an object URL from the Blob
-    const url = window.URL.createObjectURL(blob);
-
-    // 4. Create a download link and trigger click
     const safeName = conversation.title.replace(/[^a-zA-Z0-9]/g, '_');
-    const downloadLink = document.createElement('a');
-    downloadLink.href = url;
-    downloadLink.download = `neuro-lan-conversation-${safeName}-${Date.now()}.md`;
-    downloadLink.click();
+    const fileName = `neuro-lan-conversation-${safeName}-${Date.now()}.md`;
+    const content = this.generateMarkdownContent(conversation);
 
-    // 5. Revoke the object URL to free memory
-    window.URL.revokeObjectURL(url);
+    if (Capacitor.isNativePlatform()) {
+      // Android / iOS → escribir archivo y abrir diálogo de compartir
+      await this.exportFileNative(fileName, content);
+    } else {
+      // Web → comportamiento original con Blob
+      const blob = new Blob([content], { type: 'text/markdown' });
+      const url = window.URL.createObjectURL(blob);
+      const downloadLink = document.createElement('a');
+      downloadLink.href = url;
+      downloadLink.download = fileName;
+      downloadLink.click();
+      window.URL.revokeObjectURL(url);
+    }
   }
 
   async exportConversations() {
-    // 1. Get all conversations
     const conversations = await this.loadConversartions();
+    const fileName = `neuro-lan-conversations-${Date.now()}.json`;
+    const content = JSON.stringify(conversations, null, 2);
 
-    // 2. Convert to JSON string
-    const jsonString = JSON.stringify(conversations, null, 2);
-
-    // 3. Create a Blob with the JSON string
-    const blob = new Blob([jsonString], { type: 'application/json' });
-
-    // 4. Create an object URL from the Blob
-    const url = window.URL.createObjectURL(blob);
-
-    // 5. Create a download link and trigger click
-    const downloadLink = document.createElement('a');
-    downloadLink.href = url;
-    downloadLink.download = `neuro-lan-conversations-${Date.now()}.json`;
-    downloadLink.click();
-
-    // 6. Revoke the object URL to free memory
-    window.URL.revokeObjectURL(url);
+    if (Capacitor.isNativePlatform()) {
+      // Android / iOS → escribir archivo y abrir diálogo de compartir
+      await this.exportFileNative(fileName, content);
+    } else {
+      // Web → comportamiento original con Blob
+      const blob = new Blob([content], { type: 'application/json' });
+      const url = window.URL.createObjectURL(blob);
+      const downloadLink = document.createElement('a');
+      downloadLink.href = url;
+      downloadLink.download = fileName;
+      downloadLink.click();
+      window.URL.revokeObjectURL(url);
+    }
   }
 
   async importConversations() {

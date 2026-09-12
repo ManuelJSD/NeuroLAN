@@ -36,6 +36,14 @@
       </div>
       }
 
+      <!-- Temporary Chat Banner -->
+      @if (temporaryChat) {
+      <div class="temp-chat-banner">
+        <ion-icon name="hourglass-outline" aria-hidden="true"></ion-icon>
+        <span>Modo temporal activo — esta conversación no se guardará en el historial.</span>
+      </div>
+      }
+
       <!-- Messages Loop -->
       @for (msg of messages; track $index) {
       <div class="message-wrapper" [ngClass]="msg.role">

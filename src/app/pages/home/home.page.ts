@@ -9,7 +9,7 @@ import {
 } from '@ionic/angular/standalone';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { addIcons } from 'ionicons';
-import { menuOutline, refreshOutline } from 'ionicons/icons';
+import { menuOutline, refreshOutline, hourglassOutline } from 'ionicons/icons';
 import { OpenAIService } from 'src/app/core/services/openai';
 import { Router } from '@angular/router';
 import { UiService } from 'src/app/core/services/ui-service';
@@ -39,6 +39,7 @@ export class HomePage implements OnInit {
   models: { id: string }[] = [];
   selectedModelKey: string = '';
   userInput: string = '';
+  temporaryChat: boolean = false;
 
   // Example suggestions — you can adapt texts via i18n
   suggestions: string[] = [
@@ -50,7 +51,7 @@ export class HomePage implements OnInit {
   ];
 
   constructor() {
-    addIcons({ menuOutline, refreshOutline });
+    addIcons({ menuOutline, refreshOutline, hourglassOutline });
   }
 
   ngOnInit() {
@@ -100,6 +101,7 @@ export class HomePage implements OnInit {
       state: {
         message: this.userInput,
         model: this.selectedModelKey,
+        temporaryChat: this.temporaryChat,
       },
     });
 

@@ -84,6 +84,17 @@
             </button>
           </div>
 
+          <div class="action-buttons">
+            <!-- Temporary Chat Toggle -->
+            <button
+              class="temp-chat-btn"
+              [class.active]="temporaryChat"
+              (click)="temporaryChat = !temporaryChat"
+              [title]="temporaryChat ? 'Desactivar chat temporal' : 'Activar chat temporal'"
+            >
+              <ion-icon name="hourglass-outline" aria-hidden="true"></ion-icon>
+            </button>
+
           <!-- Send Button -->
           <button
             class="send-btn"
@@ -106,6 +117,7 @@
               <polyline points="5 12 12 5 19 12"></polyline>
             </svg>
           </button>
+          </div>
         </div>
       </div>
     </main>

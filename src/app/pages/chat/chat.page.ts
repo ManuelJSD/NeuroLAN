@@ -26,6 +26,7 @@ import {
   refreshOutline,
   menuOutline,
   copyOutline,
+  hourglassOutline,
 } from 'ionicons/icons';
 import { ConversationService } from 'src/app/core/services/conversation';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -74,6 +75,7 @@ export class ChatPage implements OnInit, OnDestroy {
 
   messages: ChatMessage[] = [];
   userInput: string = '';
+  temporaryChat: boolean = false;
 
   get totalConversationTokens(): number {
     return this.messages.reduce(
@@ -89,7 +91,7 @@ export class ChatPage implements OnInit, OnDestroy {
   isCopyToastOpen = false;
 
   constructor() {
-    addIcons({ createOutline, refreshOutline, menuOutline, copyOutline });
+    addIcons({ createOutline, refreshOutline, menuOutline, copyOutline, hourglassOutline });
   }
 
   ngOnInit(): void {
@@ -110,6 +112,7 @@ export class ChatPage implements OnInit, OnDestroy {
 
           this.userInput = history.state.message;
           this.selectedModelKey = history.state.model;
+          this.temporaryChat = history.state.temporaryChat;
 
           history.replaceState({ ...history.state, message: null }, '');
 
@@ -141,6 +144,7 @@ export class ChatPage implements OnInit, OnDestroy {
     this.isSending = false;
     this.currentConversationId = this.generateId();
     this.currentConversationCreatedAt = Date.now();
+    this.temporaryChat = false;
   }
 
   loadConversation(id: string) {
@@ -205,13 +209,15 @@ export class ChatPage implements OnInit, OnDestroy {
             this.messages[this.messages.length - 1].tokensCount =
               res.usage?.completion_tokens;
 
-            //Save Conversation
-            this.conversationService.saveConversation({
-              id: this.currentConversationId,
-              title: this.messages[0].content.substring(0, 50),
-              messages: this.messages,
-              createdAt: this.currentConversationCreatedAt,
-            });
+            if (!this.temporaryChat) {
+              //Save Conversation
+              this.conversationService.saveConversation({
+                id: this.currentConversationId,
+                title: this.messages[0].content.substring(0, 50),
+                messages: this.messages,
+                createdAt: this.currentConversationCreatedAt,
+              });
+            }
           },
           error: (err) => {
             console.error(err);
@@ -259,13 +265,15 @@ export class ChatPage implements OnInit, OnDestroy {
 
             this.messages[this.messages.length - 1].tokensCount = tokenCount;
 
-            //Save Conversation
-            this.conversationService.saveConversation({
-              id: this.currentConversationId,
-              title: this.messages[0].content.substring(0, 50),
-              messages: this.messages,
-              createdAt: this.currentConversationCreatedAt,
-            });
+            if (!this.temporaryChat) {
+              //Save Conversation
+              this.conversationService.saveConversation({
+                id: this.currentConversationId,
+                title: this.messages[0].content.substring(0, 50),
+                messages: this.messages,
+                createdAt: this.currentConversationCreatedAt,
+              });
+            }
           },
           error: (err) => {
             console.error(err);
@@ -320,13 +328,15 @@ export class ChatPage implements OnInit, OnDestroy {
         this.messages.pop();
       }
 
-      //Save conversation
-      this.conversationService.saveConversation({
-        id: this.currentConversationId,
-        title: this.messages[0].content.substring(0, 50),
-        messages: this.messages,
-        createdAt: this.currentConversationCreatedAt,
-      });
+      if (!this.temporaryChat) {
+        //Save conversation
+        this.conversationService.saveConversation({
+          id: this.currentConversationId,
+          title: this.messages[0].content.substring(0, 50),
+          messages: this.messages,
+          createdAt: this.currentConversationCreatedAt,
+        });
+      }
     }
   }
 

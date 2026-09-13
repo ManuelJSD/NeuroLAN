@@ -190,6 +190,51 @@
           >
         </div>
       </div>
+
+      <!-- Credits Card -->
+      <div class="settings-card credits-card">
+        <div class="card-header">
+          <div class="card-icon credits-card-icon">
+            <ion-icon name="code-slash-outline"></ion-icon>
+          </div>
+          <div class="card-header-text">
+            <h2 class="card-title">
+              {{ "SETTINGS.CREDITS_TITLE" | translate }}
+            </h2>
+            <p class="card-subtitle">
+              {{ "SETTINGS.CREDITS_SUBTITLE" | translate }}
+            </p>
+          </div>
+        </div>
+
+        <div class="credits-body">
+          <p class="credits-desc">
+            {{ "SETTINGS.CREDITS_DESC" | translate }}
+          </p>
+
+          <div class="credits-author-box">
+            <span class="author-label">{{ "SETTINGS.CREDITS_AUTHOR_LABEL" | translate }}</span>
+            <span class="author-name">{{ "SETTINGS.CREDITS_AUTHOR_NAME" | translate }}</span>
+          </div>
+
+          <div class="credits-tags">
+            <span class="credits-tag">Open Source</span>
+            <span class="credits-tag">Ionic + Angular</span>
+            <span class="credits-tag">GPL-3.0</span>
+          </div>
+
+          <ion-button
+            expand="block"
+            href="https://github.com/ManuelJSD/NeuroLAN"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="repo-button"
+          >
+            <ion-icon name="logo-github" slot="start"></ion-icon>
+            {{ "SETTINGS.CREDITS_REPO" | translate }}
+          </ion-button>
+        </div>
+      </div>
     </div>
   </ion-content>
 

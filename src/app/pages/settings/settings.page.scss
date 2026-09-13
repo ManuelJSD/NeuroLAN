@@ -395,3 +395,98 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
     color: $text;
   }
 }
+
+// ============================================================
+// Credits Card
+// ============================================================
+
+.credits-card {
+  .credits-card-icon {
+    background: rgba(137, 180, 250, 0.08);
+    border-color: rgba(137, 180, 250, 0.18);
+    color: $blue;
+  }
+
+  .credits-body {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .credits-desc {
+    font-size: 0.83rem;
+    color: $subtext0;
+    margin: 0;
+    line-height: 1.5;
+    font-family: $font;
+  }
+
+  .credits-author-box {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 10px 14px;
+    background: $base;
+    border: 1px solid $surface1;
+    border-left: 3px solid $blue;
+    border-radius: 6px;
+
+    .author-label {
+      font-size: 0.68rem;
+      font-weight: 600;
+      color: $overlay1;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-family: $font-mono;
+    }
+
+    .author-name {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: $text;
+      font-family: $font;
+    }
+  }
+
+  .credits-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .credits-tag {
+    font-size: 0.72rem;
+    font-family: $font-mono;
+    color: $blue;
+    background: rgba(137, 180, 250, 0.08);
+    border: 1px solid rgba(137, 180, 250, 0.2);
+    padding: 3px 10px;
+    border-radius: 12px;
+    letter-spacing: 0.03em;
+  }
+
+  .repo-button {
+    --background: #{$surface0};
+    --background-hover: #{$surface1};
+    --color: #{$text};
+    --border-color: #{$surface1};
+    --border-style: solid;
+    --border-width: 1px;
+    --border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.88rem;
+    font-family: $font;
+    height: 44px;
+    margin: 4px 0 0;
+
+    &::part(native) {
+      border-radius: 8px;
+      transition: background 0.15s ease, border-color 0.15s ease;
+    }
+
+    &:hover::part(native) {
+      border-color: rgba(137, 180, 250, 0.4);
+    }
+  }
+}
+

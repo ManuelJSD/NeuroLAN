@@ -124,6 +124,11 @@ Consulta [docs/TODO.md](docs/TODO.md) para ver el listado completo de funcionali
 
 Consulta [docs/architecture.es.md](docs/architecture.es.md) para un resumen de las decisiones de diseño y la organización del código.
 
+## Créditos
+
+Desarrollado por **Manuel J. Sandalio**.  
+Repositorio oficial: [GitHub - ManuelJSD/NeuroLAN](https://github.com/ManuelJSD/NeuroLAN)
+
 ## Licencia
 
 [GPL-3.0](LICENSE)

@@ -124,6 +124,11 @@ See [docs/TODO.md](docs/TODO.md) for the full list of planned features.
 
 See [docs/architecture.md](docs/architecture.md) for an overview of the design decisions and how the codebase is organized.
 
+## Credits
+
+Developed by **Manuel J. Sandalio**.  
+Official Repository: [GitHub - ManuelJSD/NeuroLAN](https://github.com/ManuelJSD/NeuroLAN)
+
 ## License
 
 [GPL-3.0](LICENSE)

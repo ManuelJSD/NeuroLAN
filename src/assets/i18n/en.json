@@ -23,7 +23,13 @@
     "STREAMING_OFF": "Streaming DISABLED",
     "DELETEHISTORY": "Clear history",
     "DELETEHISTORY_SUBTITLE": "Deletes all messages and conversations saved on this device.",
-    "ALERT_DELETE": "Are you sure you want to delete ALL conversations?"
+    "ALERT_DELETE": "Are you sure you want to delete ALL conversations?",
+    "CREDITS_TITLE": "About NeuroLAN",
+    "CREDITS_SUBTITLE": "Project information and source code",
+    "CREDITS_DESC": "Cross-platform open-source application to chat with local AI models on your home network.",
+    "CREDITS_AUTHOR_LABEL": "Lead Developer",
+    "CREDITS_AUTHOR_NAME": "Manuel J. Sandalio",
+    "CREDITS_REPO": "View on GitHub"
   },
   "MENU": {
     "LOCAL_AI": "Local AI",

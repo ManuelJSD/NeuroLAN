@@ -23,7 +23,13 @@
     "STREAMING_OFF": "Streaming Desactivado",
     "DELETEHISTORY": "Borrar historial",
     "DELETEHISTORY_SUBTITLE": "Elimina todos los mensajes y conversaciones guardadas en este dispositivo.",
-    "ALERT_DELETE": "¿Estás seguro de que quieres borrar TODO el historial de conversaciones?"
+    "ALERT_DELETE": "¿Estás seguro de que quieres borrar TODO el historial de conversaciones?",
+    "CREDITS_TITLE": "Acerca de NeuroLAN",
+    "CREDITS_SUBTITLE": "Información del proyecto y código fuente",
+    "CREDITS_DESC": "Aplicación multiplataforma de código abierto para conversar con modelos de IA locales en tu red privada.",
+    "CREDITS_AUTHOR_LABEL": "Desarrollador principal",
+    "CREDITS_AUTHOR_NAME": "Manuel J. Sandalio",
+    "CREDITS_REPO": "Ver en GitHub"
   },
   "MENU": {
     "LOCAL_AI": "IA Local",

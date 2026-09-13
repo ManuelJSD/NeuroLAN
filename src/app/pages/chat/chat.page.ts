@@ -91,7 +91,13 @@ export class ChatPage implements OnInit, OnDestroy {
   isCopyToastOpen = false;
 
   constructor() {
-    addIcons({ createOutline, refreshOutline, menuOutline, copyOutline, hourglassOutline });
+    addIcons({
+      createOutline,
+      refreshOutline,
+      menuOutline,
+      copyOutline,
+      hourglassOutline,
+    });
   }
 
   ngOnInit(): void {
@@ -129,9 +135,10 @@ export class ChatPage implements OnInit, OnDestroy {
   loadModels() {
     this.openAIService.getModels().subscribe({
       next: (res) => {
-        console.log(res);
         this.models = res.data;
-        this.selectedModelKey = res.data[0].id;
+        if (!this.selectedModelKey && res.data.length > 0) {
+          this.selectedModelKey = res.data[0].id;
+        }
       },
       error: (err) => console.error(err),
     });

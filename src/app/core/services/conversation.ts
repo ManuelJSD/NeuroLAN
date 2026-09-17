@@ -181,14 +181,27 @@ export class ConversationService {
 
   async exportConversations() {
     const conversations = await this.loadConversartions();
+
+    // Check if there are any conversations to export
+    if (conversations.length === 0) {
+      const toast = await this.toastController.create({
+        message: this.translateService.instant('CONVERSATIONS.EXPORT_EMPTY'),
+        duration: 3000,
+        color: 'warning',
+        position: 'bottom',
+      });
+      await toast.present();
+      return;
+    }
+
     const fileName = `neuro-lan-conversations-${Date.now()}.json`;
     const content = JSON.stringify(conversations, null, 2);
 
     if (Capacitor.isNativePlatform()) {
-      // Android / iOS → escribir archivo y abrir diálogo de compartir
+      // Android / iOS → write file and open native share dialog
       await this.exportFileNative(fileName, content);
     } else {
-      // Web → comportamiento original con Blob
+      // Web → original behavior using Blob
       const blob = new Blob([content], { type: 'application/json' });
       const url = window.URL.createObjectURL(blob);
       const downloadLink = document.createElement('a');
@@ -217,9 +230,23 @@ export class ConversationService {
       reader.onload = async (e: any) => {
         try {
           const jsonString = e.target.result;
-          const importedConversations: Conversation[] = JSON.parse(jsonString);
+          const parsed = JSON.parse(jsonString);
+          // Accepts both a single conversation object and an array of conversations
+          const importedConversations: Conversation[] = Array.isArray(parsed) ? parsed : [parsed];
 
-          // 4. Validate the basic structure of the imported data
+          // 4. Check if the imported array is empty
+          if (importedConversations.length === 0) {
+            const toast = await this.toastController.create({
+              message: this.translateService.instant('CONVERSATIONS.IMPORT_EMPTY'),
+              duration: 3000,
+              color: 'warning',
+              position: 'bottom',
+            });
+            await toast.present();
+            return;
+          }
+
+          // 5. Validate the basic structure of the imported data
           if (
             !Array.isArray(importedConversations) ||
             importedConversations.some(
@@ -236,7 +263,7 @@ export class ConversationService {
             return;
           }
 
-          // 5. Get current conversations and merge
+          // 6. Get current conversations and merge
           const currentConversations = await this.loadConversartions();
 
           const mergedConversations = [...currentConversations];

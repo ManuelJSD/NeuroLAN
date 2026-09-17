@@ -78,7 +78,9 @@
     "IMPORT": "Import",
     "IMPORT_SUCCESS": "Conversations imported and merged successfully.",
     "IMPORT_ERROR_FORMAT": "The imported file does not have a valid format.",
-    "IMPORT_ERROR_CORRUPT": "Error processing the file. Check that it is a valid JSON."
+    "IMPORT_ERROR_CORRUPT": "Error processing the file. Check that it is a valid JSON.",
+    "EXPORT_EMPTY": "No conversations to export.",
+    "IMPORT_EMPTY": "The file does not contain any conversations."
   },
   "HOME": {
     "TITLE": "What can I help you with?",

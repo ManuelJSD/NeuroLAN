@@ -20,7 +20,7 @@
 - [x] Copy message and code blocks to clipboard.
 - [x] Search across conversation history.
 - [x] Import / export conversations (JSON or Markdown).
-- [ ] Message editing, regeneration, and turn cancellation.
+- [x] Message editing, regeneration, and turn cancellation.
 
 ## v1.2 — Model & System Management
 

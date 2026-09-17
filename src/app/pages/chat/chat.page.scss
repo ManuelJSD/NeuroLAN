@@ -530,6 +530,7 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
       max-width: 78%;
       box-shadow: none;
       flex: none;
+      position: relative; /* Necesario para anclar el botón */
 
       .message-sender {
         display: none;
@@ -539,6 +540,65 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
         color: $crust;
         font-weight: 500;
         font-size: 0.95rem;
+      }
+
+      /* Estética del modo edición dentro de la burbuja */
+      .edit-mode-container {
+        .edit-textarea {
+          --color: #{$crust};
+          --highlight-color-focused: #{$crust};
+          --highlight-color: #{$crust};
+          --border-color: rgba(17, 17, 27, 0.2);
+          font-weight: 500;
+          font-size: 0.95rem;
+
+          &::part(textarea) {
+            caret-color: #{$crust} !important;
+            color: #{$crust} !important;
+          }
+        }
+
+        .edit-actions {
+          ion-button {
+            --color: #{$crust} !important;
+            font-weight: 600;
+
+            &[fill='clear'] {
+              --color: rgba(17, 17, 27, 0.7) !important;
+              &:hover {
+                --color: #{$crust} !important;
+              }
+            }
+          }
+        }
+      }
+
+      /* Estética del botón de editar */
+      .edit-btn {
+        position: absolute;
+        top: 50%;
+        left: -42px; /* Flotando a la izquierda de la burbuja */
+        transform: translateY(-50%);
+        background: rgba(49, 50, 68, 0.5); /* $surface0 */
+        border: 1px solid rgba(166, 173, 200, 0.2);
+        color: rgba(166, 173, 200, 0.8); /* $subtext0 */
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        &:hover {
+          color: #94e2d5; /* $teal */
+          background: rgba(49, 50, 68, 0.9);
+        }
+
+        ion-icon {
+          font-size: 15px;
+        }
       }
     }
   }
@@ -550,6 +610,7 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
     }
   }
 }
+
 
 /* ==========================================================================
    6. MARKDOWN STYLES

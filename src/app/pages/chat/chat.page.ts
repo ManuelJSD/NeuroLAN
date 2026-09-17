@@ -27,6 +27,7 @@ import {
   menuOutline,
   copyOutline,
   hourglassOutline,
+  pencilOutline,
 } from 'ionicons/icons';
 import { ConversationService } from 'src/app/core/services/conversation';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -90,6 +91,9 @@ export class ChatPage implements OnInit, OnDestroy {
 
   isCopyToastOpen = false;
 
+  editingMessageIndex: number = -1;
+  editingMessageText: string = '';
+
   constructor() {
     addIcons({
       createOutline,
@@ -97,6 +101,7 @@ export class ChatPage implements OnInit, OnDestroy {
       menuOutline,
       copyOutline,
       hourglassOutline,
+      pencilOutline,
     });
   }
 
@@ -152,6 +157,7 @@ export class ChatPage implements OnInit, OnDestroy {
     this.currentConversationId = this.generateId();
     this.currentConversationCreatedAt = Date.now();
     this.temporaryChat = false;
+    this.cancelEdit();
   }
 
   loadConversation(id: string) {
@@ -357,5 +363,40 @@ export class ChatPage implements OnInit, OnDestroy {
     }
 
     this.sendToAPI();
+  }
+
+  editMessage(index: number, currentText: string) {
+    this.editingMessageIndex = index;
+    this.editingMessageText = currentText;
+  }
+  cancelEdit() {
+    this.editingMessageIndex = -1;
+    this.editingMessageText = '';
+  }
+  saveEdit(index: number) {
+    if (
+      this.editingMessageIndex === index &&
+      this.editingMessageText.trim() != ''
+    ) {
+      this.messages.splice(index + 1);
+
+      this.messages[index].content = this.editingMessageText;
+
+      this.sendToAPI();
+
+      this.cancelEdit();
+    } else {
+      console.error('Edit index does not match');
+      this.cancelEdit();
+    }
+  }
+
+  onEditKeydown(event: KeyboardEvent, index: number) {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault();
+      this.saveEdit(index);
+    } else if (event.key === 'Escape') {
+      this.cancelEdit();
+    }
   }
 }

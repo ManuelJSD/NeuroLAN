@@ -40,7 +40,10 @@
       @if (temporaryChat) {
       <div class="temp-chat-banner">
         <ion-icon name="hourglass-outline" aria-hidden="true"></ion-icon>
-        <span>Modo temporal activo — esta conversación no se guardará en el historial.</span>
+        <span
+          >Modo temporal activo — esta conversación no se guardará en el
+          historial.</span
+        >
       </div>
       }
 
@@ -104,8 +107,9 @@
             class="copy-btn"
             (click)="copyMessage(msg.content)"
             [title]="'CHAT.COPY_MESSAGE' | translate"
-            ><ion-icon slot="icon-only" name="copy-outline"></ion-icon
-          ></ion-button>
+          >
+            <ion-icon slot="icon-only" name="copy-outline"></ion-icon>
+          </ion-button>
           }
           <markdown
             class="markdown-view"
@@ -113,14 +117,53 @@
             clipboard
             [clipboardButtonTemplate]="copyCodeBtn"
           ></markdown>
-          } @if (msg.role === 'user') {
+          } @if (msg.role === 'user') { @if (editingMessageIndex === $index) {
+          <!-- EDIT MODE -->
+          <div class="edit-mode-container">
+            <ion-textarea
+              class="edit-textarea"
+              autoGrow="true"
+              [(ngModel)]="editingMessageText"
+              (keydown)="onEditKeydown($event, $index)"
+            ></ion-textarea>
+            <div
+              class="edit-actions"
+              style="display: flex; gap: 8px; margin-top: 8px"
+            >
+              <ion-button
+                size="small"
+                fill="clear"
+                color="medium"
+                (click)="cancelEdit()"
+              >
+                {{ 'CONVERSATIONS.CANCEL' | translate }}
+              </ion-button>
+              <ion-button size="small" (click)="saveEdit($index)">
+                {{ 'CONVERSATIONS.SAVE' | translate }}
+              </ion-button>
+            </div>
+          </div>
+          } @else {
+          <!-- NORMAL READING MODE -->
           <div class="message-text">{{ msg.content }}</div>
-          } @if (msg.responseTime !== undefined || (msg.role === 'assistant' && $last && !isSending)) {
+
+          <!-- Edit Button -->
+          @if (isSending === false) {
+          <button
+            class="edit-btn"
+            (click)="editMessage($index, msg.content)"
+            [title]="'CHAT.EDIT' | translate"
+          >
+            <ion-icon name="pencil-outline" aria-hidden="true"></ion-icon>
+          </button>
+          } } } @if (msg.responseTime !== undefined || (msg.role === 'assistant'
+          && $last && !isSending)) {
           <div class="message-meta">
             @if (msg.responseTime !== undefined) {
             <span class="response-time" title="Tiempo total">
               ⏱️ {{ msg.responseTime | number:'1.1-2' }}s
             </span>
+
             @if (msg.ttft !== undefined && msg.tokensPerSecond !== undefined) {
             <span class="response-time" title="Time to First Token (Latencia)">
               ⚡ {{ msg.ttft | number:'1.1-2' }}s
@@ -132,10 +175,7 @@
             <span class="response-time" title="Tokens consumidos">
               📝 {{ msg.tokensCount }} tok
             </span>
-            }
-            }
-
-            @if (msg.role === 'assistant' && $last && !isSending) {
+            } } @if (msg.role === 'assistant' && $last && !isSending) {
             <button
               class="regenerate-btn"
               (click)="regenerateLastResponse()"

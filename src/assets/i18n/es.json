@@ -71,6 +71,7 @@
     "EDIT": "Editar",
     "DELETE": "Eliminar",
     "CANCEL": "Cancelar",
+    "SAVE": "Guardar",
     "EXPORT": "Exportar",
     "EXPORT_JSON": "Exportar a JSON",
     "EXPORT_MARKDOWN": "Exportar a Markdown",

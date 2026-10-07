@@ -59,4 +59,37 @@ export class SettingsService {
     const storage = await this.ensureStorage();
     return (await this._storage?.get('stream_mode')) ?? null;
   }
+
+  // --- Web Search settings ---
+
+  async setWebSearchEnabled(enabled: boolean): Promise<void> {
+    await this.ensureStorage();
+    await this._storage?.set('web_search_enabled', enabled);
+  }
+
+  async getWebSearchEnabled(): Promise<boolean> {
+    await this.ensureStorage();
+    return (await this._storage?.get('web_search_enabled')) ?? false;
+  }
+
+  async setSearchApiKey(key: string): Promise<void> {
+    await this.ensureStorage();
+    await this._storage?.set('search_api_key', key);
+  }
+
+  async getSearchApiKey(): Promise<string | null> {
+    await this.ensureStorage();
+    return (await this._storage?.get('search_api_key')) ?? null;
+  }
+
+  // Stores the selected provider id (e.g. 'brave', 'tavily')
+  async setSearchProviderId(id: string): Promise<void> {
+    await this.ensureStorage();
+    await this._storage?.set('search_provider_id', id);
+  }
+
+  async getSearchProviderId(): Promise<string> {
+    await this.ensureStorage();
+    return (await this._storage?.get('search_provider_id')) ?? 'brave';
+  }
 }

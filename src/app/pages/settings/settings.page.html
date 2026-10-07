@@ -168,7 +168,79 @@
         </div>
       </div>
 
+      <!-- Web Search Card -->
+      <div class="settings-card web-search-card">
+        <div class="card-header">
+          <div class="card-icon web-search-card-icon">
+            <!-- Search icon -->
+            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor"
+              stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </div>
+          <div class="card-header-text">
+            <h2 class="card-title">{{ "SETTINGS.WEB_SEARCH_TITLE" | translate }}</h2>
+            <p class="card-subtitle">{{ "SETTINGS.WEB_SEARCH_SUBTITLE" | translate }}</p>
+          </div>
+        </div>
+
+        <!-- Enable toggle -->
+        <div class="field-group">
+          <ion-toggle
+            labelPlacement="end"
+            [checked]="webSearchEnabled"
+            (ionChange)="setWebSearchEnabled($event.detail.checked)"
+          >
+            <p class="field-hint">{{ "SETTINGS.WEB_SEARCH_ENABLE" | translate }}</p>
+          </ion-toggle>
+        </div>
+
+        @if (webSearchEnabled) {
+        <!-- Provider selector -->
+        <div class="field-group">
+          <label class="field-label">{{ "SETTINGS.WEB_SEARCH_PROVIDER" | translate }}</label>
+          <div class="language-select-wrapper">
+            <ion-select
+              class="language-select"
+              interface="popover"
+              [value]="searchProviderId"
+              (ionChange)="setSearchProvider($event.detail.value)"
+            >
+              @for (provider of webSearchService.availableProviders; track provider.id) {
+              <ion-select-option [value]="provider.id">{{ provider.name }}</ion-select-option>
+              }
+            </ion-select>
+          </div>
+        </div>
+
+        <!-- API key input -->
+        <div class="field-group">
+          <label class="field-label" for="searchApiKey">
+            {{ "SETTINGS.WEB_SEARCH_API_KEY" | translate }}
+          </label>
+          <div class="field-input-wrapper">
+            <ion-input
+              id="searchApiKey"
+              class="field-input"
+              type="password"
+              [value]="searchApiKey"
+              [placeholder]="'SETTINGS.WEB_SEARCH_API_KEY_PLACEHOLDER' | translate"
+              (ionInput)="setSearchApiKey($event.detail.value ?? '')"
+            ></ion-input>
+          </div>
+          <p class="field-hint">{{ "SETTINGS.WEB_SEARCH_API_KEY_HINT" | translate }}</p>
+        </div>
+
+        <ion-button class="save-button" expand="block" (click)="saveSearchApiKey()">
+          <ion-icon name="checkmark-circle-outline" slot="start"></ion-icon>
+          {{ "SETTINGS.SAVE_BUTTON" | translate }}
+        </ion-button>
+        }
+      </div>
+
       <!-- Delete Card -->
+
       <div class="settings-card delete-card">
         <div class="card-header">
           <div class="card-icon delete-card-icon">

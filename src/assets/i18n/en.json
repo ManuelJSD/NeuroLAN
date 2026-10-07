@@ -29,7 +29,14 @@
     "CREDITS_DESC": "Cross-platform open-source application to chat with local AI models on your home network.",
     "CREDITS_AUTHOR_LABEL": "Lead Developer",
     "CREDITS_AUTHOR_NAME": "Manuel J. Sandalio",
-    "CREDITS_REPO": "View on GitHub"
+    "CREDITS_REPO": "View on GitHub",
+    "WEB_SEARCH_TITLE": "Web Search",
+    "WEB_SEARCH_SUBTITLE": "Allow the model to search the web for up-to-date information",
+    "WEB_SEARCH_ENABLE": "Enable / Disable Web Search",
+    "WEB_SEARCH_PROVIDER": "Search Provider",
+    "WEB_SEARCH_API_KEY": "API Key",
+    "WEB_SEARCH_API_KEY_PLACEHOLDER": "Paste your API key here",
+    "WEB_SEARCH_API_KEY_HINT": "Get a free key at api.search.brave.com"
   },
   "MENU": {
     "LOCAL_AI": "Local AI",

@@ -12,7 +12,7 @@
 - [x] Loading states, error handling and auto-scroll.
 - [x] Rename services and models from LM Studio-specific to OpenAI-compatible naming.
 
-## v1.1 — Streaming and chat UX
+## v1.1 — Streaming and Chat UX (Done)
 
 - [x] Response streaming (SSE), enabled by default with a toggle in Settings.
 - [x] Delete all conversation history from Settings with a confirmation dialog.
@@ -21,34 +21,152 @@
 - [x] Search across conversation history.
 - [x] Import / export conversations (JSON or Markdown).
 - [x] Message editing, regeneration, and turn cancellation.
+- [x] Temporary / no-save conversations.
 
-## v1.2 — Model & System Management
+## v1.2 — Web Search & Tools
 
-- [ ] Multiple server profiles (save several URLs/ports and switch between them).
-- [ ] View models currently loaded in memory (VRAM/RAM).
-- [ ] Load and unload models from memory.
-- [ ] Model details: quantization, disk size, estimated VRAM usage.
-- [ ] Real-time CPU and RAM usage.
-- [ ] GPU/VRAM monitoring (best-effort, depends on OS and drivers).
-- [ ] Backend connection status indicator.
-- [ ] Per-model saved parameters (temperature, system prompt, thinking level).
+### Web Search
 
-## v1.3 — Advanced Chat & Multimodal
+- [x] Automatic web search.
+- [x] Expose Web Search as a tool available to the model.
+- [x] Allow the model to decide automatically when a search is necessary.
+- [x] Execute search → return results to the model → generate final response.
+- [x] Display search activity/status in the chat.
+- [x] Show sources/citations for web results.
+- [x] Open source links from the response.
+- [x] Enable/disable Web Search from Settings.
+- [x] Handle search errors, timeouts and cancellation.
 
-- [ ] System prompt and per-conversation parameters (temperature, max tokens, top_p).
-- [ ] Voice input (Speech-to-Text) and response reading (Text-to-Speech).
-- [ ] Thinking traces UI: collapsible reasoning blocks and thinking level controls.
-- [ ] Multimodal support (drag and drop images for vision models).
+### Tool infrastructure
 
-## v2.0 — Agents, Tools & Extensibility
+- [x] Generic tool execution architecture.
+- [x] Tool call state in the conversation.
+- [x] Tool execution UI.
+- [x] Tool errors and cancellation.
+- [x] Support streamed tool calls.
+- [x] Handle models with unsupported or unreliable tool calling.
 
-- [ ] Web search and external tool support (Function Calling).
-- [ ] Artifacts Sandbox: real-time preview environment for generated HTML/JS/CSS.
-- [ ] Visual inspection: allow vision models to take screenshots of the sandbox for autonomous styling.
-- [ ] Architecture extensible for other API protocols (e.g. Anthropic).
+## v1.3 — Multimodal & Files
 
-## v2.x (Future) — RAG & Documents
+### Images
 
-- [ ] Attach files to the chat (PDF, TXT, source code).
-- [ ] Local semantic search / RAG over documents.
-- [ ] Show sources and citations in responses.
+- [ ] Image attachments.
+- [ ] Image preview before sending.
+- [ ] Remove images before sending.
+- [ ] Send images using the OpenAI-compatible multimodal format.
+- [ ] Detect/configure model vision capability.
+- [ ] Disable image attachment when the selected model does not support vision.
+- [ ] Show vision capability in the model selector.
+
+### Files
+
+- [ ] Generic file attachment system.
+- [ ] File type and size validation.
+- [ ] TXT files.
+- [ ] Source code files.
+- [ ] PDF text extraction.
+- [ ] Include extracted file contents in the model request.
+- [ ] File preview/removal before sending.
+- [ ] Show attached files in messages.
+
+## v1.4 — Voice
+
+### Speech-to-Text
+
+- [ ] Voice input.
+- [ ] Start/stop recording.
+- [ ] Convert audio to text.
+- [ ] Edit transcription before sending.
+- [ ] Handle microphone permissions/errors.
+
+### Text-to-Speech
+
+- [ ] Read assistant responses aloud.
+- [ ] Play/pause/stop controls.
+- [ ] Voice/language configuration.
+
+## v1.5 — Multi-Server & Model Management
+
+### Server aggregation
+
+- [ ] Configure multiple OpenAI-compatible servers.
+- [ ] Check server availability.
+- [ ] Retrieve models from all configured servers.
+- [ ] Show all available models in a unified model selector.
+- [ ] Show the server/provider associated with each model.
+- [ ] Remember which server provides each model.
+- [ ] Handle duplicate model names from different servers.
+- [ ] Indicate unavailable/offline servers.
+
+### Model capabilities
+
+- [ ] Detect/store model capabilities where available.
+- [ ] Vision capability.
+- [ ] Tool/function calling capability.
+- [ ] Reasoning/thinking capability.
+- [ ] Streaming capability.
+- [ ] Show relevant capabilities in the model selector and chat UI.
+
+### Model configuration
+
+- [ ] Per-model saved parameters.
+- [ ] Temperature.
+- [ ] System prompt.
+- [ ] Thinking/reasoning level.
+- [ ] Other model-specific parameters where supported.
+
+## v1.6 — Advanced Chat
+
+- [ ] System prompt per conversation.
+- [ ] Temperature per conversation.
+- [ ] Max tokens per conversation.
+- [ ] Top_p and other sampling parameters.
+- [ ] Thinking/reasoning UI.
+- [ ] Collapsible reasoning blocks.
+- [ ] Thinking level controls.
+- [ ] Better tool-call visualization.
+- [ ] Better handling of multimodal messages.
+
+## v2.0 — Agents & Extensibility
+
+- [ ] Multi-step tool execution.
+- [ ] Agent execution loop.
+- [ ] Multiple tools in the same conversation.
+- [ ] Tool permissions/confirmation.
+- [ ] Tool execution limits.
+- [ ] Tool execution history.
+- [ ] Extensible tool system.
+- [ ] Support for additional API protocols (e.g. Anthropic).
+
+### Artifacts
+
+- [ ] Artifacts Sandbox.
+- [ ] Real-time HTML/CSS/JS preview.
+- [ ] Execute generated frontend code in an isolated environment.
+- [ ] Visual inspection with vision models.
+- [ ] Allow models to inspect screenshots of the sandbox.
+
+## v2.x — Backend & Synchronization
+
+- [ ] Optional backend mode.
+- [ ] Keep local-only mode fully functional without a backend.
+- [ ] User registration.
+- [ ] Authentication.
+- [ ] JWT authentication.
+- [ ] Backend conversation storage.
+- [ ] Synchronize conversations between devices.
+- [ ] Conversation conflict handling.
+- [ ] Backend ↔ LM Studio/OpenAI-compatible server communication.
+- [ ] Optional backend proxy for model requests.
+
+## v2.x — RAG & Document Library
+
+- [ ] Persistent document library.
+- [ ] Local document indexing.
+- [ ] Embeddings.
+- [ ] Local vector storage.
+- [ ] Semantic search.
+- [ ] RAG over documents.
+- [ ] Retrieve relevant document chunks during conversations.
+- [ ] Document sources/citations.
+- [ ] Document management UI.

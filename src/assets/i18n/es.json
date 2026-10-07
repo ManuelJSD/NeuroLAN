@@ -29,7 +29,14 @@
     "CREDITS_DESC": "Aplicación multiplataforma de código abierto para conversar con modelos de IA locales en tu red privada.",
     "CREDITS_AUTHOR_LABEL": "Desarrollador principal",
     "CREDITS_AUTHOR_NAME": "Manuel J. Sandalio",
-    "CREDITS_REPO": "Ver en GitHub"
+    "CREDITS_REPO": "Ver en GitHub",
+    "WEB_SEARCH_TITLE": "Búsqueda Web",
+    "WEB_SEARCH_SUBTITLE": "Permite que el modelo busque en Internet información actualizada",
+    "WEB_SEARCH_ENABLE": "Activar / Desactivar Búsqueda Web",
+    "WEB_SEARCH_PROVIDER": "Proveedor de búsqueda",
+    "WEB_SEARCH_API_KEY": "Clave API",
+    "WEB_SEARCH_API_KEY_PLACEHOLDER": "Pega aquí tu clave API",
+    "WEB_SEARCH_API_KEY_HINT": "Obtén una clave gratuita en api.search.brave.com"
   },
   "MENU": {
     "LOCAL_AI": "IA Local",

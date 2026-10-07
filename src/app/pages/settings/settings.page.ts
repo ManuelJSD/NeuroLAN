@@ -27,6 +27,7 @@ import {
 import { SettingsService } from 'src/app/core/services/settings';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { ConversationService } from 'src/app/core/services/conversation';
+import { WebSearchService } from 'src/app/core/services/search/web-search.service';
 
 @Component({
   selector: 'app-settings',
@@ -69,6 +70,13 @@ export class SettingsPage implements OnInit {
     { id: 'es', label: 'Español' },
   ];
 
+  // Web Search state
+  webSearchEnabled: boolean = false;
+  searchApiKey: string = '';
+  searchProviderId: string = 'brave';
+  // Injected so the template can iterate availableProviders
+  public webSearchService = inject(WebSearchService);
+
   settingsForm = this.formBuilder.group({
     serverAddress: [''],
     languageSelect: [''],
@@ -98,7 +106,10 @@ export class SettingsPage implements OnInit {
     const streaming = await this.settingsService.getStreamMode();
     this.streaming = streaming ?? true;
 
-    console.log('Inicialización:', this.streaming);
+    // Web Search
+    this.webSearchEnabled = await this.settingsService.getWebSearchEnabled();
+    this.searchApiKey = (await this.settingsService.getSearchApiKey()) ?? '';
+    this.searchProviderId = await this.settingsService.getSearchProviderId();
 
     this.settingsForm.setValue({
       serverAddress: this.baseUrl ?? 'http://127.0.0.1:1234',
@@ -136,6 +147,28 @@ export class SettingsPage implements OnInit {
   setStreaming(streaming: boolean) {
     this.streaming = streaming;
     this.settingsService.setStreamMode(streaming);
+    this.setOpen(true, this.translateService.instant('SETTINGS.TOAST_SUCCESS'));
+  }
+
+  setWebSearchEnabled(enabled: boolean) {
+    this.webSearchEnabled = enabled;
+    this.settingsService.setWebSearchEnabled(enabled);
+    this.setOpen(true, this.translateService.instant('SETTINGS.TOAST_SUCCESS'));
+  }
+
+  setSearchApiKey(key: string) {
+    this.searchApiKey = key;
+    this.settingsService.setSearchApiKey(key);
+  }
+
+  saveSearchApiKey() {
+    this.settingsService.setSearchApiKey(this.searchApiKey);
+    this.setOpen(true, this.translateService.instant('SETTINGS.TOAST_SUCCESS'));
+  }
+
+  setSearchProvider(providerId: string) {
+    this.searchProviderId = providerId;
+    this.settingsService.setSearchProviderId(providerId);
     this.setOpen(true, this.translateService.instant('SETTINGS.TOAST_SUCCESS'));
   }
 

@@ -13,10 +13,12 @@ import {
   IonButton,
   IonToast,
 } from '@ionic/angular/standalone';
-import { OpenAIService } from 'src/app/core/services/openai';
+import { OpenAIService, StreamChunk } from 'src/app/core/services/openai';
 import {
   ChatMessage,
   OpenAIModel,
+  Tool,
+  ToolCall,
   UsageTokens,
 } from 'src/app/core/models/openai.model';
 import { MarkdownComponent } from 'ngx-markdown';
@@ -34,7 +36,32 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { UiService } from 'src/app/core/services/ui-service';
 import { SettingsService } from 'src/app/core/services/settings';
+import { WebSearchService } from 'src/app/core/services/search/web-search.service';
+import { SearchResult } from 'src/app/core/services/search/search-provider.interface';
 import { Subscription } from 'rxjs';
+
+// Maximum number of tool-calling iterations before giving up (prevents infinite loops)
+const MAX_TOOL_ITERATIONS = 5;
+
+// Tool definition sent to the model so it knows web search is available
+const WEB_SEARCH_TOOL: Tool = {
+  type: 'function',
+  function: {
+    name: 'web_search',
+    description:
+      'Search the web for up-to-date information. Use this when the user asks about current events, real-time data, or anything your training data may not cover.',
+    parameters: {
+      type: 'object',
+      properties: {
+        query: {
+          type: 'string',
+          description: 'The search query to look up.',
+        },
+      },
+      required: ['query'],
+    },
+  },
+};
 
 @Component({
   selector: 'app-chat',
@@ -68,6 +95,7 @@ export class ChatPage implements OnInit, OnDestroy {
   private conversationService = inject(ConversationService);
   private translateService = inject(TranslateService);
   private ngZone = inject(NgZone);
+  public webSearchService = inject(WebSearchService);
 
   private activeSubscription?: Subscription;
 
@@ -77,6 +105,11 @@ export class ChatPage implements OnInit, OnDestroy {
   messages: ChatMessage[] = [];
   userInput: string = '';
   temporaryChat: boolean = false;
+
+  // Web Search state
+  webSearchEnabled: boolean = false;
+  // Stores the sources from the last search to display them in the UI
+  lastSearchSources: SearchResult[] = [];
 
   get totalConversationTokens(): number {
     return this.messages.reduce(
@@ -107,6 +140,7 @@ export class ChatPage implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.loadModels();
+    this.loadWebSearchSetting();
 
     this.route.paramMap.subscribe((params) => {
       const id = params.get('id');
@@ -157,6 +191,8 @@ export class ChatPage implements OnInit, OnDestroy {
     this.currentConversationId = this.generateId();
     this.currentConversationCreatedAt = Date.now();
     this.temporaryChat = false;
+    this.lastSearchSources = [];
+    this.webSearchService.reset();
     this.cancelEdit();
   }
 
@@ -195,107 +231,169 @@ export class ChatPage implements OnInit, OnDestroy {
     await this.sendToAPI();
   }
 
+  private async loadWebSearchSetting(): Promise<void> {
+    this.webSearchEnabled = await this.settingsService.getWebSearchEnabled();
+  }
+
   async sendToAPI() {
     this.isSending = true;
     this.errorMessage = null;
+    this.lastSearchSources = [];
+    this.webSearchService.reset();
 
     const startTime = Date.now();
-
     const streaming = (await this.settingsService.getStreamMode()) ?? true;
+    const tools = this.webSearchEnabled ? [WEB_SEARCH_TOOL] : undefined;
 
-    if (!streaming) {
-      this.activeSubscription = this.openAIService
-        .sendChat({
-          model: this.selectedModelKey,
-          messages: this.messages,
-        })
-        .subscribe({
-          next: (res) => {
-            const responseTime = (Date.now() - startTime) / 1000;
-            this.messages.push({
-              role: 'assistant',
-              content: res.choices[0].message.content,
-              responseTime: responseTime,
-            });
-            this.isSending = false;
+    // --- Tool-calling loop ---
+    // Each iteration sends the current messages to the model.
+    // If the model requests a tool, we execute it, append the result, and loop.
+    // If the model returns text, we display it and exit.
+    for (let iteration = 0; iteration < MAX_TOOL_ITERATIONS; iteration++) {
 
-            this.messages[this.messages.length - 1].tokensCount =
-              res.usage?.completion_tokens;
+      if (!streaming) {
+        // ── Non-streaming path ──────────────────────────────────────────────
+        let response: any;
+        try {
+          response = await new Promise((resolve, reject) => {
+            this.activeSubscription = this.openAIService
+              .sendChat({ model: this.selectedModelKey, messages: this.messages, tools })
+              .subscribe({ next: resolve, error: reject });
+          });
+        } catch (err) {
+          console.error(err);
+          this.errorMessage = this.translateService.instant('CHAT.ERROR_SEND_FAILED');
+          this.isSending = false;
+          return;
+        }
 
-            if (!this.temporaryChat) {
-              //Save Conversation
-              this.conversationService.saveConversation({
-                id: this.currentConversationId,
-                title: this.messages[0].content.substring(0, 50),
-                messages: this.messages,
-                createdAt: this.currentConversationCreatedAt,
-              });
-            }
-          },
-          error: (err) => {
-            console.error(err);
-            this.errorMessage = this.translateService.instant(
-              'CHAT.ERROR_SEND_FAILED',
-            );
-            this.isSending = false;
-          },
+        const choice = response.choices[0];
+
+        if (choice.message.tool_calls?.length) {
+          // Model wants to call a tool — execute and continue the loop
+          this.messages.push({ role: 'assistant', content: '', tool_calls: choice.message.tool_calls });
+          await this.executeToolCalls(choice.message.tool_calls);
+          continue;
+        }
+
+        // Model returned a final text response
+        const responseTime = (Date.now() - startTime) / 1000;
+        this.messages.push({
+          role: 'assistant',
+          content: choice.message.content,
+          responseTime,
+          tokensCount: response.usage?.completion_tokens,
+          sources: [...this.lastSearchSources],
         });
-    } else {
-      let tokenCount = 0;
-      const messagesToSend = [...this.messages];
-      this.messages.push({ role: 'assistant', content: '' });
-      let tokenStartTime = 0;
+        this.isSending = false;
+        this.saveConversationIfNeeded();
+        return;
 
-      this.activeSubscription = this.openAIService
-        .sendChatStream({
-          model: this.selectedModelKey,
-          messages: messagesToSend,
-        })
-        .subscribe({
-          next: (chunk) => {
-            this.ngZone.run(() => {
-              this.messages[this.messages.length - 1].content += chunk;
+      } else {
+        // ── Streaming path ──────────────────────────────────────────────────
+        let receivedToolCalls: ToolCall[] = [];
+        let tokenCount = 0;
+        let tokenStartTime = 0;
+        const messagesToSend = [...this.messages];
+        this.messages.push({ role: 'assistant', content: '' });
+
+        const streamResult = await new Promise<'text' | 'tool_calls'>((resolve, reject) => {
+          this.activeSubscription = this.openAIService
+            .sendChatStream({ model: this.selectedModelKey, messages: messagesToSend, tools })
+            .subscribe({
+              next: (chunk: StreamChunk) => {
+                this.ngZone.run(() => {
+                  if (chunk.type === 'text') {
+                    this.messages[this.messages.length - 1].content += chunk.content;
+                    if (tokenCount === 0) tokenStartTime = Date.now();
+                    tokenCount++;
+                  } else if (chunk.type === 'tool_calls') {
+                    receivedToolCalls = chunk.toolCalls;
+                  }
+                });
+              },
+              complete: () => resolve(receivedToolCalls.length > 0 ? 'tool_calls' : 'text'),
+              error: reject,
             });
-            if (tokenCount === 0) {
-              tokenStartTime = Date.now();
-            }
-            tokenCount++;
-          },
-          complete: () => {
-            this.isSending = false;
-
-            const responseTime = (Date.now() - startTime) / 1000;
-            this.messages[this.messages.length - 1].responseTime = responseTime;
-
-            const ttft = (tokenStartTime - startTime) / 1000;
-            const tokenResponseTime = (Date.now() - tokenStartTime) / 1000;
-            const tokensPerSecond =
-              tokenResponseTime > 0 ? tokenCount / tokenResponseTime : 0;
-
-            this.messages[this.messages.length - 1].ttft = ttft;
-            this.messages[this.messages.length - 1].tokensPerSecond =
-              tokensPerSecond;
-
-            this.messages[this.messages.length - 1].tokensCount = tokenCount;
-
-            if (!this.temporaryChat) {
-              //Save Conversation
-              this.conversationService.saveConversation({
-                id: this.currentConversationId,
-                title: this.messages[0].content.substring(0, 50),
-                messages: this.messages,
-                createdAt: this.currentConversationCreatedAt,
-              });
-            }
-          },
-          error: (err) => {
-            console.error(err);
-            this.errorMessage = this.translateService.instant(
-              'CHAT.ERROR_SEND_FAILED',
-            );
-            this.isSending = false;
-          },
+        }).catch((err) => {
+          console.error(err);
+          this.errorMessage = this.translateService.instant('CHAT.ERROR_SEND_FAILED');
+          this.isSending = false;
+          return null;
         });
+
+        if (streamResult === null) return; // Error occurred
+
+        if (streamResult === 'tool_calls') {
+          // Strip the empty placeholder message we added before streaming
+          this.messages.pop();
+          this.messages.push({ role: 'assistant', content: '', tool_calls: receivedToolCalls });
+          await this.executeToolCalls(receivedToolCalls);
+          continue;
+        }
+
+        // Model returned a final text response via stream
+        const responseTime = (Date.now() - startTime) / 1000;
+        const tokenResponseTime = (Date.now() - tokenStartTime) / 1000;
+        const tokensPerSecond = tokenResponseTime > 0 ? tokenCount / tokenResponseTime : 0;
+        const lastMsg = this.messages[this.messages.length - 1];
+        lastMsg.responseTime = responseTime;
+        lastMsg.ttft = (tokenStartTime - startTime) / 1000;
+        lastMsg.tokensPerSecond = tokensPerSecond;
+        lastMsg.tokensCount = tokenCount;
+        lastMsg.sources = [...this.lastSearchSources];
+
+        this.isSending = false;
+        this.saveConversationIfNeeded();
+        return;
+      }
+    }
+
+    // Reached iteration limit without a final text response
+    this.errorMessage = this.translateService.instant('CHAT.ERROR_SEND_FAILED');
+    this.isSending = false;
+  }
+
+  /**
+   * Execute a list of tool calls requested by the model.
+   * Currently only 'web_search' is supported.
+   * Appends a 'tool' message for each call so the model can read the results.
+   */
+  private async executeToolCalls(toolCalls: ToolCall[]): Promise<void> {
+    for (const tc of toolCalls) {
+      if (tc.function.name === 'web_search') {
+        let args: { query?: string } = {};
+        try {
+          args = JSON.parse(tc.function.arguments);
+        } catch {
+          args = { query: '' };
+        }
+
+        const query = args.query ?? '';
+        let resultContent: string;
+
+        try {
+          const results = await this.webSearchService.search(query);
+          // Store sources for display in the UI
+          this.lastSearchSources = this.webSearchService.getLastResults();
+          resultContent = results;
+        } catch (err: any) {
+          resultContent = `Search failed: ${err?.message ?? 'unknown error'}`;
+        }
+
+        this.messages.push({
+          role: 'tool',
+          content: resultContent,
+          tool_call_id: tc.id,
+        });
+      } else {
+        // Unknown tool — return an error message so the model can recover
+        this.messages.push({
+          role: 'tool',
+          content: `Error: unknown tool "${tc.function.name}"`,
+          tool_call_id: tc.id,
+        });
+      }
     }
   }
 
@@ -331,6 +429,7 @@ export class ChatPage implements OnInit, OnDestroy {
     if (this.activeSubscription) {
       this.activeSubscription.unsubscribe();
       this.isSending = false;
+      this.webSearchService.cancel();
 
       const lastMessage = this.messages[this.messages.length - 1];
       if (
@@ -342,7 +441,6 @@ export class ChatPage implements OnInit, OnDestroy {
       }
 
       if (!this.temporaryChat) {
-        //Save conversation
         this.conversationService.saveConversation({
           id: this.currentConversationId,
           title: this.messages[0].content.substring(0, 50),
@@ -350,6 +448,17 @@ export class ChatPage implements OnInit, OnDestroy {
           createdAt: this.currentConversationCreatedAt,
         });
       }
+    }
+  }
+
+  private saveConversationIfNeeded(): void {
+    if (!this.temporaryChat && this.messages.length > 0) {
+      this.conversationService.saveConversation({
+        id: this.currentConversationId,
+        title: this.messages[0].content.substring(0, 50),
+        messages: this.messages,
+        createdAt: this.currentConversationCreatedAt,
+      });
     }
   }
 

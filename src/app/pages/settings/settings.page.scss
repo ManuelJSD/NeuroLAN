@@ -490,3 +490,20 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
   }
 }
 
+// ============================================================
+// Web Search card
+// ============================================================
+
+.web-search-card {
+  .web-search-card-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, rgba(250, 179, 135, 0.15), rgba(235, 160, 172, 0.08));
+    border: 1px solid rgba(250, 179, 135, 0.2);
+    color: #fab387;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+  }
+}

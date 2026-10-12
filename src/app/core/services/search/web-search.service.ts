@@ -1,6 +1,7 @@
 import { Injectable, signal, inject } from '@angular/core';
 import { SearchProvider, SearchResult, SearchStatus } from './search-provider.interface';
 import { BraveSearchProvider } from './brave-search.provider';
+import { TavilySearchProvider } from './tavily-search.provider';
 import { SettingsService } from '../settings';
 
 // Search timeout in milliseconds
@@ -15,6 +16,7 @@ export class WebSearchService {
   // The Settings UI will automatically pick it up from `availableProviders`.
   readonly availableProviders: SearchProvider[] = [
     new BraveSearchProvider(),
+    new TavilySearchProvider(),
   ];
 
   // Reactive signal: the UI subscribes to this to show search status

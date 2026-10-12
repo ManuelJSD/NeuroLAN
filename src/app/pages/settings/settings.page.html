@@ -214,6 +214,27 @@
           </div>
         </div>
 
+        <!-- Search mode selector -->
+        <div class="field-group">
+          <label class="field-label">{{ "SETTINGS.WEB_SEARCH_MODE" | translate }}</label>
+          <div class="language-select-wrapper">
+            <ion-select
+              class="language-select"
+              interface="popover"
+              [value]="searchMode"
+              (ionChange)="setSearchMode($event.detail.value)"
+            >
+              <ion-select-option value="native">
+                {{ "SETTINGS.WEB_SEARCH_MODE_NATIVE" | translate }}
+              </ion-select-option>
+              <ion-select-option value="rag">
+                {{ "SETTINGS.WEB_SEARCH_MODE_RAG" | translate }}
+              </ion-select-option>
+            </ion-select>
+          </div>
+          <p class="field-hint">{{ "SETTINGS.WEB_SEARCH_MODE_HINT" | translate }}</p>
+        </div>
+
         <!-- API key input -->
         <div class="field-group">
           <label class="field-label" for="searchApiKey">

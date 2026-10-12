@@ -92,4 +92,19 @@ export class SettingsService {
     await this.ensureStorage();
     return (await this._storage?.get('search_provider_id')) ?? 'brave';
   }
+
+  // --- Search mode ---
+  // 'native': the model decides when to call the web_search tool (requires tool calling support).
+  // 'rag':    the app searches before calling the model and injects the results as context
+  //           (works with any model, including uncensored ones that ignore the tools parameter).
+
+  async setSearchMode(mode: 'native' | 'rag'): Promise<void> {
+    await this.ensureStorage();
+    await this._storage?.set('search_mode', mode);
+  }
+
+  async getSearchMode(): Promise<'native' | 'rag'> {
+    await this.ensureStorage();
+    return (await this._storage?.get('search_mode')) ?? 'native';
+  }
 }

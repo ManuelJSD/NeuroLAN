@@ -13,6 +13,7 @@ import { menuOutline, refreshOutline, hourglassOutline } from 'ionicons/icons';
 import { OpenAIService } from 'src/app/core/services/openai';
 import { Router } from '@angular/router';
 import { UiService } from 'src/app/core/services/ui-service';
+import { SettingsService } from 'src/app/core/services/settings';
 
 @Component({
   selector: 'app-home',
@@ -35,11 +36,16 @@ export class HomePage implements OnInit {
   private openAIService = inject(OpenAIService);
   private router = inject(Router);
   private translate = inject(TranslateService);
+  private settingsService = inject(SettingsService);
 
   models: { id: string }[] = [];
   selectedModelKey: string = '';
   userInput: string = '';
   temporaryChat: boolean = false;
+
+  // Web search opt-in toggle for the first message
+  webSearchEnabled: boolean = false;
+  searchThisMessage: boolean = false;
 
   // Example suggestions — you can adapt texts via i18n
   suggestions: string[] = [
@@ -56,6 +62,9 @@ export class HomePage implements OnInit {
 
   ngOnInit() {
     this.loadModels();
+    this.settingsService.getWebSearchEnabled().then((enabled) => {
+      this.webSearchEnabled = enabled;
+    });
   }
 
   loadModels() {
@@ -102,9 +111,11 @@ export class HomePage implements OnInit {
         message: this.userInput,
         model: this.selectedModelKey,
         temporaryChat: this.temporaryChat,
+        searchThisMessage: this.searchThisMessage,
       },
     });
 
     this.userInput = '';
+    this.searchThisMessage = false; // reset after navigate
   }
 }

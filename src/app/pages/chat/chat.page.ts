@@ -43,6 +43,12 @@ import { Subscription } from 'rxjs';
 // Maximum number of tool-calling iterations before giving up (prevents infinite loops)
 const MAX_TOOL_ITERATIONS = 5;
 
+/** Represents a single step in the processing status panel */
+interface ProcessStep {
+  label: string;
+  state: 'active' | 'done';
+}
+
 // Tool definition sent to the model so it knows web search is available
 const WEB_SEARCH_TOOL: Tool = {
   type: 'function',
@@ -111,6 +117,12 @@ export class ChatPage implements OnInit, OnDestroy {
   // Stores the sources from the last search to display them in the UI
   lastSearchSources: SearchResult[] = [];
 
+  // Processing steps shown to the user while waiting for a response
+  processingSteps: ProcessStep[] = [];
+
+  // Opt-in web search toggle for the current message (resets after each send)
+  searchThisMessage: boolean = false;
+
   get totalConversationTokens(): number {
     return this.messages.reduce(
       (total, msg) => total + (msg.tokensCount || 0),
@@ -158,6 +170,9 @@ export class ChatPage implements OnInit, OnDestroy {
           this.userInput = history.state.message;
           this.selectedModelKey = history.state.model;
           this.temporaryChat = history.state.temporaryChat;
+          // Propagate the search toggle from Home so the first message
+          // also performs a web search if the user activated it there.
+          this.searchThisMessage = history.state.searchThisMessage ?? false;
 
           history.replaceState({ ...history.state, message: null }, '');
 
@@ -192,6 +207,7 @@ export class ChatPage implements OnInit, OnDestroy {
     this.currentConversationCreatedAt = Date.now();
     this.temporaryChat = false;
     this.lastSearchSources = [];
+    this.searchThisMessage = false;
     this.webSearchService.reset();
     this.cancelEdit();
   }
@@ -202,6 +218,7 @@ export class ChatPage implements OnInit, OnDestroy {
         this.currentConversationId = c.id;
         this.currentConversationCreatedAt = c.createdAt;
         this.messages = c.messages;
+        this.searchThisMessage = false;
       }
     });
   }
@@ -239,11 +256,26 @@ export class ChatPage implements OnInit, OnDestroy {
     this.isSending = true;
     this.errorMessage = null;
     this.lastSearchSources = [];
+    this.processingSteps = [];
     this.webSearchService.reset();
 
     const startTime = Date.now();
     const streaming = (await this.settingsService.getStreamMode()) ?? true;
-    const tools = this.webSearchEnabled ? [WEB_SEARCH_TOOL] : undefined;
+    const searchMode = await this.settingsService.getSearchMode();
+
+    // In RAG mode, only search if the user explicitly activated the toggle.
+    // The toggle remains active for subsequent messages until the user disables it.
+    let ragMessages: ChatMessage[] | undefined;
+    if (this.webSearchEnabled && searchMode === 'rag' && this.searchThisMessage) {
+      ragMessages = await this.buildRagMessages();
+    }
+
+    // Show the "generating" step once web search (if any) is done
+    this.addStep(this.translateService.instant('CHAT.STEPS.GENERATING'));
+
+    // In native mode, pass the tools array so the model can decide when to search.
+    const tools =
+      this.webSearchEnabled && searchMode === 'native' ? [WEB_SEARCH_TOOL] : undefined;
 
     // --- Tool-calling loop ---
     // Each iteration sends the current messages to the model.
@@ -257,7 +289,7 @@ export class ChatPage implements OnInit, OnDestroy {
         try {
           response = await new Promise((resolve, reject) => {
             this.activeSubscription = this.openAIService
-              .sendChat({ model: this.selectedModelKey, messages: this.messages, tools })
+              .sendChat({ model: this.selectedModelKey, messages: ragMessages ?? this.messages, tools })
               .subscribe({ next: resolve, error: reject });
           });
         } catch (err) {
@@ -285,6 +317,7 @@ export class ChatPage implements OnInit, OnDestroy {
           tokensCount: response.usage?.completion_tokens,
           sources: [...this.lastSearchSources],
         });
+        this.clearSteps();
         this.isSending = false;
         this.saveConversationIfNeeded();
         return;
@@ -294,7 +327,8 @@ export class ChatPage implements OnInit, OnDestroy {
         let receivedToolCalls: ToolCall[] = [];
         let tokenCount = 0;
         let tokenStartTime = 0;
-        const messagesToSend = [...this.messages];
+        // In RAG mode use the enriched copy; otherwise use the live messages array.
+        const messagesToSend = ragMessages ?? [...this.messages];
         this.messages.push({ role: 'assistant', content: '' });
 
         const streamResult = await new Promise<'text' | 'tool_calls'>((resolve, reject) => {
@@ -323,6 +357,7 @@ export class ChatPage implements OnInit, OnDestroy {
         });
 
         if (streamResult === null) return; // Error occurred
+        this.clearSteps();
 
         if (streamResult === 'tool_calls') {
           // Strip the empty placeholder message we added before streaming
@@ -343,6 +378,7 @@ export class ChatPage implements OnInit, OnDestroy {
         lastMsg.tokensCount = tokenCount;
         lastMsg.sources = [...this.lastSearchSources];
 
+        this.clearSteps();
         this.isSending = false;
         this.saveConversationIfNeeded();
         return;
@@ -372,14 +408,28 @@ export class ChatPage implements OnInit, OnDestroy {
         const query = args.query ?? '';
         let resultContent: string;
 
+        // Show step: searching (native tool-calling mode)
+        this.clearSteps();
+        this.addStep(this.translateService.instant('CHAT.STEPS.TOOL_SEARCHING', { query }));
+
         try {
           const results = await this.webSearchService.search(query);
           // Store sources for display in the UI
           this.lastSearchSources = this.webSearchService.getLastResults();
           resultContent = results;
+          const count = this.lastSearchSources.length;
+          this.completeLastStep(
+            this.translateService.instant('CHAT.STEPS.TOOL_SEARCH_DONE', { count })
+          );
         } catch (err: any) {
           resultContent = `Search failed: ${err?.message ?? 'unknown error'}`;
+          this.completeLastStep(
+            this.translateService.instant('CHAT.STEPS.SEARCH_FAILED')
+          );
         }
+
+        // Show "generating" step now that search is complete
+        this.addStep(this.translateService.instant('CHAT.STEPS.GENERATING'));
 
         this.messages.push({
           role: 'tool',
@@ -395,6 +445,111 @@ export class ChatPage implements OnInit, OnDestroy {
         });
       }
     }
+  }
+
+  /**
+   * RAG mode: builds a copy of the messages array where the last user message
+   * is enriched with web search results. The original this.messages is never
+   * mutated, so the chat UI always shows the original user text.
+   */
+  /**
+   * Builds a context-aware search query (Option B).
+   * If the last user message is short or lacks specific terms, it enriches
+   * the query with recent conversation context so follow-up questions
+   * (e.g. "¿y en 2004?") produce relevant search results.
+   */
+  private buildSearchQuery(): string {
+    const userMsgs = this.messages.filter((m) => m.role === 'user');
+    const lastMsg = userMsgs[userMsgs.length - 1];
+    if (!lastMsg) return '';
+
+    const currentText = lastMsg.content.trim();
+
+    // Find the most recent previous user message that is specific enough
+    // to act as a topic anchor for the search engine.
+    const anchor = [...userMsgs]
+      .slice(0, -1)      // all except the last (current) message
+      .reverse()
+      .find((m) => m.content.trim().length >= 40);
+
+    // Always combine anchor topic + current question so the search engine
+    // understands the conversational context even for short follow-ups
+    // or long messages that lack explicit topic keywords (e.g. "monturas").
+    if (anchor) {
+      return `${anchor.content.substring(0, 150)} ${currentText}`;
+    }
+
+    return currentText;
+  }
+
+
+  private async buildRagMessages(): Promise<ChatMessage[]> {
+    const lastUserMsg = [...this.messages].reverse().find((m) => m.role === 'user');
+    if (!lastUserMsg) return [...this.messages];
+
+    const query = this.buildSearchQuery();
+    let searchResults: string;
+
+    // Step 1: Searching
+    this.addStep(this.translateService.instant('CHAT.STEPS.SEARCHING', { query: lastUserMsg.content.substring(0, 60) }));
+
+    try {
+      searchResults = await this.webSearchService.search(query);
+      this.lastSearchSources = this.webSearchService.getLastResults();
+      const count = this.lastSearchSources.length;
+      this.completeLastStep(
+        this.translateService.instant('CHAT.STEPS.SEARCH_DONE', { count })
+      );
+    } catch {
+      // If the search fails, fall back to the original messages (model answers from training data)
+      this.completeLastStep(
+        this.translateService.instant('CHAT.STEPS.SEARCH_FAILED')
+      );
+      return [...this.messages];
+    }
+
+    // Step 2: Preparing context
+    this.addStep(this.translateService.instant('CHAT.STEPS.PREPARING_CONTEXT'));
+    // (context building is synchronous, so we mark it done immediately)
+    this.completeLastStep(
+      this.translateService.instant('CHAT.STEPS.CONTEXT_READY')
+    );
+
+    // Return a shallow copy where only the last user message has enriched content
+    return this.messages.map((m) => {
+      if (m !== lastUserMsg) return m;
+      return {
+        ...m,
+        content:
+          `[INFORMACIÓN WEB ACTUALIZADA]:\n${searchResults}\n\n` +
+          `Usa la información anterior para responder a la siguiente pregunta. ` +
+          `Si la respuesta no está en el contexto, indícalo.\n\n` +
+          `PREGUNTA: ${query}`,
+      };
+    });
+  }
+
+  // ── Processing Steps helpers ──────────────────────────────────────────────
+
+  /** Adds a new active step to the processing panel */
+  private addStep(label: string): void {
+    this.processingSteps.push({ label, state: 'active' });
+  }
+
+  /**
+   * Marks the last step as done (optionally updating its label)
+   * and transitions it to the 'done' state with a check icon.
+   */
+  private completeLastStep(newLabel?: string): void {
+    const last = this.processingSteps[this.processingSteps.length - 1];
+    if (!last) return;
+    if (newLabel) last.label = newLabel;
+    last.state = 'done';
+  }
+
+  /** Clears all steps once the model's response has arrived */
+  private clearSteps(): void {
+    this.processingSteps = [];
   }
 
   onEnterKey(event: KeyboardEvent) {

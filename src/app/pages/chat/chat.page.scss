@@ -358,9 +358,15 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
     }
   }
 
+  .action-buttons {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
   /* Token Counter Chip */
   .tokens-chip {
-    margin: 0 8px 0 auto; /* Pushes the chip to the right, next to the send button */
+    margin: 0;
     --background: rgba(166, 173, 200, 0.06); /* $subtext0 opacity */
     --color: #{$subtext0};
     border: 1px solid rgba(166, 173, 200, 0.15);
@@ -399,6 +405,37 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
     &:disabled {
       opacity: 0.2;
       cursor: default;
+    }
+  }
+
+  .web-search-toggle-btn {
+    background: transparent;
+    border: 1px solid $surface1;
+    border-radius: 6px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    color: $subtext0;
+    transition: color 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease, transform 0.1s ease;
+
+    &:hover {
+      color: $teal;
+      border-color: rgba(148, 226, 213, 0.35);
+    }
+
+    &:active {
+      transform: scale(0.9);
+    }
+
+    &.active {
+      color: $teal;
+      border-color: rgba(148, 226, 213, 0.6);
+      background: rgba(148, 226, 213, 0.08);
+      box-shadow: 0 0 8px rgba(148, 226, 213, 0.2);
     }
   }
 }
@@ -792,6 +829,67 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
     height: 18px;
     color: $teal;
   }
+}
+
+// Processing Steps Panel (Opción B: pasos secuenciales estilo Perplexity)
+.processing-steps-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: $surface0;
+  border: 1px solid $surface1;
+  border-radius: 10px;
+  padding: 10px 14px;
+  width: fit-content;
+  min-width: 220px;
+  max-width: 420px;
+}
+
+.process-step {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  animation: stepFadeIn 0.2s ease forwards;
+  opacity: 0;
+
+  .step-spinner {
+    flex-shrink: 0;
+    width: 14px;
+    height: 14px;
+    color: $teal;
+  }
+
+  .step-check {
+    flex-shrink: 0;
+    width: 14px;
+    height: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    color: $teal;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .step-label {
+    font-size: 0.82rem;
+    font-family: $font-mono;
+    color: $subtext1;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &.step-done .step-label {
+    color: $subtext0;
+  }
+}
+
+@keyframes stepFadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 .error-container {

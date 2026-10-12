@@ -34,6 +34,10 @@
     "WEB_SEARCH_SUBTITLE": "Allow the model to search the web for up-to-date information",
     "WEB_SEARCH_ENABLE": "Enable / Disable Web Search",
     "WEB_SEARCH_PROVIDER": "Search Provider",
+    "WEB_SEARCH_MODE": "Search Mode",
+    "WEB_SEARCH_MODE_NATIVE": "Native Tool Calling (compatible models)",
+    "WEB_SEARCH_MODE_RAG": "Compatibility (experimental) — RAG pre-search",
+    "WEB_SEARCH_MODE_HINT": "Use 'Compatibility' with uncensored models or those without tool calling support. Variable results.",
     "WEB_SEARCH_API_KEY": "API Key",
     "WEB_SEARCH_API_KEY_PLACEHOLDER": "Paste your API key here",
     "WEB_SEARCH_API_KEY_HINT": "Get a free key at api.search.brave.com"
@@ -60,6 +64,16 @@
     "USER_ROLE": "You",
     "ASSISTANT_ROLE": "Assistant",
     "THINKING": "Thinking",
+    "STEPS": {
+      "SEARCHING": "Searching: \"{{query}}\"",
+      "SEARCH_DONE": "{{count}} source(s) found",
+      "SEARCH_FAILED": "Search unavailable, answering from training data",
+      "PREPARING_CONTEXT": "Preparing context for the model...",
+      "CONTEXT_READY": "Context ready",
+      "GENERATING": "Generating response...",
+      "TOOL_SEARCHING": "Looking up information: \"{{query}}\"",
+      "TOOL_SEARCH_DONE": "Results retrieved — {{count}} source(s)"
+    },
     "TYPE_MESSAGE": "Type your message...",
     "ERROR_SELECT_MODEL": "You must select a model",
     "ERROR_SEND_FAILED": "Failed to send message",
@@ -71,7 +85,9 @@
     "COPY_MESSAGE": "Copy message",
     "MESSAGE_COPIED": "Message copied to clipboard",
     "STOP": "Stop",
-    "REGENERATE": "Regenerate response"
+    "REGENERATE": "Regenerate response",
+    "SEARCH_TOGGLE_OFF": "Enable web search for this conversation",
+    "SEARCH_TOGGLE_ON": "Web search active — click to disable"
   },
   "CONVERSATIONS": {
     "EMPTY": "No conversations yet",

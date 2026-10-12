@@ -74,6 +74,8 @@ export class SettingsPage implements OnInit {
   webSearchEnabled: boolean = false;
   searchApiKey: string = '';
   searchProviderId: string = 'brave';
+  // 'native' → model decides via tool_calls; 'rag' → app pre-searches and injects context
+  searchMode: 'native' | 'rag' = 'native';
   // Injected so the template can iterate availableProviders
   public webSearchService = inject(WebSearchService);
 
@@ -110,6 +112,7 @@ export class SettingsPage implements OnInit {
     this.webSearchEnabled = await this.settingsService.getWebSearchEnabled();
     this.searchApiKey = (await this.settingsService.getSearchApiKey()) ?? '';
     this.searchProviderId = await this.settingsService.getSearchProviderId();
+    this.searchMode = await this.settingsService.getSearchMode();
 
     this.settingsForm.setValue({
       serverAddress: this.baseUrl ?? 'http://127.0.0.1:1234',
@@ -169,6 +172,12 @@ export class SettingsPage implements OnInit {
   setSearchProvider(providerId: string) {
     this.searchProviderId = providerId;
     this.settingsService.setSearchProviderId(providerId);
+    this.setOpen(true, this.translateService.instant('SETTINGS.TOAST_SUCCESS'));
+  }
+
+  setSearchMode(mode: 'native' | 'rag') {
+    this.searchMode = mode;
+    this.settingsService.setSearchMode(mode);
     this.setOpen(true, this.translateService.instant('SETTINGS.TOAST_SUCCESS'));
   }
 

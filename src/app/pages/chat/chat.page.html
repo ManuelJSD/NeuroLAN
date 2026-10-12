@@ -210,59 +210,27 @@
       </div>
       }
 
-      <!-- Web Search Status Indicator -->
-      @if (webSearchService.searchStatus().state === 'searching') {
+      <!-- Processing Steps Panel -->
+      @if (processingSteps.length > 0) {
       <div class="message-wrapper assistant">
         <div class="avatar ai-avatar">
-          <svg
-            viewBox="0 0 24 24"
-            width="18"
-            height="18"
-            stroke="currentColor"
-            stroke-width="2"
-            fill="none"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            aria-hidden="true"
-          >
-            <circle cx="11" cy="11" r="8"></circle>
-            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-          </svg>
-        </div>
-        <div class="message-bubble thinking-bubble">
-          <span class="thinking-text">
-            🔍 Searching: <em>{{ webSearchService.searchStatus().query }}</em>
-          </span>
-          <ion-spinner name="dots" class="custom-spinner"></ion-spinner>
-        </div>
-      </div>
-      }
-
-      <!-- Thinking Indicator -->
-      @if (isSending && webSearchService.searchStatus().state !== 'searching') {
-      <div class="message-wrapper assistant">
-        <div class="avatar ai-avatar">
-          <svg
-            viewBox="0 0 24 24"
-            width="18"
-            height="18"
-            stroke="currentColor"
-            stroke-width="2"
-            fill="none"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            aria-hidden="true"
-          >
-            <path
-              d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2z"
-            ></path>
+          <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2z"></path>
             <path d="M9 14v-2"></path>
             <path d="M15 14v-2"></path>
           </svg>
         </div>
-        <div class="message-bubble thinking-bubble">
-          <span class="thinking-text">{{ 'CHAT.THINKING' | translate }}</span>
-          <ion-spinner name="dots" class="custom-spinner"></ion-spinner>
+        <div class="processing-steps-panel">
+          @for (step of processingSteps; track $index) {
+          <div class="process-step" [class.step-done]="step.state === 'done'">
+            @if (step.state === 'active') {
+              <ion-spinner name="dots" class="step-spinner"></ion-spinner>
+            } @else {
+              <span class="step-check" aria-hidden="true">✓</span>
+            }
+            <span class="step-label">{{ step.label }}</span>
+          </div>
+          }
         </div>
       </div>
       }
@@ -320,59 +288,78 @@
           </button>
         </div>
 
-        @if (totalConversationTokens > 0) {
-        <ion-chip class="tokens-chip">
-          <ion-label
-            >{{ totalConversationTokens | number }} {{ 'CHAT.TOKENS' | translate
-            }}</ion-label
-          >
-        </ion-chip>
+        <div class="action-buttons">
+          @if (totalConversationTokens > 0) {
+          <ion-chip class="tokens-chip">
+            <ion-label
+              >{{ totalConversationTokens | number }} {{ 'CHAT.TOKENS' | translate
+              }}</ion-label
+            >
+          </ion-chip>
+          }
 
-        } @if (isSending) {
-        <!-- Stop Button -->
-        <button
-          class="stop-btn"
-          (click)="stopGeneration()"
-          [title]="'CHAT.STOP' | translate"
-        >
-          <svg
-            viewBox="0 0 24 24"
-            width="18"
-            height="18"
-            stroke="currentColor"
-            stroke-width="2.5"
-            fill="none"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            aria-hidden="true"
+          <!-- Web Search Toggle (RAG mode opt-in) -->
+          @if (webSearchEnabled && !isSending) {
+          <button
+            class="web-search-toggle-btn"
+            [class.active]="searchThisMessage"
+            (click)="searchThisMessage = !searchThisMessage"
+            [title]="(searchThisMessage ? ('CHAT.SEARCH_TOGGLE_ON' | translate) : ('CHAT.SEARCH_TOGGLE_OFF' | translate))"
+            aria-label="Toggle web search for this message"
           >
-            <rect x="4" y="4" width="16" height="16"></rect>
-          </svg>
-        </button>
-        } @else {
-        <!-- Send Button -->
-        <button
-          class="send-btn"
-          (click)="sendMessage()"
-          [disabled]="isSending || !userInput"
-          [title]="'CHAT.SEND' | translate"
-        >
-          <svg
-            viewBox="0 0 24 24"
-            width="18"
-            height="18"
-            stroke="currentColor"
-            stroke-width="2.5"
-            fill="none"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            aria-hidden="true"
+            <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </button>
+          }
+
+          @if (isSending) {
+          <!-- Stop Button -->
+          <button
+            class="stop-btn"
+            (click)="stopGeneration()"
+            [title]="'CHAT.STOP' | translate"
           >
-            <line x1="22" y1="2" x2="11" y2="13"></line>
-            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-          </svg>
-        </button>
-        }
+            <svg
+              viewBox="0 0 24 24"
+              width="18"
+              height="18"
+              stroke="currentColor"
+              stroke-width="2.5"
+              fill="none"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <rect x="4" y="4" width="16" height="16"></rect>
+            </svg>
+          </button>
+          } @else {
+          <!-- Send Button -->
+          <button
+            class="send-btn"
+            (click)="sendMessage()"
+            [disabled]="isSending || !userInput"
+            [title]="'CHAT.SEND' | translate"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              width="18"
+              height="18"
+              stroke="currentColor"
+              stroke-width="2.5"
+              fill="none"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <line x1="22" y1="2" x2="11" y2="13"></line>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+          </button>
+          }
+        </div>
       </div>
     </div>
   </footer>

@@ -95,6 +95,22 @@
               <ion-icon name="hourglass-outline" aria-hidden="true"></ion-icon>
             </button>
 
+            <!-- Web Search Toggle (opt-in, solo visible si la búsqueda web está activada) -->
+            @if (webSearchEnabled) {
+            <button
+              class="web-search-toggle-btn"
+              [class.active]="searchThisMessage"
+              (click)="searchThisMessage = !searchThisMessage"
+              [title]="(searchThisMessage ? 'CHAT.SEARCH_TOGGLE_ON' : 'CHAT.SEARCH_TOGGLE_OFF') | translate"
+              aria-label="Toggle web search"
+            >
+              <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+            </button>
+            }
+
           <!-- Send Button -->
           <button
             class="send-btn"

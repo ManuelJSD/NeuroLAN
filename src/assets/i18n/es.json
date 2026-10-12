@@ -34,6 +34,10 @@
     "WEB_SEARCH_SUBTITLE": "Permite que el modelo busque en Internet información actualizada",
     "WEB_SEARCH_ENABLE": "Activar / Desactivar Búsqueda Web",
     "WEB_SEARCH_PROVIDER": "Proveedor de búsqueda",
+    "WEB_SEARCH_MODE": "Modo de búsqueda",
+    "WEB_SEARCH_MODE_NATIVE": "Tool Calling nativo (modelos compatibles)",
+    "WEB_SEARCH_MODE_RAG": "Compatibilidad (experimental) — pre-búsqueda RAG",
+    "WEB_SEARCH_MODE_HINT": "Usa 'Compatibilidad' con modelos uncensored o sin soporte de herramientas. Resultados variables.",
     "WEB_SEARCH_API_KEY": "Clave API",
     "WEB_SEARCH_API_KEY_PLACEHOLDER": "Pega aquí tu clave API",
     "WEB_SEARCH_API_KEY_HINT": "Obtén una clave gratuita en api.search.brave.com"
@@ -60,6 +64,16 @@
     "USER_ROLE": "Tú",
     "ASSISTANT_ROLE": "Asistente",
     "THINKING": "Pensando",
+    "STEPS": {
+      "SEARCHING": "Buscando: \"{{query}}\"",
+      "SEARCH_DONE": "{{count}} fuente(s) encontrada(s)",
+      "SEARCH_FAILED": "Búsqueda no disponible, respondiendo desde conocimiento base",
+      "PREPARING_CONTEXT": "Preparando contexto para el modelo...",
+      "CONTEXT_READY": "Contexto listo",
+      "GENERATING": "Generando respuesta...",
+      "TOOL_SEARCHING": "Buscando información: \"{{query}}\"",
+      "TOOL_SEARCH_DONE": "Resultados obtenidos — {{count}} fuente(s)"
+    },
     "TYPE_MESSAGE": "Escribe tu mensaje...",
     "ERROR_SELECT_MODEL": "Debes seleccionar un modelo",
     "ERROR_SEND_FAILED": "Error al enviar el mensaje",
@@ -71,7 +85,9 @@
     "COPY_MESSAGE": "Copiar mensaje",
     "MESSAGE_COPIED": "Mensaje copiado al portapapeles",
     "STOP": "Detener",
-    "REGENERATE": "Regenerar respuesta"
+    "REGENERATE": "Regenerar respuesta",
+    "SEARCH_TOGGLE_OFF": "Activar búsqueda web en esta conversación",
+    "SEARCH_TOGGLE_ON": "Búsqueda web activa — pulsa para desactivar"
   },
   "CONVERSATIONS": {
     "EMPTY": "Aún no hay conversaciones",

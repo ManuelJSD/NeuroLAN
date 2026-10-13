@@ -40,7 +40,20 @@
     "WEB_SEARCH_MODE_HINT": "Use 'Compatibility' with uncensored models or those without tool calling support. Variable results.",
     "WEB_SEARCH_API_KEY": "API Key",
     "WEB_SEARCH_API_KEY_PLACEHOLDER": "Paste your API key here",
-    "WEB_SEARCH_API_KEY_HINT": "Get a free key at api.search.brave.com"
+    "WEB_SEARCH_API_KEY_HINT": "Get a free key at api.search.brave.com",
+    "MEMORY_TITLE": "Memory",
+    "MEMORY_SUBTITLE": "Allow the assistant to remember information between conversations",
+    "MEMORY_ENABLE": "Enable / Disable Memory",
+    "MEMORY_ADD": "Add a memory manually",
+    "MEMORY_ADD_BTN": "Add",
+    "MEMORY_PLACEHOLDER": "e.g. I prefer concise answers",
+    "MEMORY_LIST": "Saved memories",
+    "MEMORY_CLEAR_ALL": "Clear all memories",
+    "MEMORY_ALERT_DELETE": "Are you sure you want to delete ALL memories?",
+    "MEMORY_LIMIT": "Memory limit",
+    "MEMORY_LIMIT_HINT": "Maximum number of memories to keep. Oldest are discarded automatically. Set to 0 for unlimited.",
+    "MEMORY_FREQ": "Extraction frequency",
+    "MEMORY_FREQ_HINT": "The assistant will scan the conversation for new data every N responses. Minimum 1 (always), default 2."
   },
   "MENU": {
     "LOCAL_AI": "Local AI",
@@ -87,7 +100,12 @@
     "STOP": "Stop",
     "REGENERATE": "Regenerate response",
     "SEARCH_TOGGLE_OFF": "Enable web search for this conversation",
-    "SEARCH_TOGGLE_ON": "Web search active — click to disable"
+    "SEARCH_TOGGLE_ON": "Web search active — click to disable",
+    "MEMORY_UPDATED": "Memory updated",
+    "MANAGE_MEMORIES": "Manage memories",
+    "MEMORY_ACTION_ADD": "Saved",
+    "MEMORY_ACTION_UPDATE": "Updated",
+    "MEMORY_ACTION_DELETE": "Removed"
   },
   "CONVERSATIONS": {
     "EMPTY": "No conversations yet",

@@ -107,4 +107,45 @@ export class SettingsService {
     await this.ensureStorage();
     return (await this._storage?.get('search_mode')) ?? 'native';
   }
+
+  // --- Memory settings ---
+
+  async setMemoryEnabled(enabled: boolean): Promise<void> {
+    await this.ensureStorage();
+    await this._storage?.set('memory_enabled', enabled);
+  }
+
+  async getMemoryEnabled(): Promise<boolean> {
+    await this.ensureStorage();
+    return (await this._storage?.get('memory_enabled')) ?? true;
+  }
+
+  /**
+   * Maximum number of memories to keep. Oldest are discarded when exceeded.
+   * 0 means unlimited.
+   */
+  async setMemoryLimit(limit: number): Promise<void> {
+    await this.ensureStorage();
+    await this._storage?.set('memory_limit', limit);
+  }
+
+  async getMemoryLimit(): Promise<number> {
+    await this.ensureStorage();
+    return (await this._storage?.get('memory_limit')) ?? 50;
+  }
+
+  /**
+   * How often (every N assistant turns) the app runs memory extraction.
+   * 1 = every turn, 2 = every other turn, etc.
+   * 0 is treated as 1 (always extract).
+   */
+  async setMemoryExtractionFrequency(n: number): Promise<void> {
+    await this.ensureStorage();
+    await this._storage?.set('memory_extraction_freq', n);
+  }
+
+  async getMemoryExtractionFrequency(): Promise<number> {
+    await this.ensureStorage();
+    return (await this._storage?.get('memory_extraction_freq')) ?? 2;
+  }
 }

@@ -137,6 +137,56 @@
             </div>
           </div>
           }
+
+          <!-- Memory Feedback Badge (ChatGPT style) -->
+          @if (msg.memoryActions && msg.memoryActions.length > 0) {
+          <div class="memory-feedback-container">
+            <button
+              type="button"
+              class="memory-pill-btn"
+              (click)="toggleMemoryDetails(msg)"
+              [title]="'CHAT.MEMORY_UPDATED' | translate"
+            >
+              <span class="memory-pill-icon">🧠</span>
+              <span class="memory-pill-text">{{ 'CHAT.MEMORY_UPDATED' | translate }}</span>
+              <ion-icon
+                [name]="msg.showMemoryDetails ? 'chevron-up-outline' : 'chevron-down-outline'"
+                class="memory-pill-chevron"
+              ></ion-icon>
+            </button>
+
+            @if (msg.showMemoryDetails) {
+            <div class="memory-details-card">
+              <div class="memory-details-list">
+                @for (action of msg.memoryActions; track $index) {
+                <div class="memory-details-item" [class]="'action-' + action.action">
+                  <span class="memory-action-tag">
+                    @if (action.action === 'add') {
+                      {{ 'CHAT.MEMORY_ACTION_ADD' | translate }}
+                    } @else if (action.action === 'update') {
+                      {{ 'CHAT.MEMORY_ACTION_UPDATE' | translate }}
+                    } @else {
+                      {{ 'CHAT.MEMORY_ACTION_DELETE' | translate }}
+                    }
+                  </span>
+                  <span class="memory-action-content">{{ action.content }}</span>
+                </div>
+                }
+              </div>
+              <div class="memory-details-footer">
+                <button
+                  type="button"
+                  class="manage-memories-btn"
+                  (click)="goToSettings()"
+                >
+                  <ion-icon name="settings-outline"></ion-icon>
+                  {{ 'CHAT.MANAGE_MEMORIES' | translate }}
+                </button>
+              </div>
+            </div>
+            }
+          </div>
+          }
           } @if (msg.role === 'user') { @if (editingMessageIndex === $index) {
           <!-- EDIT MODE -->
           <div class="edit-mode-container">

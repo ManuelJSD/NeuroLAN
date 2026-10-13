@@ -44,6 +44,11 @@ export interface ToolCall {
 // 'tool' is used to send the result of a tool call back to the model
 export type ChatRole = 'system' | 'user' | 'assistant' | 'tool';
 
+export interface MemoryActionRecord {
+  action: 'add' | 'update' | 'delete';
+  content: string;
+}
+
 export interface ChatMessage {
   role: ChatRole;
   content: string;
@@ -59,6 +64,9 @@ export interface ChatMessage {
   tokensCount?: number;
   // Web search sources attached to the final assistant response
   sources?: { title: string; url: string; snippet: string }[];
+  // Memorias detectadas y actualizadas en este turno
+  memoryActions?: MemoryActionRecord[];
+  showMemoryDetails?: boolean;
 }
 
 export interface OpenAIChatRequest {

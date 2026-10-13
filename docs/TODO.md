@@ -23,7 +23,7 @@
 - [x] Message editing, regeneration, and turn cancellation.
 - [x] Temporary / no-save conversations.
 
-## v1.2 — Web Search & Tools
+## v1.2 — Web Search & Tools (Done)
 
 ### Web Search
 
@@ -46,7 +46,18 @@
 - [x] Support streamed tool calls.
 - [x] Handle models with unsupported or unreliable tool calling.
 
-## v1.3 — Multimodal & Files
+## v1.3 — Long-term Memory (Done)
+
+- [x] Automatic background memory extraction (fire-and-forget).
+- [x] Local persistence of memories with LocalForage.
+- [x] Contextual injection of user memories into system prompt.
+- [x] Semantic deduplication and support for add, update, and delete memory actions.
+- [x] Enable/disable memory toggle in Settings.
+- [x] Configurable memory limit and extraction frequency (throttling) in Settings.
+- [x] Manual memory management (create, edit, delete) in Settings.
+- [x] ChatGPT-style user feedback badge in assistant messages with expandable details and direct link to Settings.
+
+## v1.4 — Multimodal & Files
 
 ### Images
 
@@ -69,7 +80,7 @@
 - [ ] File preview/removal before sending.
 - [ ] Show attached files in messages.
 
-## v1.4 — Voice
+## v1.5 — Voice
 
 ### Speech-to-Text
 
@@ -85,7 +96,7 @@
 - [ ] Play/pause/stop controls.
 - [ ] Voice/language configuration.
 
-## v1.5 — Multi-Server & Model Management
+## v1.6 — Multi-Server & Model Management
 
 ### Server aggregation
 
@@ -115,7 +126,7 @@
 - [ ] Thinking/reasoning level.
 - [ ] Other model-specific parameters where supported.
 
-## v1.6 — Advanced Chat
+## v1.7 — Advanced Chat
 
 - [ ] System prompt per conversation.
 - [ ] Temperature per conversation.

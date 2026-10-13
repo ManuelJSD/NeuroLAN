@@ -40,7 +40,20 @@
     "WEB_SEARCH_MODE_HINT": "Usa 'Compatibilidad' con modelos uncensored o sin soporte de herramientas. Resultados variables.",
     "WEB_SEARCH_API_KEY": "Clave API",
     "WEB_SEARCH_API_KEY_PLACEHOLDER": "Pega aquí tu clave API",
-    "WEB_SEARCH_API_KEY_HINT": "Obtén una clave gratuita en api.search.brave.com"
+    "WEB_SEARCH_API_KEY_HINT": "Obtén una clave gratuita en api.search.brave.com",
+    "MEMORY_TITLE": "Memoria",
+    "MEMORY_SUBTITLE": "Permite al asistente recordar información entre conversaciones",
+    "MEMORY_ENABLE": "Activar / Desactivar Memoria",
+    "MEMORY_ADD": "Añadir una memoria manualmente",
+    "MEMORY_ADD_BTN": "Añadir",
+    "MEMORY_PLACEHOLDER": "p.ej. Prefiero respuestas concisas",
+    "MEMORY_LIST": "Memorias guardadas",
+    "MEMORY_CLEAR_ALL": "Borrar todas las memorias",
+    "MEMORY_ALERT_DELETE": "¿Estás seguro de que quieres borrar TODAS las memorias?",
+    "MEMORY_LIMIT": "Límite de memorias",
+    "MEMORY_LIMIT_HINT": "Máximo de memorias a conservar. Las más antiguas se descartan automáticamente. Escribe 0 para sin límite.",
+    "MEMORY_FREQ": "Frecuencia de extracción",
+    "MEMORY_FREQ_HINT": "El asistente analizará la conversación en busca de datos cada N respuestas. Mínimo 1 (siempre), defecto 2."
   },
   "MENU": {
     "LOCAL_AI": "IA Local",
@@ -87,7 +100,12 @@
     "STOP": "Detener",
     "REGENERATE": "Regenerar respuesta",
     "SEARCH_TOGGLE_OFF": "Activar búsqueda web en esta conversación",
-    "SEARCH_TOGGLE_ON": "Búsqueda web activa — pulsa para desactivar"
+    "SEARCH_TOGGLE_ON": "Búsqueda web activa — pulsa para desactivar",
+    "MEMORY_UPDATED": "Memoria actualizada",
+    "MANAGE_MEMORIES": "Administrar memorias",
+    "MEMORY_ACTION_ADD": "Guardado",
+    "MEMORY_ACTION_UPDATE": "Actualizado",
+    "MEMORY_ACTION_DELETE": "Eliminado"
   },
   "CONVERSATIONS": {
     "EMPTY": "Aún no hay conversaciones",

@@ -30,6 +30,9 @@ import {
   copyOutline,
   hourglassOutline,
   pencilOutline,
+  chevronDownOutline,
+  chevronUpOutline,
+  settingsOutline,
 } from 'ionicons/icons';
 import { ConversationService } from 'src/app/core/services/conversation';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -38,6 +41,7 @@ import { UiService } from 'src/app/core/services/ui-service';
 import { SettingsService } from 'src/app/core/services/settings';
 import { WebSearchService } from 'src/app/core/services/search/web-search.service';
 import { SearchResult } from 'src/app/core/services/search/search-provider.interface';
+import { MemoryService } from 'src/app/core/services/memory.service';
 import { Subscription } from 'rxjs';
 
 // Maximum number of tool-calling iterations before giving up (prevents infinite loops)
@@ -96,12 +100,14 @@ export class ChatPage implements OnInit, OnDestroy {
   public uiService = inject(UiService);
 
   private route = inject(ActivatedRoute);
+  private router = inject(Router);
   private openAIService = inject(OpenAIService);
   private settingsService = inject(SettingsService);
   private conversationService = inject(ConversationService);
   private translateService = inject(TranslateService);
   private ngZone = inject(NgZone);
   public webSearchService = inject(WebSearchService);
+  private memoryService = inject(MemoryService);
 
   private activeSubscription?: Subscription;
 
@@ -147,6 +153,9 @@ export class ChatPage implements OnInit, OnDestroy {
       copyOutline,
       hourglassOutline,
       pencilOutline,
+      chevronDownOutline,
+      chevronUpOutline,
+      settingsOutline,
     });
   }
 
@@ -262,6 +271,17 @@ export class ChatPage implements OnInit, OnDestroy {
     const startTime = Date.now();
     const streaming = (await this.settingsService.getStreamMode()) ?? true;
     const searchMode = await this.settingsService.getSearchMode();
+
+    // Prepend memory system message if memories are enabled
+    const memorySystemMsg = await this.memoryService.buildMemorySystemMessage();
+    if (memorySystemMsg) {
+      // Only inject once: remove any previous memory system message before re-adding
+      const firstMsg = this.messages[0];
+      if (firstMsg?.role === 'system' && firstMsg.content.startsWith('[USER MEMORY')) {
+        this.messages.shift();
+      }
+      this.messages.unshift(memorySystemMsg);
+    }
 
     // In RAG mode, only search if the user explicitly activated the toggle.
     // The toggle remains active for subsequent messages until the user disables it.
@@ -596,9 +616,10 @@ export class ChatPage implements OnInit, OnDestroy {
       }
 
       if (!this.temporaryChat) {
+        const firstUserMsg = this.messages.find((m) => m.role === 'user');
         this.conversationService.saveConversation({
           id: this.currentConversationId,
-          title: this.messages[0].content.substring(0, 50),
+          title: (firstUserMsg?.content ?? '...').substring(0, 50),
           messages: this.messages,
           createdAt: this.currentConversationCreatedAt,
         });
@@ -608,13 +629,54 @@ export class ChatPage implements OnInit, OnDestroy {
 
   private saveConversationIfNeeded(): void {
     if (!this.temporaryChat && this.messages.length > 0) {
+      const firstUserMsg = this.messages.find((m) => m.role === 'user');
       this.conversationService.saveConversation({
         id: this.currentConversationId,
-        title: this.messages[0].content.substring(0, 50),
+        title: (firstUserMsg?.content ?? '...').substring(0, 50),
         messages: this.messages,
         createdAt: this.currentConversationCreatedAt,
       });
+
+      // Fire-and-forget memory extraction after each assistant response.
+      // If LM Studio/Ollama is down at this point, the error is silently swallowed.
+      this.settingsService.getBaseUrl().then((baseUrl) => {
+        if (baseUrl) {
+          this.memoryService
+            .extractAndSaveMemories(
+              this.messages,
+              this.selectedModelKey,
+              baseUrl,
+            )
+            .then((appliedActions) => {
+              if (appliedActions && appliedActions.length > 0) {
+                const lastAssistant = [...this.messages]
+                  .reverse()
+                  .find((m) => m.role === 'assistant');
+                if (lastAssistant) {
+                  lastAssistant.memoryActions = [
+                    ...(lastAssistant.memoryActions || []),
+                    ...appliedActions,
+                  ];
+                  this.conversationService.saveConversation({
+                    id: this.currentConversationId,
+                    title: (firstUserMsg?.content ?? '...').substring(0, 50),
+                    messages: this.messages,
+                    createdAt: this.currentConversationCreatedAt,
+                  });
+                }
+              }
+            });
+        }
+      });
     }
+  }
+
+  toggleMemoryDetails(msg: ChatMessage) {
+    msg.showMemoryDetails = !msg.showMemoryDetails;
+  }
+
+  goToSettings() {
+    this.router.navigate(['/settings']);
   }
 
   regenerateLastResponse() {

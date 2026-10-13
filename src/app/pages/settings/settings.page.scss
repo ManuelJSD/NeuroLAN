@@ -507,3 +507,144 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
     border-radius: 10px;
   }
 }
+
+// ============================================================
+// Memory card
+// ============================================================
+
+.memory-card {
+  .memory-card-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, rgba(137, 180, 250, 0.15), rgba(180, 190, 254, 0.08));
+    border: 1px solid rgba(137, 180, 250, 0.2);
+    color: #89b4fa;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+  }
+
+  .memory-input-row,
+  .memory-edit-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+
+    .memory-input-wrapper {
+      flex: 1;
+    }
+  }
+
+  .memory-add-btn {
+    flex-shrink: 0;
+    --border-radius: 8px;
+  }
+
+  .memory-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 4px;
+  }
+
+  .memory-item {
+    border-radius: 10px;
+    border: 1px solid var(--surface0, rgba(255,255,255,0.06));
+    background: var(--mantle, rgba(0,0,0,0.2));
+    padding: 10px 12px;
+    transition: border-color 0.2s;
+
+    &:hover {
+      border-color: rgba(137, 180, 250, 0.3);
+    }
+  }
+
+  .memory-content-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .memory-source-badge {
+    flex-shrink: 0;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 2px 7px;
+    border-radius: 6px;
+    background: rgba(166, 173, 200, 0.12);
+    color: #a6adc8;
+    border: 1px solid rgba(166, 173, 200, 0.2);
+
+    &.auto {
+      background: rgba(137, 180, 250, 0.12);
+      color: #89b4fa;
+      border-color: rgba(137, 180, 250, 0.25);
+    }
+  }
+
+  .memory-text {
+    flex: 1;
+    font-size: 13px;
+    color: var(--text, #cdd6f4);
+    line-height: 1.4;
+  }
+
+  .memory-actions {
+    display: flex;
+    gap: 4px;
+    flex-shrink: 0;
+    // Always show at reduced opacity so touch users can see them;
+    // hover brings them to full opacity on desktop.
+    opacity: 0.45;
+    transition: opacity 0.2s;
+
+    .memory-item:hover & {
+      opacity: 1;
+    }
+  }
+
+  .memory-action-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 6px;
+    color: #a6adc8;
+    transition: background 0.15s, color 0.15s;
+
+    &:hover {
+      background: rgba(137, 180, 250, 0.1);
+      color: #89b4fa;
+    }
+
+    &.memory-delete-btn:hover {
+      background: rgba(243, 139, 168, 0.1);
+      color: #f38ba8;
+    }
+  }
+
+  // Limit row
+  .memory-limit-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .memory-limit-count {
+    flex-shrink: 0;
+    font-size: 12px;
+    font-weight: 600;
+    color: #89b4fa;
+    background: rgba(137, 180, 250, 0.1);
+    border: 1px solid rgba(137, 180, 250, 0.2);
+    border-radius: 8px;
+    padding: 4px 10px;
+    white-space: nowrap;
+  }
+}

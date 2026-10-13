@@ -1,7 +1,7 @@
 import { UiService } from './../../core/services/ui-service';
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   IonContent,
   IonInput,
@@ -28,6 +28,8 @@ import { SettingsService } from 'src/app/core/services/settings';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { ConversationService } from 'src/app/core/services/conversation';
 import { WebSearchService } from 'src/app/core/services/search/web-search.service';
+import { MemoryService } from 'src/app/core/services/memory.service';
+import { Memory } from 'src/app/core/models/memory.model';
 
 @Component({
   selector: 'app-settings',
@@ -38,6 +40,7 @@ import { WebSearchService } from 'src/app/core/services/search/web-search.servic
     IonAlert,
     IonToggle,
     CommonModule,
+    FormsModule,
     ReactiveFormsModule,
     TranslatePipe,
     IonInput,
@@ -56,10 +59,22 @@ export class SettingsPage implements OnInit {
   private settingsService = inject(SettingsService);
   private translateService = inject(TranslateService);
   private formBuilder = inject(FormBuilder);
+  public memoryService = inject(MemoryService);
+
   isToastOpen: boolean = false;
   toastMessage: string = '';
 
   isDeleteAlertOpen: boolean = false;
+  isDeleteMemoriesAlertOpen: boolean = false;
+
+  // Memory state
+  memoryEnabled: boolean = true;
+  memoryLimit: number = 50;
+  memoryExtractionFreq: number = 2;
+  memories: Memory[] = [];
+  newMemoryText: string = '';
+  editingMemoryId: string | null = null;
+  editingMemoryText: string = '';
 
   baseUrl: string | null = '';
   selectedlanguage: string | null = '';
@@ -113,6 +128,13 @@ export class SettingsPage implements OnInit {
     this.searchApiKey = (await this.settingsService.getSearchApiKey()) ?? '';
     this.searchProviderId = await this.settingsService.getSearchProviderId();
     this.searchMode = await this.settingsService.getSearchMode();
+
+    // Memory
+    this.memoryEnabled = await this.settingsService.getMemoryEnabled();
+    this.memoryLimit = await this.settingsService.getMemoryLimit();
+    this.memoryExtractionFreq = await this.settingsService.getMemoryExtractionFrequency();
+    this.memories = await this.memoryService.loadMemories();
+    this.memoryService.memories$.subscribe((mems) => (this.memories = mems));
 
     this.settingsForm.setValue({
       serverAddress: this.baseUrl ?? 'http://127.0.0.1:1234',
@@ -195,5 +217,66 @@ export class SettingsPage implements OnInit {
 
   deleteAllConversations() {
     this.isDeleteAlertOpen = true;
+  }
+
+  // ── Memory ──────────────────────────────────────────────────────────────
+
+  setMemoryEnabled(enabled: boolean) {
+    this.memoryEnabled = enabled;
+    this.settingsService.setMemoryEnabled(enabled);
+    this.setOpen(true, this.translateService.instant('SETTINGS.TOAST_SUCCESS'));
+  }
+
+  setMemoryLimit(limit: number) {
+    const parsed = Math.max(0, Math.floor(limit));
+    this.memoryLimit = parsed;
+    this.settingsService.setMemoryLimit(parsed);
+    this.setOpen(true, this.translateService.instant('SETTINGS.TOAST_SUCCESS'));
+  }
+
+  setMemoryExtractionFreq(freq: number) {
+    const parsed = Math.max(1, Math.floor(freq));
+    this.memoryExtractionFreq = parsed;
+    this.settingsService.setMemoryExtractionFrequency(parsed);
+    this.setOpen(true, this.translateService.instant('SETTINGS.TOAST_SUCCESS'));
+  }
+
+  async addMemory() {
+    const text = this.newMemoryText.trim();
+    if (!text) return;
+    await this.memoryService.addMemory(text, 'user');
+    this.newMemoryText = '';
+  }
+
+  startEditMemory(memory: Memory) {
+    this.editingMemoryId = memory.id;
+    this.editingMemoryText = memory.content;
+  }
+
+  cancelEditMemory() {
+    this.editingMemoryId = null;
+    this.editingMemoryText = '';
+  }
+
+  async saveEditMemory() {
+    if (!this.editingMemoryId || !this.editingMemoryText.trim()) return;
+    await this.memoryService.updateMemory(this.editingMemoryId, this.editingMemoryText);
+    this.cancelEditMemory();
+  }
+
+  async deleteMemory(id: string) {
+    await this.memoryService.deleteMemory(id);
+  }
+
+  async onDeleteMemoriesAlertDismiss(event: any) {
+    this.isDeleteMemoriesAlertOpen = false;
+    if (event.detail.role === 'confirm') {
+      await this.memoryService.deleteAllMemories();
+      this.setOpen(true, this.translateService.instant('SETTINGS.TOAST_SUCCESS'));
+    }
+  }
+
+  deleteAllMemories() {
+    this.isDeleteMemoriesAlertOpen = true;
   }
 }

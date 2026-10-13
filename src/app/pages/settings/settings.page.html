@@ -260,6 +260,151 @@
         }
       </div>
 
+      <!-- Memory Card -->
+      <div class="settings-card memory-card">
+        <div class="card-header">
+          <div class="card-icon memory-card-icon">
+            <!-- Brain icon -->
+            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor"
+              stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9.5 2a2.5 2.5 0 0 1 5 0v1a7 7 0 0 1 0 14v1a2.5 2.5 0 0 1-5 0"/>
+              <path d="M14.5 2a2.5 2.5 0 0 0-5 0"/>
+              <path d="M9 13a4 4 0 0 0 3 1 4 4 0 0 0 3-1"/>
+              <path d="M9.5 18a2.5 2.5 0 0 0 5 0"/>
+              <path d="M3 10h3M18 10h3M3 14h3M18 14h3"/>
+            </svg>
+          </div>
+          <div class="card-header-text">
+            <h2 class="card-title">{{ "SETTINGS.MEMORY_TITLE" | translate }}</h2>
+            <p class="card-subtitle">{{ "SETTINGS.MEMORY_SUBTITLE" | translate }}</p>
+          </div>
+        </div>
+
+        <!-- Enable toggle -->
+        <div class="field-group">
+          <ion-toggle
+            labelPlacement="end"
+            [checked]="memoryEnabled"
+            (ionChange)="setMemoryEnabled($event.detail.checked)"
+          >
+            <p class="field-hint">{{ "SETTINGS.MEMORY_ENABLE" | translate }}</p>
+          </ion-toggle>
+        </div>
+
+        @if (memoryEnabled) {
+        <!-- Memory limit -->
+        <div class="field-group">
+          <label class="field-label">{{ "SETTINGS.MEMORY_LIMIT" | translate }}</label>
+          <div class="field-input-wrapper memory-limit-wrapper">
+            <ion-input
+              class="field-input"
+              type="number"
+              [value]="memoryLimit"
+              min="0"
+              max="500"
+              (ionChange)="setMemoryLimit(+($event.detail.value ?? memoryLimit))"
+            ></ion-input>
+            <span class="memory-limit-count">
+              {{ memories.length }} / {{ memoryLimit === 0 ? '∞' : memoryLimit }}
+            </span>
+          </div>
+          <p class="field-hint">{{ "SETTINGS.MEMORY_LIMIT_HINT" | translate }}</p>
+        </div>
+
+        <!-- Extraction frequency -->
+        <div class="field-group">
+          <label class="field-label">{{ "SETTINGS.MEMORY_FREQ" | translate }}</label>
+          <div class="field-input-wrapper memory-limit-wrapper">
+            <ion-input
+              class="field-input"
+              type="number"
+              [value]="memoryExtractionFreq"
+              min="1"
+              max="20"
+              (ionChange)="setMemoryExtractionFreq(+($event.detail.value ?? memoryExtractionFreq))"
+            ></ion-input>
+          </div>
+          <p class="field-hint">{{ "SETTINGS.MEMORY_FREQ_HINT" | translate }}</p>
+        </div>
+
+        <!-- Add memory input -->
+        <div class="field-group memory-add-group">
+          <label class="field-label">{{ "SETTINGS.MEMORY_ADD" | translate }}</label>
+          <div class="memory-input-row">
+            <div class="field-input-wrapper memory-input-wrapper">
+              <ion-input
+                class="field-input"
+                [(ngModel)]="newMemoryText"
+                [placeholder]="'SETTINGS.MEMORY_PLACEHOLDER' | translate"
+                (keydown.enter)="addMemory()"
+              ></ion-input>
+            </div>
+            <ion-button class="memory-add-btn" (click)="addMemory()">
+              {{ "SETTINGS.MEMORY_ADD_BTN" | translate }}
+            </ion-button>
+          </div>
+        </div>
+
+        <!-- Memory list -->
+        @if (memories.length > 0) {
+        <div class="field-group">
+          <label class="field-label">{{ "SETTINGS.MEMORY_LIST" | translate }}</label>
+          <div class="memory-list">
+            @for (memory of memories; track memory.id) {
+            <div class="memory-item">
+              @if (editingMemoryId === memory.id) {
+              <div class="memory-edit-row">
+                <div class="field-input-wrapper memory-input-wrapper">
+                  <ion-input
+                    class="field-input"
+                    [(ngModel)]="editingMemoryText"
+                    (keydown.enter)="saveEditMemory()"
+                    (keydown.escape)="cancelEditMemory()"
+                  ></ion-input>
+                </div>
+                <ion-button size="small" (click)="saveEditMemory()">
+                  {{ "CONVERSATIONS.SAVE" | translate }}
+                </ion-button>
+                <ion-button size="small" fill="outline" color="medium" (click)="cancelEditMemory()">
+                  {{ "CONVERSATIONS.CANCEL" | translate }}
+                </ion-button>
+              </div>
+              } @else {
+              <div class="memory-content-row">
+                <span class="memory-source-badge" [class.auto]="memory.source === 'auto'">
+                  {{ memory.source === 'auto' ? 'AI' : 'You' }}
+                </span>
+                <span class="memory-text">{{ memory.content }}</span>
+                <div class="memory-actions">
+                  <button class="memory-action-btn" (click)="startEditMemory(memory)" title="Edit">
+                    <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none">
+                      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                      <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                    </svg>
+                  </button>
+                  <button class="memory-action-btn memory-delete-btn" (click)="deleteMemory(memory.id)" title="Delete">
+                    <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none">
+                      <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/>
+                      <path d="M10 11v6M14 11v6M9 6V4h6v2"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              }
+            </div>
+            }
+          </div>
+        </div>
+
+        <div class="field-group">
+          <ion-button fill="outline" color="danger" size="small" (click)="deleteAllMemories()">
+            {{ "SETTINGS.MEMORY_CLEAR_ALL" | translate }}
+          </ion-button>
+        </div>
+        }
+        }
+      </div>
+
       <!-- Delete Card -->
 
       <div class="settings-card delete-card">
@@ -349,6 +494,18 @@
     { text: 'CHAT.ALERT_YES' | translate, role: 'confirm' }
   ]"
     (didDismiss)="onDeleteAlertDismiss($event)"
+  >
+  </ion-alert>
+
+  <ion-alert
+    [isOpen]="isDeleteMemoriesAlertOpen"
+    class="delete-alert"
+    header="{{ 'SETTINGS.MEMORY_ALERT_DELETE' | translate }}"
+    [buttons]="[
+    { text: 'CHAT.ALERT_NO' | translate, role: 'cancel' },
+    { text: 'CHAT.ALERT_YES' | translate, role: 'confirm' }
+  ]"
+    (didDismiss)="onDeleteMemoriesAlertDismiss($event)"
   >
   </ion-alert>
 </div>

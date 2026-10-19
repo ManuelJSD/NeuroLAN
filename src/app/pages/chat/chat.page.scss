@@ -1168,3 +1168,107 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
   }
 }
 
+/* ==========================================================================
+   IMAGE ATTACHMENTS
+   ========================================================================== */
+
+// --- Footer: image preview strip ---
+
+.image-preview-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 8px 12px 0;
+}
+
+.image-preview-item {
+  position: relative;
+  flex-shrink: 0;
+
+  .preview-thumb {
+    width: 72px;
+    height: 72px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    display: block;
+  }
+
+  .preview-remove-btn {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    background: #1e1e2e;
+    border: none;
+    border-radius: 50%;
+    padding: 0;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #f38ba8;
+    font-size: 1rem;
+    transition: color 0.15s, transform 0.15s;
+    line-height: 1;
+
+    ion-icon {
+      font-size: 1.1rem;
+    }
+
+    &:hover {
+      color: #ff7b7b;
+      transform: scale(1.15);
+    }
+  }
+}
+
+// --- Attach button in toolbar ---
+
+.attach-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: $subtext1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  border-radius: 6px;
+  transition: background 0.15s, color 0.15s;
+  font-size: 1.1rem;
+
+  ion-icon {
+    font-size: 1.15rem;
+  }
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.06);
+    color: $text;
+  }
+}
+
+// --- Images inside sent user messages ---
+
+.message-images {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 6px;
+
+  .message-img {
+    max-width: 260px;
+    max-height: 200px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    cursor: pointer;
+    transition: opacity 0.15s;
+
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+}
+

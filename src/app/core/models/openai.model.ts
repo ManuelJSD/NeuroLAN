@@ -44,6 +44,31 @@ export interface ToolCall {
 // 'tool' is used to send the result of a tool call back to the model
 export type ChatRole = 'system' | 'user' | 'assistant' | 'tool';
 
+// --- Multimodal Content ---
+
+/** A plain text segment within a multimodal message */
+export interface TextContentPart {
+  type: 'text';
+  text: string;
+}
+
+/**
+ * An image segment within a multimodal message.
+ * The url should be a data URI (e.g. "data:image/png;base64,...")
+ * or a remote URL for models that support URL-based images.
+ */
+export interface ImageContentPart {
+  type: 'image_url';
+  image_url: { url: string };
+}
+
+/**
+ * The content of a chat message.
+ * - `string` — plain text (all existing messages; sent as-is to the API)
+ * - `(TextContentPart | ImageContentPart)[]` — multimodal (text + images)
+ */
+export type MessageContent = string | (TextContentPart | ImageContentPart)[];
+
 export interface MemoryActionRecord {
   action: 'add' | 'update' | 'delete';
   content: string;
@@ -51,7 +76,7 @@ export interface MemoryActionRecord {
 
 export interface ChatMessage {
   role: ChatRole;
-  content: string;
+  content: MessageContent;
   // --- Tool Calling ---
   // Present in 'assistant' messages when the model wants to invoke a tool
   tool_calls?: ToolCall[];

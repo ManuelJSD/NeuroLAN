@@ -9,7 +9,13 @@ import {
 } from '@ionic/angular/standalone';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { addIcons } from 'ionicons';
-import { menuOutline, refreshOutline, hourglassOutline } from 'ionicons/icons';
+import {
+  menuOutline,
+  refreshOutline,
+  hourglassOutline,
+  attachOutline,
+  closeCircleOutline,
+} from 'ionicons/icons';
 import { OpenAIService } from 'src/app/core/services/openai';
 import { Router } from '@angular/router';
 import { UiService } from 'src/app/core/services/ui-service';
@@ -41,6 +47,7 @@ export class HomePage implements OnInit {
   models: { id: string }[] = [];
   selectedModelKey: string = '';
   userInput: string = '';
+  attachedImages: string[] = [];
   temporaryChat: boolean = false;
 
   // Web search opt-in toggle for the first message
@@ -57,7 +64,13 @@ export class HomePage implements OnInit {
   ];
 
   constructor() {
-    addIcons({ menuOutline, refreshOutline, hourglassOutline });
+    addIcons({
+      menuOutline,
+      refreshOutline,
+      hourglassOutline,
+      attachOutline,
+      closeCircleOutline,
+    });
   }
 
   ngOnInit() {
@@ -101,14 +114,45 @@ export class HomePage implements OnInit {
     }
   }
 
+  triggerImagePicker(): void {
+    const input = document.getElementById(
+      'home-image-file-input',
+    ) as HTMLInputElement;
+    input?.click();
+  }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (!input.files) return;
+
+    const files = Array.from(input.files);
+    input.value = '';
+
+    for (const file of files) {
+      if (!file.type.startsWith('image/')) continue;
+      const reader = new FileReader();
+      reader.onload = () => {
+        const dataUrl = reader.result as string;
+        this.attachedImages = [...this.attachedImages, dataUrl];
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  removeImage(index: number): void {
+    this.attachedImages = this.attachedImages.filter((_, i) => i !== index);
+  }
+
   sendMessage() {
-    if (this.userInput.trim() === '') return;
+    const userText = this.userInput.trim();
+    if (userText === '' && this.attachedImages.length === 0) return;
 
     const newId = this.generateId();
 
     this.router.navigate(['/chat', newId], {
       state: {
-        message: this.userInput,
+        message: userText,
+        attachedImages: [...this.attachedImages],
         model: this.selectedModelKey,
         temporaryChat: this.temporaryChat,
         searchThisMessage: this.searchThisMessage,
@@ -116,6 +160,7 @@ export class HomePage implements OnInit {
     });
 
     this.userInput = '';
+    this.attachedImages = [];
     this.searchThisMessage = false; // reset after navigate
   }
 }

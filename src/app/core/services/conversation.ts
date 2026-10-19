@@ -97,9 +97,17 @@ export class ConversationService {
     return conversations.filter((conversation) => {
       const titleMatches = conversation.title.toLowerCase().includes(query);
 
-      const messageMatches = conversation.messages.some((message) =>
-        message.content.toLowerCase().includes(query),
-      );
+      const messageMatches = conversation.messages.some((message) => {
+        // content can be a string (plain text) or a multimodal array
+        const text =
+          typeof message.content === 'string'
+            ? message.content
+            : message.content
+                .filter((p) => p.type === 'text')
+                .map((p) => (p as { type: 'text'; text: string }).text)
+                .join(' ');
+        return text.toLowerCase().includes(query);
+      });
       return titleMatches || messageMatches;
     });
   }

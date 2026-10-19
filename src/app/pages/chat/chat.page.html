@@ -105,7 +105,7 @@
             fill="clear"
             size="small"
             class="copy-btn"
-            (click)="copyMessage(msg.content)"
+            (click)="copyMessage($any(msg.content))"
             [title]="'CHAT.COPY_MESSAGE' | translate"
           >
             <ion-icon slot="icon-only" name="copy-outline"></ion-icon>
@@ -113,7 +113,7 @@
           }
           <markdown
             class="markdown-view"
-            [data]="msg.content"
+            [data]="$any(msg.content)"
             clipboard
             [clipboardButtonTemplate]="copyCodeBtn"
           ></markdown>
@@ -215,13 +215,31 @@
           </div>
           } @else {
           <!-- NORMAL READING MODE -->
+          <!-- Attached images in sent messages -->
+          @if ($any(msg.content) && $any(msg.content).length && $any(msg.content)[0]?.type) {
+          <div class="message-images">
+            @for (part of $any(msg.content); track $index) {
+              @if (part.type === 'image_url') {
+                <img [src]="part.image_url.url" class="message-img" alt="Imagen adjunta" />
+              }
+            }
+          </div>
+          <div class="message-text">
+            @for (part of $any(msg.content); track $index) {
+              @if (part.type === 'text') {
+                <span>{{ part.text }}</span>
+              }
+            }
+          </div>
+          } @else {
           <div class="message-text">{{ msg.content }}</div>
+          }
 
           <!-- Edit Button -->
           @if (isSending === false) {
           <button
             class="edit-btn"
-            (click)="editMessage($index, msg.content)"
+            (click)="editMessage($index, $any(msg.content))"
             [title]="'CHAT.EDIT' | translate"
           >
             <ion-icon name="pencil-outline" aria-hidden="true"></ion-icon>
@@ -299,6 +317,36 @@
   <!-- Footer Section -->
   <footer class="chat-footer">
     <div class="input-card">
+
+      <!-- Hidden file input for image selection -->
+      <input
+        type="file"
+        id="image-file-input"
+        accept="image/*"
+        multiple
+        style="display: none"
+        (change)="onFileSelected($event)"
+      />
+
+      <!-- Image preview strip (shown above textarea when images are attached) -->
+      @if (attachedImages.length > 0) {
+      <div class="image-preview-strip">
+        @for (img of attachedImages; track $index) {
+        <div class="image-preview-item">
+          <img [src]="img" class="preview-thumb" alt="Imagen adjunta" />
+          <button
+            class="preview-remove-btn"
+            (click)="removeImage($index)"
+            title="Eliminar imagen"
+            aria-label="Eliminar imagen"
+          >
+            <ion-icon name="close-circle-outline"></ion-icon>
+          </button>
+        </div>
+        }
+      </div>
+      }
+
       <!-- Text Area -->
       <ion-textarea
         class="main-input"
@@ -346,6 +394,18 @@
               }}</ion-label
             >
           </ion-chip>
+          }
+
+          <!-- Image Attach Button -->
+          @if (!isSending) {
+          <button
+            class="attach-btn"
+            (click)="triggerImagePicker()"
+            title="Adjuntar imagen"
+            aria-label="Adjuntar imagen"
+          >
+            <ion-icon name="attach-outline" aria-hidden="true"></ion-icon>
+          </button>
           }
 
           <!-- Web Search Toggle (RAG mode opt-in) -->

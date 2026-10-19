@@ -16,7 +16,10 @@ import {
 import { OpenAIService, StreamChunk } from 'src/app/core/services/openai';
 import {
   ChatMessage,
+  ImageContentPart,
+  MessageContent,
   OpenAIModel,
+  TextContentPart,
   Tool,
   ToolCall,
   UsageTokens,
@@ -33,6 +36,8 @@ import {
   chevronDownOutline,
   chevronUpOutline,
   settingsOutline,
+  attachOutline,
+  closeCircleOutline,
 } from 'ionicons/icons';
 import { ConversationService } from 'src/app/core/services/conversation';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -46,6 +51,20 @@ import { Subscription } from 'rxjs';
 
 // Maximum number of tool-calling iterations before giving up (prevents infinite loops)
 const MAX_TOOL_ITERATIONS = 5;
+
+/**
+ * Extracts a plain-text representation from any MessageContent value.
+ * - If content is already a string, returns it as-is.
+ * - If content is a multimodal array, concatenates the text parts.
+ * Used wherever legacy string-only APIs (e.g. search queries, titles) need a string.
+ */
+function getTextContent(content: MessageContent): string {
+  if (typeof content === 'string') return content;
+  return content
+    .filter((p): p is TextContentPart => p.type === 'text')
+    .map((p) => p.text)
+    .join(' ');
+}
 
 /** Represents a single step in the processing status panel */
 interface ProcessStep {
@@ -118,6 +137,9 @@ export class ChatPage implements OnInit, OnDestroy {
   userInput: string = '';
   temporaryChat: boolean = false;
 
+  /** Base64 data URLs of images attached to the current (unsent) message */
+  attachedImages: string[] = [];
+
   // Web Search state
   webSearchEnabled: boolean = false;
   // Stores the sources from the last search to display them in the UI
@@ -156,6 +178,8 @@ export class ChatPage implements OnInit, OnDestroy {
       chevronDownOutline,
       chevronUpOutline,
       settingsOutline,
+      attachOutline,
+      closeCircleOutline,
     });
   }
 
@@ -172,18 +196,27 @@ export class ChatPage implements OnInit, OnDestroy {
           this.loadConversation(id);
         }
         // 2. Check if Home just sent a message through router state
-        if (history.state && history.state.message) {
+        if (
+          history.state &&
+          (history.state.message ||
+            (history.state.attachedImages &&
+              history.state.attachedImages.length > 0))
+        ) {
           // Assign ID directly (since it's a new chat)
           this.currentConversationId = id;
 
-          this.userInput = history.state.message;
+          this.userInput = history.state.message || '';
+          this.attachedImages = history.state.attachedImages || [];
           this.selectedModelKey = history.state.model;
           this.temporaryChat = history.state.temporaryChat;
           // Propagate the search toggle from Home so the first message
           // also performs a web search if the user activated it there.
           this.searchThisMessage = history.state.searchThisMessage ?? false;
 
-          history.replaceState({ ...history.state, message: null }, '');
+          history.replaceState(
+            { ...history.state, message: null, attachedImages: null },
+            '',
+          );
 
           // Send request to OpenAI
           this.sendMessage();
@@ -217,6 +250,7 @@ export class ChatPage implements OnInit, OnDestroy {
     this.temporaryChat = false;
     this.lastSearchSources = [];
     this.searchThisMessage = false;
+    this.attachedImages = [];
     this.webSearchService.reset();
     this.cancelEdit();
   }
@@ -235,8 +269,8 @@ export class ChatPage implements OnInit, OnDestroy {
   async sendMessage() {
     const userText = this.userInput.trim();
 
-    // Exit if input is empty
-    if (userText === '') return;
+    // Exit if both text and images are empty
+    if (userText === '' && this.attachedImages.length === 0) return;
 
     // Check that a model is selected
     if (!this.selectedModelKey) {
@@ -246,15 +280,65 @@ export class ChatPage implements OnInit, OnDestroy {
       return;
     }
 
-    // Append the user's message
-    this.messages.push({
-      role: 'user',
-      content: userText,
-    });
+    // Build content: plain string if no images, multimodal array otherwise
+    let content: MessageContent;
+    if (this.attachedImages.length === 0) {
+      content = userText;
+    } else {
+      const parts: (TextContentPart | ImageContentPart)[] = [];
+      if (userText) {
+        parts.push({ type: 'text', text: userText });
+      }
+      for (const dataUrl of this.attachedImages) {
+        parts.push({ type: 'image_url', image_url: { url: dataUrl } });
+      }
+      content = parts;
+    }
 
-    // Clear the input
+    // Append the user's message
+    this.messages.push({ role: 'user', content });
+
+    // Clear input and attached images
     this.userInput = '';
+    this.attachedImages = [];
     await this.sendToAPI();
+  }
+
+  /**
+   * Opens the hidden file input to pick images.
+   * Called when the user clicks the attachment button.
+   */
+  triggerImagePicker(): void {
+    const input = document.getElementById('image-file-input') as HTMLInputElement;
+    input?.click();
+  }
+
+  /**
+   * Reads selected image files and converts them to base64 data URLs.
+   * Multiple images can be selected at once.
+   */
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (!input.files) return;
+
+    const files = Array.from(input.files);
+    // Reset input so the same file can be reselected after removal
+    input.value = '';
+
+    for (const file of files) {
+      if (!file.type.startsWith('image/')) continue;
+      const reader = new FileReader();
+      reader.onload = () => {
+        const dataUrl = reader.result as string;
+        this.attachedImages = [...this.attachedImages, dataUrl];
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  /** Removes a pending image by index before the message is sent */
+  removeImage(index: number): void {
+    this.attachedImages = this.attachedImages.filter((_, i) => i !== index);
   }
 
   private async loadWebSearchSetting(): Promise<void> {
@@ -277,7 +361,7 @@ export class ChatPage implements OnInit, OnDestroy {
     if (memorySystemMsg) {
       // Only inject once: remove any previous memory system message before re-adding
       const firstMsg = this.messages[0];
-      if (firstMsg?.role === 'system' && firstMsg.content.startsWith('[USER MEMORY')) {
+      if (firstMsg?.role === 'system' && getTextContent(firstMsg.content).startsWith('[USER MEMORY')) {
         this.messages.shift();
       }
       this.messages.unshift(memorySystemMsg);
@@ -483,20 +567,20 @@ export class ChatPage implements OnInit, OnDestroy {
     const lastMsg = userMsgs[userMsgs.length - 1];
     if (!lastMsg) return '';
 
-    const currentText = lastMsg.content.trim();
+    const currentText = getTextContent(lastMsg.content).trim();
 
     // Find the most recent previous user message that is specific enough
     // to act as a topic anchor for the search engine.
     const anchor = [...userMsgs]
       .slice(0, -1)      // all except the last (current) message
       .reverse()
-      .find((m) => m.content.trim().length >= 40);
+      .find((m) => getTextContent(m.content).trim().length >= 40);
 
     // Always combine anchor topic + current question so the search engine
     // understands the conversational context even for short follow-ups
     // or long messages that lack explicit topic keywords (e.g. "monturas").
     if (anchor) {
-      return `${anchor.content.substring(0, 150)} ${currentText}`;
+      return `${getTextContent(anchor.content).substring(0, 150)} ${currentText}`;
     }
 
     return currentText;
@@ -511,7 +595,7 @@ export class ChatPage implements OnInit, OnDestroy {
     let searchResults: string;
 
     // Step 1: Searching
-    this.addStep(this.translateService.instant('CHAT.STEPS.SEARCHING', { query: lastUserMsg.content.substring(0, 60) }));
+    this.addStep(this.translateService.instant('CHAT.STEPS.SEARCHING', { query: getTextContent(lastUserMsg.content).substring(0, 60) }));
 
     try {
       searchResults = await this.webSearchService.search(query);
@@ -619,7 +703,7 @@ export class ChatPage implements OnInit, OnDestroy {
         const firstUserMsg = this.messages.find((m) => m.role === 'user');
         this.conversationService.saveConversation({
           id: this.currentConversationId,
-          title: (firstUserMsg?.content ?? '...').substring(0, 50),
+          title: getTextContent(firstUserMsg?.content ?? '...').substring(0, 50),
           messages: this.messages,
           createdAt: this.currentConversationCreatedAt,
         });
@@ -632,7 +716,7 @@ export class ChatPage implements OnInit, OnDestroy {
       const firstUserMsg = this.messages.find((m) => m.role === 'user');
       this.conversationService.saveConversation({
         id: this.currentConversationId,
-        title: (firstUserMsg?.content ?? '...').substring(0, 50),
+        title: getTextContent(firstUserMsg?.content ?? '...').substring(0, 50),
         messages: this.messages,
         createdAt: this.currentConversationCreatedAt,
       });
@@ -659,7 +743,7 @@ export class ChatPage implements OnInit, OnDestroy {
                   ];
                   this.conversationService.saveConversation({
                     id: this.currentConversationId,
-                    title: (firstUserMsg?.content ?? '...').substring(0, 50),
+                    title: getTextContent(firstUserMsg?.content ?? '...').substring(0, 50),
                     messages: this.messages,
                     createdAt: this.currentConversationCreatedAt,
                   });
@@ -706,7 +790,7 @@ export class ChatPage implements OnInit, OnDestroy {
     ) {
       this.messages.splice(index + 1);
 
-      this.messages[index].content = this.editingMessageText;
+      this.messages[index].content = this.editingMessageText; // editingMessageText is always a string
 
       this.sendToAPI();
 

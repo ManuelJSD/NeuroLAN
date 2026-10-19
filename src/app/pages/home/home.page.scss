@@ -259,6 +259,37 @@ $font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
   &:active {
     transform: scale(0.9);
   }
+
+  // Disabled state: model does not support vision
+  &.disabled,
+  &:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    border-color: $surface1;
+    color: $overlay0;
+    pointer-events: none;
+
+    &:hover {
+      color: $overlay0;
+      border-color: $surface1;
+    }
+  }
+}
+
+/* Vision badge — eye emoji shown next to model selector */
+.vision-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 14px;
+  line-height: 1;
+  opacity: 0.75;
+  cursor: default;
+  user-select: none;
+  transition: opacity 0.2s ease;
+
+  &:hover {
+    opacity: 1;
+  }
 }
 
 /* Botón Chat Temporal */

@@ -130,6 +130,9 @@
     "SELECT_MODEL": "Model",
     "RELOAD_MODELS": "Reload models",
     "SEND": "Send message",
+    "ATTACH_IMAGE": "Attach image",
+    "ATTACH_IMAGE_NO_VISION": "This model does not support image attachments",
+    "MODEL_HAS_VISION": "This model supports vision (image input)",
     "SUGGESTIONS": {
       "CONCEPT": "Explain a concept",
       "CODE": "Write code for...",

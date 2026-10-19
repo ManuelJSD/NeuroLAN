@@ -364,11 +364,12 @@
             class="model-select"
             interface="popover"
             [placeholder]="'HOME.SELECT_MODEL' | translate"
-            [(ngModel)]="selectedModelKey"
+            [value]="selectedModelKey"
+            (ionChange)="onModelChange($event.detail.value)"
           >
             @for (model of models; track model.id) {
             <ion-select-option [value]="model.id"
-              >{{ model.id }}</ion-select-option
+              >{{ modelVisionMap[model.id] ? '👁 ' : '' }}{{ model.id }}</ion-select-option
             >
             } @empty {
             <ion-select-option disabled
@@ -376,6 +377,14 @@
             >
             }
           </ion-select>
+
+          <!-- Vision badge: shown when selected model supports vision -->
+          @if (selectedModelHasVision) {
+          <span
+            class="vision-badge"
+            [title]="'HOME.MODEL_HAS_VISION' | translate"
+          >👁</span>
+          }
 
           <button
             class="reload-btn"
@@ -400,9 +409,11 @@
           @if (!isSending) {
           <button
             class="attach-btn"
+            [class.disabled]="!selectedModelHasVision"
+            [disabled]="!selectedModelHasVision"
             (click)="triggerImagePicker()"
-            title="Adjuntar imagen"
-            aria-label="Adjuntar imagen"
+            [title]="selectedModelHasVision ? ('HOME.ATTACH_IMAGE' | translate) : ('HOME.ATTACH_IMAGE_NO_VISION' | translate)"
+            [attr.aria-label]="selectedModelHasVision ? ('HOME.ATTACH_IMAGE' | translate) : ('HOME.ATTACH_IMAGE_NO_VISION' | translate)"
           >
             <ion-icon name="attach-outline" aria-hidden="true"></ion-icon>
           </button>

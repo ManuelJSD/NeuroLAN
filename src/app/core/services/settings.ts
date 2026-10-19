@@ -148,4 +148,27 @@ export class SettingsService {
     await this.ensureStorage();
     return (await this._storage?.get('memory_extraction_freq')) ?? 2;
   }
+
+  // --- Vision capability overrides ---
+  // Stores a Record<modelId, boolean> with per-model manual overrides.
+  // If a model is not present in the record, detection falls back to heuristics.
+
+  async getVisionOverrides(): Promise<Record<string, boolean>> {
+    await this.ensureStorage();
+    return (await this._storage?.get('vision_overrides')) ?? {};
+  }
+
+  async setVisionOverride(modelId: string, hasVision: boolean): Promise<void> {
+    await this.ensureStorage();
+    const current = await this.getVisionOverrides();
+    current[modelId] = hasVision;
+    await this._storage?.set('vision_overrides', current);
+  }
+
+  async removeVisionOverride(modelId: string): Promise<void> {
+    await this.ensureStorage();
+    const current = await this.getVisionOverrides();
+    delete current[modelId];
+    await this._storage?.set('vision_overrides', current);
+  }
 }

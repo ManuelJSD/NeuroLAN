@@ -130,6 +130,9 @@
     "SELECT_MODEL": "Modelo",
     "RELOAD_MODELS": "Recargar modelos",
     "SEND": "Enviar mensaje",
+    "ATTACH_IMAGE": "Adjuntar imagen",
+    "ATTACH_IMAGE_NO_VISION": "Este modelo no soporta imágenes adjuntas",
+    "MODEL_HAS_VISION": "Este modelo soporta visión (entrada de imagen)",
     "SUGGESTIONS": {
       "CONCEPT": "Explícame un concepto",
       "CODE": "Escribe código para...",

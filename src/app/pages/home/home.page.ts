@@ -50,6 +50,16 @@ export class HomePage implements OnInit {
   attachedImages: string[] = [];
   temporaryChat: boolean = false;
 
+  /** Whether the currently selected model supports vision (image attachments). */
+  selectedModelHasVision: boolean = false;
+
+  /**
+   * Preloaded vision capability map for all available models.
+   * Populated when the model list is loaded; used in the template to
+   * show 👁 in the option labels without async pipes.
+   */
+  modelVisionMap: Record<string, boolean> = {};
+
   // Web search opt-in toggle for the first message
   webSearchEnabled: boolean = false;
   searchThisMessage: boolean = false;
@@ -82,12 +92,37 @@ export class HomePage implements OnInit {
 
   loadModels() {
     this.openAIService.getModels().subscribe({
-      next: (res) => {
+      next: async (res) => {
         console.log(res);
         this.models = res.data;
         this.selectedModelKey = res.data[0].id;
+        // Pre-resolve vision capability for all models (fills the option badge map)
+        for (const m of res.data) {
+          this.modelVisionMap[m.id] = await this.openAIService.modelHasVision(m.id);
+        }
+        this.updateVisionCapability(this.selectedModelKey);
       },
       error: (err) => console.error(err),
+    });
+  }
+
+  /** Called whenever the model selector value changes. */
+  onModelChange(modelId: string) {
+    this.selectedModelKey = modelId;
+    this.updateVisionCapability(modelId);
+    // If the new model doesn't support vision, clear any pending images.
+    if (!this.selectedModelHasVision) {
+      this.attachedImages = [];
+    }
+  }
+
+  private updateVisionCapability(modelId: string) {
+    if (!modelId) {
+      this.selectedModelHasVision = false;
+      return;
+    }
+    this.openAIService.modelHasVision(modelId).then((hasVision) => {
+      this.selectedModelHasVision = hasVision;
     });
   }
 

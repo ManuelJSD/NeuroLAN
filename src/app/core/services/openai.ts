@@ -48,6 +48,35 @@ export class OpenAIService {
     );
   }
 
+  /**
+   * Returns true if the given model is known (or configured) to support vision.
+   *
+   * Priority:
+   *  1. User override stored in SettingsService (explicit true/false).
+   *  2. Keyword heuristics on the model ID (covers most popular vision models).
+   *
+   * This is a best-effort detection because the OpenAI-compatible /v1/models
+   * endpoint does not expose capability metadata in the standard schema.
+   */
+  async modelHasVision(modelId: string): Promise<boolean> {
+    // 1. Check user override
+    const overrides = await this.settingsService.getVisionOverrides();
+    if (modelId in overrides) {
+      return overrides[modelId];
+    }
+
+    // 2. Keyword heuristics (case-insensitive)
+    const lower = modelId.toLowerCase();
+    const visionKeywords = [
+      'llava', 'vision', 'bakllava', 'minicpm-v', 'minicpm_v',
+      'pixtral', 'qwen-vl', 'qwen_vl', 'internvl', 'moondream',
+      'cogvlm', 'phi-3-vision', 'phi3-vision', 'gemma-vision',
+      'deepseek-vl', 'yi-vl', 'idefics', 'paligemma',
+      'gpt-4o', 'gpt-4-vision', 'claude-3',
+    ];
+    return visionKeywords.some((kw) => lower.includes(kw));
+  }
+
   sendChat(body: OpenAIChatRequest): Observable<OpenAIChatResponse> {
     return from(this.settingsService.getBaseUrl()).pipe(
       switchMap((baseUrl) => {

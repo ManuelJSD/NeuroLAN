@@ -65,9 +65,9 @@
 - [x] Image preview before sending.
 - [x] Remove images before sending.
 - [x] Send images using the OpenAI-compatible multimodal format.
-- [ ] Detect/configure model vision capability.
-- [ ] Disable image attachment when the selected model does not support vision.
-- [ ] Show vision capability in the model selector.
+- [x] Detect/configure model vision capability.
+- [x] Disable image attachment when the selected model does not support vision.
+- [x] Show vision capability in the model selector.
 
 ### Files
 

@@ -137,6 +137,16 @@ export class ChatPage implements OnInit, OnDestroy {
   userInput: string = '';
   temporaryChat: boolean = false;
 
+  /** Whether the currently selected model supports vision (image attachments). */
+  selectedModelHasVision: boolean = false;
+
+  /**
+   * Preloaded vision capability map for all available models.
+   * Populated when the model list is loaded; used in the template to
+   * show 👁 in the option labels without async pipes.
+   */
+  modelVisionMap: Record<string, boolean> = {};
+
   /** Base64 data URLs of images attached to the current (unsent) message */
   attachedImages: string[] = [];
 
@@ -209,6 +219,12 @@ export class ChatPage implements OnInit, OnDestroy {
           this.attachedImages = history.state.attachedImages || [];
           this.selectedModelKey = history.state.model;
           this.temporaryChat = history.state.temporaryChat;
+          // Resolve vision capability for the model passed from Home
+          this.openAIService.modelHasVision(this.selectedModelKey).then((v) => {
+            this.selectedModelHasVision = v;
+            // Drop attached images if the model doesn't support vision
+            if (!v) this.attachedImages = [];
+          });
           // Propagate the search toggle from Home so the first message
           // also performs a web search if the user activated it there.
           this.searchThisMessage = history.state.searchThisMessage ?? false;
@@ -230,14 +246,31 @@ export class ChatPage implements OnInit, OnDestroy {
 
   loadModels() {
     this.openAIService.getModels().subscribe({
-      next: (res) => {
+      next: async (res) => {
         this.models = res.data;
         if (!this.selectedModelKey && res.data.length > 0) {
           this.selectedModelKey = res.data[0].id;
         }
+        // Pre-resolve vision capability for all models
+        for (const m of res.data) {
+          this.modelVisionMap[m.id] = await this.openAIService.modelHasVision(m.id);
+        }
+        if (this.selectedModelKey) {
+          this.selectedModelHasVision = this.modelVisionMap[this.selectedModelKey] ?? false;
+        }
       },
       error: (err) => console.error(err),
     });
+  }
+
+  /** Called whenever the model selector value changes in the chat view. */
+  onModelChange(modelId: string) {
+    this.selectedModelKey = modelId;
+    this.selectedModelHasVision = this.modelVisionMap[modelId] ?? false;
+    // If the new model doesn't support vision, clear pending images
+    if (!this.selectedModelHasVision) {
+      this.attachedImages = [];
+    }
   }
 
   newChat() {

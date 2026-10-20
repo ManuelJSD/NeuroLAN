@@ -441,11 +441,13 @@ $font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
   .home-wrapper {
     padding: 0;
     justify-content: flex-start;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
   }
 
   .home-main {
-    flex: 1; /* Permite que el contenedor se expanda ocupando todo el alto disponible */
-    padding: 0 1.25rem 1.5rem;
+    flex: 1;
+    min-height: 100%;
+    padding: 0 1.25rem calc(1.25rem + env(safe-area-inset-bottom, 0px));
     justify-content: flex-start;
     gap: 1.5rem;
   }
@@ -460,6 +462,39 @@ $font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
 
   .input-card {
     margin-top: auto;
+    padding-bottom: calc(0.625rem + env(safe-area-inset-bottom, 0px));
+  }
+
+  /* ── Toolbar en móvil: evitar desbordamiento de botones ── */
+  .input-toolbar {
+    gap: 0.25rem;
+  }
+
+  .model-selector-wrapper {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .model-select {
+    max-width: 140px;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .action-buttons {
+    flex-shrink: 0;
+    gap: 0.25rem;
+  }
+
+  .attach-btn,
+  .temp-chat-btn,
+  .web-search-toggle-btn,
+  .send-btn {
+    width: 30px;
+    height: 30px;
   }
 
   .suggestions-row {
@@ -479,3 +514,4 @@ $font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
     }
   }
 }
+

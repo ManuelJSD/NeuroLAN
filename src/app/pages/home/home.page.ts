@@ -1,25 +1,18 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import {
   IonContent,
-  IonTextarea,
-  IonSelect,
-  IonSelectOption,
-  IonIcon,
 } from '@ionic/angular/standalone';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { addIcons } from 'ionicons';
-import {
-  menuOutline,
-  refreshOutline,
-  hourglassOutline,
-  attachOutline,
-  closeCircleOutline,
-} from 'ionicons/icons';
+import { menuOutline } from 'ionicons/icons';
 import { OpenAIService } from 'src/app/core/services/openai';
-import { Router } from '@angular/router';
 import { UiService } from 'src/app/core/services/ui-service';
 import { SettingsService } from 'src/app/core/services/settings';
+import {
+  ChatInputComponent,
+  ChatInputPayload,
+} from 'src/app/shared/components/chat-input/chat-input.component';
 
 @Component({
   selector: 'app-home',
@@ -28,12 +21,8 @@ import { SettingsService } from 'src/app/core/services/settings';
   standalone: true,
   imports: [
     IonContent,
-    FormsModule,
-    IonTextarea,
-    IonSelect,
-    IonSelectOption,
-    IonIcon,
     TranslatePipe,
+    ChatInputComponent,
   ],
 })
 export class HomePage implements OnInit {
@@ -47,22 +36,9 @@ export class HomePage implements OnInit {
   models: { id: string }[] = [];
   selectedModelKey: string = '';
   userInput: string = '';
-  attachedImages: string[] = [];
-  temporaryChat: boolean = false;
-
-  /** Whether the currently selected model supports vision (image attachments). */
-  selectedModelHasVision: boolean = false;
-
-  /**
-   * Preloaded vision capability map for all available models.
-   * Populated when the model list is loaded; used in the template to
-   * show 👁 in the option labels without async pipes.
-   */
-  modelVisionMap: Record<string, boolean> = {};
 
   // Web search opt-in toggle for the first message
   webSearchEnabled: boolean = false;
-  searchThisMessage: boolean = false;
 
   // Example suggestions — you can adapt texts via i18n
   suggestions: string[] = [
@@ -76,10 +52,6 @@ export class HomePage implements OnInit {
   constructor() {
     addIcons({
       menuOutline,
-      refreshOutline,
-      hourglassOutline,
-      attachOutline,
-      closeCircleOutline,
     });
   }
 
@@ -92,15 +64,11 @@ export class HomePage implements OnInit {
 
   loadModels() {
     this.openAIService.getModels().subscribe({
-      next: async (res) => {
-        console.log(res);
+      next: (res) => {
         this.models = res.data;
-        this.selectedModelKey = res.data[0].id;
-        // Pre-resolve vision capability for all models (fills the option badge map)
-        for (const m of res.data) {
-          this.modelVisionMap[m.id] = await this.openAIService.modelHasVision(m.id);
+        if (res.data.length > 0 && !this.selectedModelKey) {
+          this.selectedModelKey = res.data[0].id;
         }
-        this.updateVisionCapability(this.selectedModelKey);
       },
       error: (err) => console.error(err),
     });
@@ -109,21 +77,6 @@ export class HomePage implements OnInit {
   /** Called whenever the model selector value changes. */
   onModelChange(modelId: string) {
     this.selectedModelKey = modelId;
-    this.updateVisionCapability(modelId);
-    // If the new model doesn't support vision, clear any pending images.
-    if (!this.selectedModelHasVision) {
-      this.attachedImages = [];
-    }
-  }
-
-  private updateVisionCapability(modelId: string) {
-    if (!modelId) {
-      this.selectedModelHasVision = false;
-      return;
-    }
-    this.openAIService.modelHasVision(modelId).then((hasVision) => {
-      this.selectedModelHasVision = hasVision;
-    });
   }
 
   private generateId() {
@@ -142,60 +95,20 @@ export class HomePage implements OnInit {
     this.userInput = textTrans;
   }
 
-  onEnterKey(event: KeyboardEvent) {
-    if (!event.shiftKey) {
-      event.preventDefault();
-      this.sendMessage();
-    }
-  }
-
-  triggerImagePicker(): void {
-    const input = document.getElementById(
-      'home-image-file-input',
-    ) as HTMLInputElement;
-    input?.click();
-  }
-
-  onFileSelected(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    if (!input.files) return;
-
-    const files = Array.from(input.files);
-    input.value = '';
-
-    for (const file of files) {
-      if (!file.type.startsWith('image/')) continue;
-      const reader = new FileReader();
-      reader.onload = () => {
-        const dataUrl = reader.result as string;
-        this.attachedImages = [...this.attachedImages, dataUrl];
-      };
-      reader.readAsDataURL(file);
-    }
-  }
-
-  removeImage(index: number): void {
-    this.attachedImages = this.attachedImages.filter((_, i) => i !== index);
-  }
-
-  sendMessage() {
-    const userText = this.userInput.trim();
-    if (userText === '' && this.attachedImages.length === 0) return;
-
+  onSendMessage(payload: ChatInputPayload) {
     const newId = this.generateId();
 
     this.router.navigate(['/chat', newId], {
       state: {
-        message: userText,
-        attachedImages: [...this.attachedImages],
-        model: this.selectedModelKey,
-        temporaryChat: this.temporaryChat,
-        searchThisMessage: this.searchThisMessage,
+        message: payload.text,
+        attachedImages: payload.images,
+        attachedFiles: payload.files,
+        model: payload.model || this.selectedModelKey,
+        temporaryChat: payload.temporaryChat,
+        searchThisMessage: payload.searchThisMessage,
       },
     });
 
     this.userInput = '';
-    this.attachedImages = [];
-    this.searchThisMessage = false; // reset after navigate
   }
 }

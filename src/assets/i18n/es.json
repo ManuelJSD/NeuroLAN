@@ -105,7 +105,13 @@
     "MANAGE_MEMORIES": "Administrar memorias",
     "MEMORY_ACTION_ADD": "Guardado",
     "MEMORY_ACTION_UPDATE": "Actualizado",
-    "MEMORY_ACTION_DELETE": "Eliminado"
+    "MEMORY_ACTION_DELETE": "Eliminado",
+    "ATTACH": "Adjuntar archivos o imágenes",
+    "ATTACH_FILE": "Adjuntar archivo (TXT, código, PDF)",
+    "FILE_REMOVE": "Eliminar archivo",
+    "FILE_TOO_LARGE": "El archivo es demasiado grande (máx. 10 MB)",
+    "FILE_UNSUPPORTED": "Tipo de archivo no soportado",
+    "EDIT": "Editar mensaje"
   },
   "CONVERSATIONS": {
     "EMPTY": "Aún no hay conversaciones",
@@ -130,9 +136,8 @@
     "SELECT_MODEL": "Modelo",
     "RELOAD_MODELS": "Recargar modelos",
     "SEND": "Enviar mensaje",
+    "ATTACH": "Adjuntar archivos o imágenes",
     "ATTACH_IMAGE": "Adjuntar imagen",
-    "ATTACH_IMAGE_NO_VISION": "Este modelo no soporta imágenes adjuntas",
-    "MODEL_HAS_VISION": "Este modelo soporta visión (entrada de imagen)",
     "SUGGESTIONS": {
       "CONCEPT": "Explícame un concepto",
       "CODE": "Escribe código para...",

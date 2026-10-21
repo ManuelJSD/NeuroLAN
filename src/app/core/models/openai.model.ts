@@ -1,3 +1,5 @@
+import { AttachedFile } from 'src/app/core/services/file-attachment.service';
+
 export interface OpenAIModel {
   id: string;
   object: string;
@@ -92,6 +94,8 @@ export interface ChatMessage {
   // Memorias detectadas y actualizadas en este turno
   memoryActions?: MemoryActionRecord[];
   showMemoryDetails?: boolean;
+  // File attachments — metadata only (content is injected into the API request, not stored here)
+  attachedFiles?: Pick<AttachedFile, 'name' | 'size' | 'category'>[];
 }
 
 export interface OpenAIChatRequest {

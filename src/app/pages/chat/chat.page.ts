@@ -1,9 +1,7 @@
-import { Component, NgZone, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, NgZone, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
 import { CommonModule, DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
-  IonSelect,
-  IonSelectOption,
   IonContent,
   IonLabel,
   IonTextarea,
@@ -38,6 +36,8 @@ import {
   settingsOutline,
   attachOutline,
   closeCircleOutline,
+  documentTextOutline,
+  codeSlashOutline,
 } from 'ionicons/icons';
 import { ConversationService } from 'src/app/core/services/conversation';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -47,7 +47,12 @@ import { SettingsService } from 'src/app/core/services/settings';
 import { WebSearchService } from 'src/app/core/services/search/web-search.service';
 import { SearchResult } from 'src/app/core/services/search/search-provider.interface';
 import { MemoryService } from 'src/app/core/services/memory.service';
-import { Subscription } from 'rxjs';
+import { FileAttachmentService, AttachedFile } from 'src/app/core/services/file-attachment.service';
+import {
+  ChatInputComponent,
+  ChatInputPayload,
+} from 'src/app/shared/components/chat-input/chat-input.component';
+import { Subscription, firstValueFrom } from 'rxjs';
 
 // Maximum number of tool-calling iterations before giving up (prevents infinite loops)
 const MAX_TOOL_ITERATIONS = 5;
@@ -106,13 +111,12 @@ const WEB_SEARCH_TOOL: Tool = {
     CommonModule,
     DecimalPipe,
     FormsModule,
-    IonSelect,
-    IonSelectOption,
     IonTextarea,
     IonSpinner,
     IonIcon,
     MarkdownComponent,
     TranslatePipe,
+    ChatInputComponent,
   ],
 })
 export class ChatPage implements OnInit, OnDestroy {
@@ -130,6 +134,8 @@ export class ChatPage implements OnInit, OnDestroy {
 
   private activeSubscription?: Subscription;
 
+  @ViewChild(ChatInputComponent) chatInput?: ChatInputComponent;
+
   models: OpenAIModel[] = [];
   selectedModelKey: string = '';
 
@@ -137,18 +143,8 @@ export class ChatPage implements OnInit, OnDestroy {
   userInput: string = '';
   temporaryChat: boolean = false;
 
-  /** Whether the currently selected model supports vision (image attachments). */
-  selectedModelHasVision: boolean = false;
-
-  /**
-   * Preloaded vision capability map for all available models.
-   * Populated when the model list is loaded; used in the template to
-   * show 👁 in the option labels without async pipes.
-   */
-  modelVisionMap: Record<string, boolean> = {};
-
-  /** Base64 data URLs of images attached to the current (unsent) message */
-  attachedImages: string[] = [];
+  /** Exposed service so the template can call helpers (humanSize, categoryIcon, etc.) */
+  public fileAttachmentService = inject(FileAttachmentService);
 
   // Web Search state
   webSearchEnabled: boolean = false;
@@ -190,6 +186,8 @@ export class ChatPage implements OnInit, OnDestroy {
       settingsOutline,
       attachOutline,
       closeCircleOutline,
+      documentTextOutline,
+      codeSlashOutline,
     });
   }
 
@@ -210,32 +208,39 @@ export class ChatPage implements OnInit, OnDestroy {
           history.state &&
           (history.state.message ||
             (history.state.attachedImages &&
-              history.state.attachedImages.length > 0))
+              history.state.attachedImages.length > 0) ||
+            (history.state.attachedFiles &&
+              history.state.attachedFiles.length > 0))
         ) {
           // Assign ID directly (since it's a new chat)
           this.currentConversationId = id;
 
-          this.userInput = history.state.message || '';
-          this.attachedImages = history.state.attachedImages || [];
-          this.selectedModelKey = history.state.model;
-          this.temporaryChat = history.state.temporaryChat;
-          // Resolve vision capability for the model passed from Home
-          this.openAIService.modelHasVision(this.selectedModelKey).then((v) => {
-            this.selectedModelHasVision = v;
-            // Drop attached images if the model doesn't support vision
-            if (!v) this.attachedImages = [];
-          });
-          // Propagate the search toggle from Home so the first message
-          // also performs a web search if the user activated it there.
-          this.searchThisMessage = history.state.searchThisMessage ?? false;
+          const initialPayload: ChatInputPayload = {
+            text: history.state.message || '',
+            images: history.state.attachedImages || [],
+            files: history.state.attachedFiles || [],
+            model: history.state.model || this.selectedModelKey,
+            temporaryChat: history.state.temporaryChat ?? false,
+            searchThisMessage: history.state.searchThisMessage ?? false,
+          };
+
+          this.temporaryChat = initialPayload.temporaryChat ?? false;
+          if (initialPayload.model) {
+            this.selectedModelKey = initialPayload.model;
+          }
 
           history.replaceState(
-            { ...history.state, message: null, attachedImages: null },
+            {
+              ...history.state,
+              message: null,
+              attachedImages: null,
+              attachedFiles: null,
+            },
             '',
           );
 
           // Send request to OpenAI
-          this.sendMessage();
+          this.sendMessage(initialPayload);
         }
       } else {
         // Fallback security check for missing ID
@@ -246,17 +251,10 @@ export class ChatPage implements OnInit, OnDestroy {
 
   loadModels() {
     this.openAIService.getModels().subscribe({
-      next: async (res) => {
+      next: (res) => {
         this.models = res.data;
         if (!this.selectedModelKey && res.data.length > 0) {
           this.selectedModelKey = res.data[0].id;
-        }
-        // Pre-resolve vision capability for all models
-        for (const m of res.data) {
-          this.modelVisionMap[m.id] = await this.openAIService.modelHasVision(m.id);
-        }
-        if (this.selectedModelKey) {
-          this.selectedModelHasVision = this.modelVisionMap[this.selectedModelKey] ?? false;
         }
       },
       error: (err) => console.error(err),
@@ -266,11 +264,6 @@ export class ChatPage implements OnInit, OnDestroy {
   /** Called whenever the model selector value changes in the chat view. */
   onModelChange(modelId: string) {
     this.selectedModelKey = modelId;
-    this.selectedModelHasVision = this.modelVisionMap[modelId] ?? false;
-    // If the new model doesn't support vision, clear pending images
-    if (!this.selectedModelHasVision) {
-      this.attachedImages = [];
-    }
   }
 
   newChat() {
@@ -283,9 +276,9 @@ export class ChatPage implements OnInit, OnDestroy {
     this.temporaryChat = false;
     this.lastSearchSources = [];
     this.searchThisMessage = false;
-    this.attachedImages = [];
     this.webSearchService.reset();
     this.cancelEdit();
+    this.chatInput?.clear();
   }
 
   loadConversation(id: string) {
@@ -299,13 +292,39 @@ export class ChatPage implements OnInit, OnDestroy {
     });
   }
 
-  async sendMessage() {
-    const userText = this.userInput.trim();
+  async sendMessage(payload?: ChatInputPayload) {
+    const userText = (payload ? payload.text : this.userInput).trim();
+    const images = payload ? payload.images : [];
+    const files = payload ? payload.files : [];
 
-    // Exit if both text and images are empty
-    if (userText === '' && this.attachedImages.length === 0) return;
+    if (payload?.model) {
+      this.selectedModelKey = payload.model;
+    }
+    if (payload?.searchThisMessage !== undefined) {
+      this.searchThisMessage = payload.searchThisMessage;
+    }
 
-    // Check that a model is selected
+    // Exit if text, images, and files are all empty
+    if (
+      userText === '' &&
+      images.length === 0 &&
+      files.length === 0
+    )
+      return;
+
+    // Check that a model is selected, fallback if needed
+    if (!this.selectedModelKey) {
+      if (this.models.length > 0) {
+        this.selectedModelKey = this.models[0].id;
+      } else {
+        try {
+          const res = await firstValueFrom(this.openAIService.getModels());
+          this.models = res.data;
+          this.selectedModelKey = res.data[0]?.id || '';
+        } catch {}
+      }
+    }
+
     if (!this.selectedModelKey) {
       this.errorMessage = this.translateService.instant(
         'CHAT.ERROR_SELECT_MODEL',
@@ -315,70 +334,50 @@ export class ChatPage implements OnInit, OnDestroy {
 
     // Build content: plain string if no images, multimodal array otherwise
     let content: MessageContent;
-    if (this.attachedImages.length === 0) {
+    if (images.length === 0) {
       content = userText;
     } else {
       const parts: (TextContentPart | ImageContentPart)[] = [];
       if (userText) {
         parts.push({ type: 'text', text: userText });
       }
-      for (const dataUrl of this.attachedImages) {
+      for (const dataUrl of images) {
         parts.push({ type: 'image_url', image_url: { url: dataUrl } });
       }
       content = parts;
     }
 
+    // Save file metadata for display in the message bubble (content stays in service)
+    const filesMeta = files.map((f) => ({
+      name: f.name,
+      size: f.size,
+      category: f.category,
+    }));
+
     // Append the user's message
-    this.messages.push({ role: 'user', content });
+    this.messages.push({
+      role: 'user',
+      content,
+      attachedFiles: filesMeta.length > 0 ? filesMeta : undefined,
+    });
 
-    // Clear input and attached images
+    // Clear input
     this.userInput = '';
-    this.attachedImages = [];
-    await this.sendToAPI();
+    await this.sendToAPI(files);
   }
 
-  /**
-   * Opens the hidden file input to pick images.
-   * Called when the user clicks the attachment button.
-   */
-  triggerImagePicker(): void {
-    const input = document.getElementById('image-file-input') as HTMLInputElement;
-    input?.click();
-  }
-
-  /**
-   * Reads selected image files and converts them to base64 data URLs.
-   * Multiple images can be selected at once.
-   */
-  onFileSelected(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    if (!input.files) return;
-
-    const files = Array.from(input.files);
-    // Reset input so the same file can be reselected after removal
-    input.value = '';
-
-    for (const file of files) {
-      if (!file.type.startsWith('image/')) continue;
-      const reader = new FileReader();
-      reader.onload = () => {
-        const dataUrl = reader.result as string;
-        this.attachedImages = [...this.attachedImages, dataUrl];
-      };
-      reader.readAsDataURL(file);
-    }
-  }
-
-  /** Removes a pending image by index before the message is sent */
-  removeImage(index: number): void {
-    this.attachedImages = this.attachedImages.filter((_, i) => i !== index);
+  onFileError(err: string): void {
+    this.errorMessage = err;
+    setTimeout(() => {
+      if (this.errorMessage === err) this.errorMessage = null;
+    }, 4000);
   }
 
   private async loadWebSearchSetting(): Promise<void> {
     this.webSearchEnabled = await this.settingsService.getWebSearchEnabled();
   }
 
-  async sendToAPI() {
+  async sendToAPI(pendingFiles: AttachedFile[] = []) {
     this.isSending = true;
     this.errorMessage = null;
     this.lastSearchSources = [];
@@ -400,11 +399,34 @@ export class ChatPage implements OnInit, OnDestroy {
       this.messages.unshift(memorySystemMsg);
     }
 
+    // Inject file context into the last user message for this API call only.
+    // We work on a shallow copy so this.messages (and the UI) are never mutated.
+    let messagesWithFiles: ChatMessage[] = [...this.messages];
+    if (pendingFiles.length > 0) {
+      const fileContext = this.fileAttachmentService.buildFileContext(pendingFiles);
+      if (fileContext) {
+        const lastUserIdx = [...messagesWithFiles]
+          .reverse()
+          .findIndex((m) => m.role === 'user');
+        if (lastUserIdx !== -1) {
+          const realIdx = messagesWithFiles.length - 1 - lastUserIdx;
+          const lastUser = messagesWithFiles[realIdx];
+          const originalText = getTextContent(lastUser.content);
+          messagesWithFiles = [
+            ...messagesWithFiles.slice(0, realIdx),
+            { ...lastUser, content: fileContext + originalText },
+            ...messagesWithFiles.slice(realIdx + 1),
+          ];
+        }
+      }
+    }
+
     // In RAG mode, only search if the user explicitly activated the toggle.
     // The toggle remains active for subsequent messages until the user disables it.
     let ragMessages: ChatMessage[] | undefined;
     if (this.webSearchEnabled && searchMode === 'rag' && this.searchThisMessage) {
-      ragMessages = await this.buildRagMessages();
+      // Pass the file-enriched messages as base so RAG also benefits from file context
+      ragMessages = await this.buildRagMessages(messagesWithFiles);
     }
 
     // Show the "generating" step once web search (if any) is done
@@ -413,6 +435,9 @@ export class ChatPage implements OnInit, OnDestroy {
     // In native mode, pass the tools array so the model can decide when to search.
     const tools =
       this.webSearchEnabled && searchMode === 'native' ? [WEB_SEARCH_TOOL] : undefined;
+
+    // Use messagesWithFiles as the base for the tool-calling loop
+    const baseMessages = messagesWithFiles;
 
     // --- Tool-calling loop ---
     // Each iteration sends the current messages to the model.
@@ -426,7 +451,7 @@ export class ChatPage implements OnInit, OnDestroy {
         try {
           response = await new Promise((resolve, reject) => {
             this.activeSubscription = this.openAIService
-              .sendChat({ model: this.selectedModelKey, messages: ragMessages ?? this.messages, tools })
+              .sendChat({ model: this.selectedModelKey, messages: ragMessages ?? baseMessages, tools })
               .subscribe({ next: resolve, error: reject });
           });
         } catch (err) {
@@ -464,8 +489,8 @@ export class ChatPage implements OnInit, OnDestroy {
         let receivedToolCalls: ToolCall[] = [];
         let tokenCount = 0;
         let tokenStartTime = 0;
-        // In RAG mode use the enriched copy; otherwise use the live messages array.
-        const messagesToSend = ragMessages ?? [...this.messages];
+        // In RAG mode use the enriched copy; otherwise use the base messages (may include file context).
+        const messagesToSend = ragMessages ?? [...baseMessages];
         this.messages.push({ role: 'assistant', content: '' });
 
         const streamResult = await new Promise<'text' | 'tool_calls'>((resolve, reject) => {
@@ -620,9 +645,10 @@ export class ChatPage implements OnInit, OnDestroy {
   }
 
 
-  private async buildRagMessages(): Promise<ChatMessage[]> {
-    const lastUserMsg = [...this.messages].reverse().find((m) => m.role === 'user');
-    if (!lastUserMsg) return [...this.messages];
+  private async buildRagMessages(baseMessages?: ChatMessage[]): Promise<ChatMessage[]> {
+    const msgSource = baseMessages ?? this.messages;
+    const lastUserMsg = [...msgSource].reverse().find((m) => m.role === 'user');
+    if (!lastUserMsg) return [...msgSource];
 
     const query = this.buildSearchQuery();
     let searchResults: string;
@@ -642,7 +668,7 @@ export class ChatPage implements OnInit, OnDestroy {
       this.completeLastStep(
         this.translateService.instant('CHAT.STEPS.SEARCH_FAILED')
       );
-      return [...this.messages];
+      return [...msgSource];
     }
 
     // Step 2: Preparing context
@@ -653,7 +679,7 @@ export class ChatPage implements OnInit, OnDestroy {
     );
 
     // Return a shallow copy where only the last user message has enriched content
-    return this.messages.map((m) => {
+    return msgSource.map((m) => {
       if (m !== lastUserMsg) return m;
       return {
         ...m,
@@ -665,6 +691,7 @@ export class ChatPage implements OnInit, OnDestroy {
       };
     });
   }
+
 
   // ── Processing Steps helpers ──────────────────────────────────────────────
 
@@ -689,12 +716,7 @@ export class ChatPage implements OnInit, OnDestroy {
     this.processingSteps = [];
   }
 
-  onEnterKey(event: KeyboardEvent) {
-    if (!event.shiftKey) {
-      event.preventDefault();
-      this.sendMessage();
-    }
-  }
+
 
   ngOnDestroy() {
     this.activeSubscription?.unsubscribe();

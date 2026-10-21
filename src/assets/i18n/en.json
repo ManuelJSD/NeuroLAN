@@ -105,7 +105,13 @@
     "MANAGE_MEMORIES": "Manage memories",
     "MEMORY_ACTION_ADD": "Saved",
     "MEMORY_ACTION_UPDATE": "Updated",
-    "MEMORY_ACTION_DELETE": "Removed"
+    "MEMORY_ACTION_DELETE": "Removed",
+    "ATTACH": "Attach files or images",
+    "ATTACH_FILE": "Attach file (TXT, code, PDF)",
+    "FILE_REMOVE": "Remove file",
+    "FILE_TOO_LARGE": "File is too large (max 10 MB)",
+    "FILE_UNSUPPORTED": "File type not supported",
+    "EDIT": "Edit message"
   },
   "CONVERSATIONS": {
     "EMPTY": "No conversations yet",
@@ -130,9 +136,8 @@
     "SELECT_MODEL": "Model",
     "RELOAD_MODELS": "Reload models",
     "SEND": "Send message",
+    "ATTACH": "Attach files or images",
     "ATTACH_IMAGE": "Attach image",
-    "ATTACH_IMAGE_NO_VISION": "This model does not support image attachments",
-    "MODEL_HAS_VISION": "This model supports vision (image input)",
     "SUGGESTIONS": {
       "CONCEPT": "Explain a concept",
       "CODE": "Write code for...",

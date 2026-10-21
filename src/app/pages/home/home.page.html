@@ -42,149 +42,20 @@
         }
       </div>
 
-      <!-- Barra de input principal -->
-      <div class="input-card">
-        <!-- Hidden file input for image selection -->
-        <input
-          type="file"
-          id="home-image-file-input"
-          accept="image/*"
-          multiple
-          style="display: none"
-          (change)="onFileSelected($event)"
-        />
-
-        <!-- Image preview strip (shown above textarea when images are attached) -->
-        @if (attachedImages.length > 0) {
-        <div class="image-preview-strip">
-          @for (img of attachedImages; track $index) {
-          <div class="image-preview-item">
-            <img [src]="img" class="preview-thumb" alt="Imagen adjunta" />
-            <button
-              class="preview-remove-btn"
-              (click)="removeImage($index)"
-              title="Eliminar imagen"
-              aria-label="Eliminar imagen"
-            >
-              <ion-icon name="close-circle-outline"></ion-icon>
-            </button>
-          </div>
-          }
-        </div>
-        }
-
-        <!-- Text Area -->
-        <ion-textarea
-          class="main-input"
-          autoGrow="true"
-          rows="1"
-          [(ngModel)]="userInput"
-          [placeholder]="'HOME.PLACEHOLDER' | translate"
-          (keydown.enter)="onEnterKey($any($event))"
-        ></ion-textarea>
-
-        <!-- Bottom bar: model selector + send button -->
-        <div class="input-toolbar">
-          <!-- Model Select -->
-          <div class="model-selector-wrapper">
-            <ion-select
-              class="model-select"
-              interface="popover"
-              [placeholder]="'HOME.SELECT_MODEL' | translate"
-              [value]="selectedModelKey"
-              (ionChange)="onModelChange($event.detail.value)"
-            >
-              @for (model of models; track model.id) {
-              <ion-select-option [value]="model.id"
-                >{{ modelVisionMap[model.id] ? '👁 ' : '' }}{{ model.id }}</ion-select-option
-              >
-              } @empty {
-              <ion-select-option disabled
-                >{{ 'CHAT.NO_MODELS' | translate }}</ion-select-option
-              >
-              }
-            </ion-select>
-
-            <!-- Vision badge: shown when selected model supports vision -->
-            @if (selectedModelHasVision) {
-            <span
-              class="vision-badge"
-              [title]="'HOME.MODEL_HAS_VISION' | translate"
-            >👁</span>
-            }
-
-            <button
-              class="reload-btn"
-              (click)="loadModels()"
-              [title]="'HOME.RELOAD_MODELS' | translate"
-            >
-              <ion-icon name="refresh-outline" aria-hidden="true"></ion-icon>
-            </button>
-          </div>
-
-          <div class="action-buttons">
-            <!-- Image Attach Button -->
-            <button
-              class="attach-btn"
-              [class.disabled]="!selectedModelHasVision"
-              [disabled]="!selectedModelHasVision"
-              (click)="triggerImagePicker()"
-              [title]="selectedModelHasVision ? ('HOME.ATTACH_IMAGE' | translate) : ('HOME.ATTACH_IMAGE_NO_VISION' | translate)"
-              [attr.aria-label]="selectedModelHasVision ? ('HOME.ATTACH_IMAGE' | translate) : ('HOME.ATTACH_IMAGE_NO_VISION' | translate)"
-            >
-              <ion-icon name="attach-outline" aria-hidden="true"></ion-icon>
-            </button>
-
-            <!-- Temporary Chat Toggle -->
-            <button
-              class="temp-chat-btn"
-              [class.active]="temporaryChat"
-              (click)="temporaryChat = !temporaryChat"
-              [title]="temporaryChat ? 'Desactivar chat temporal' : 'Activar chat temporal'"
-            >
-              <ion-icon name="hourglass-outline" aria-hidden="true"></ion-icon>
-            </button>
-
-            <!-- Web Search Toggle (opt-in, solo visible si la búsqueda web está activada) -->
-            @if (webSearchEnabled) {
-            <button
-              class="web-search-toggle-btn"
-              [class.active]="searchThisMessage"
-              (click)="searchThisMessage = !searchThisMessage"
-              [title]="(searchThisMessage ? 'CHAT.SEARCH_TOGGLE_ON' : 'CHAT.SEARCH_TOGGLE_OFF') | translate"
-              aria-label="Toggle web search"
-            >
-              <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <circle cx="11" cy="11" r="8"></circle>
-                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-              </svg>
-            </button>
-            }
-
-            <!-- Send Button -->
-            <button
-              class="send-btn"
-              (click)="sendMessage()"
-              [disabled]="!userInput.trim() && attachedImages.length === 0"
-              [title]="'HOME.SEND' | translate"
-            >
-              <svg
-                viewBox="0 0 24 24"
-                width="18"
-                height="18"
-                stroke="currentColor"
-                stroke-width="2.5"
-                fill="none"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                aria-hidden="true"
-              >
-                <line x1="12" y1="19" x2="12" y2="5"></line>
-                <polyline points="5 12 12 5 19 12"></polyline>
-              </svg>
-            </button>
-          </div>
-        </div>
+      <!-- Barra de input principal con el componente reutilizable -->
+      <div class="chat-input-wrapper">
+        <app-chat-input
+          [models]="models"
+          [selectedModelKey]="selectedModelKey"
+          [webSearchEnabled]="webSearchEnabled"
+          [showTemporaryChat]="true"
+          [placeholder]="'HOME.PLACEHOLDER'"
+          [sendButtonTitle]="'HOME.SEND'"
+          [(text)]="userInput"
+          (send)="onSendMessage($event)"
+          (modelChange)="onModelChange($event)"
+          (reloadModels)="loadModels()"
+        ></app-chat-input>
       </div>
     </main>
   </div>

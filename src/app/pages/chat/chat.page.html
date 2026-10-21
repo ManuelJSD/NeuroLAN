@@ -235,6 +235,19 @@
           <div class="message-text">{{ msg.content }}</div>
           }
 
+          <!-- Attached files shown in sent user messages -->
+          @if (msg.attachedFiles && msg.attachedFiles.length > 0) {
+          <div class="message-files">
+            @for (f of msg.attachedFiles; track $index) {
+            <div class="message-file-chip">
+              <span class="message-file-icon">{{ fileAttachmentService.categoryIcon(f.category) }}</span>
+              <span class="message-file-name" [title]="f.name">{{ f.name }}</span>
+              <span class="message-file-size">{{ fileAttachmentService.humanSize(f.size) }}</span>
+            </div>
+            }
+          </div>
+          }
+
           <!-- Edit Button -->
           @if (isSending === false) {
           <button
@@ -315,173 +328,25 @@
   </ion-content>
 
   <!-- Footer Section -->
+  <!-- Footer Section -->
   <footer class="chat-footer">
-    <div class="input-card">
-
-      <!-- Hidden file input for image selection -->
-      <input
-        type="file"
-        id="image-file-input"
-        accept="image/*"
-        multiple
-        style="display: none"
-        (change)="onFileSelected($event)"
-      />
-
-      <!-- Image preview strip (shown above textarea when images are attached) -->
-      @if (attachedImages.length > 0) {
-      <div class="image-preview-strip">
-        @for (img of attachedImages; track $index) {
-        <div class="image-preview-item">
-          <img [src]="img" class="preview-thumb" alt="Imagen adjunta" />
-          <button
-            class="preview-remove-btn"
-            (click)="removeImage($index)"
-            title="Eliminar imagen"
-            aria-label="Eliminar imagen"
-          >
-            <ion-icon name="close-circle-outline"></ion-icon>
-          </button>
-        </div>
-        }
-      </div>
-      }
-
-      <!-- Text Area -->
-      <ion-textarea
-        class="main-input"
-        autoGrow="true"
-        rows="1"
-        [(ngModel)]="userInput"
-        [placeholder]="'CHAT.TYPE_MESSAGE' | translate"
-        (keydown.enter)="onEnterKey($any($event))"
-      ></ion-textarea>
-
-      <div class="input-toolbar">
-        <!-- Model Select -->
-        <div class="model-selector-wrapper">
-          <ion-select
-            class="model-select"
-            interface="popover"
-            [placeholder]="'HOME.SELECT_MODEL' | translate"
-            [value]="selectedModelKey"
-            (ionChange)="onModelChange($event.detail.value)"
-          >
-            @for (model of models; track model.id) {
-            <ion-select-option [value]="model.id"
-              >{{ modelVisionMap[model.id] ? '👁 ' : '' }}{{ model.id }}</ion-select-option
-            >
-            } @empty {
-            <ion-select-option disabled
-              >{{ 'CHAT.NO_MODELS' | translate }}</ion-select-option
-            >
-            }
-          </ion-select>
-
-          <!-- Vision badge: shown when selected model supports vision -->
-          @if (selectedModelHasVision) {
-          <span
-            class="vision-badge"
-            [title]="'HOME.MODEL_HAS_VISION' | translate"
-          >👁</span>
-          }
-
-          <button
-            class="reload-btn"
-            (click)="loadModels()"
-            [title]="'HOME.RELOAD_MODELS' | translate"
-          >
-            <ion-icon name="refresh-outline" aria-hidden="true"></ion-icon>
-          </button>
-        </div>
-
-        <div class="action-buttons">
-          @if (totalConversationTokens > 0) {
-          <ion-chip class="tokens-chip">
-            <ion-label
-              >{{ totalConversationTokens | number }} {{ 'CHAT.TOKENS' | translate
-              }}</ion-label
-            >
-          </ion-chip>
-          }
-
-          <!-- Image Attach Button -->
-          @if (!isSending) {
-          <button
-            class="attach-btn"
-            [class.disabled]="!selectedModelHasVision"
-            [disabled]="!selectedModelHasVision"
-            (click)="triggerImagePicker()"
-            [title]="selectedModelHasVision ? ('HOME.ATTACH_IMAGE' | translate) : ('HOME.ATTACH_IMAGE_NO_VISION' | translate)"
-            [attr.aria-label]="selectedModelHasVision ? ('HOME.ATTACH_IMAGE' | translate) : ('HOME.ATTACH_IMAGE_NO_VISION' | translate)"
-          >
-            <ion-icon name="attach-outline" aria-hidden="true"></ion-icon>
-          </button>
-          }
-
-          <!-- Web Search Toggle (RAG mode opt-in) -->
-          @if (webSearchEnabled && !isSending) {
-          <button
-            class="web-search-toggle-btn"
-            [class.active]="searchThisMessage"
-            (click)="searchThisMessage = !searchThisMessage"
-            [title]="(searchThisMessage ? ('CHAT.SEARCH_TOGGLE_ON' | translate) : ('CHAT.SEARCH_TOGGLE_OFF' | translate))"
-            aria-label="Toggle web search for this message"
-          >
-            <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <circle cx="11" cy="11" r="8"></circle>
-              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-            </svg>
-          </button>
-          }
-
-          @if (isSending) {
-          <!-- Stop Button -->
-          <button
-            class="stop-btn"
-            (click)="stopGeneration()"
-            [title]="'CHAT.STOP' | translate"
-          >
-            <svg
-              viewBox="0 0 24 24"
-              width="18"
-              height="18"
-              stroke="currentColor"
-              stroke-width="2.5"
-              fill="none"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              aria-hidden="true"
-            >
-              <rect x="4" y="4" width="16" height="16"></rect>
-            </svg>
-          </button>
-          } @else {
-          <!-- Send Button -->
-          <button
-            class="send-btn"
-            (click)="sendMessage()"
-            [disabled]="isSending || !userInput"
-            [title]="'CHAT.SEND' | translate"
-          >
-            <svg
-              viewBox="0 0 24 24"
-              width="18"
-              height="18"
-              stroke="currentColor"
-              stroke-width="2.5"
-              fill="none"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              aria-hidden="true"
-            >
-              <line x1="22" y1="2" x2="11" y2="13"></line>
-              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-            </svg>
-          </button>
-          }
-        </div>
-      </div>
+    <div class="chat-input-wrapper">
+      <app-chat-input
+        #chatInput
+        [models]="models"
+        [selectedModelKey]="selectedModelKey"
+        [isSending]="isSending"
+        [webSearchEnabled]="webSearchEnabled"
+        [totalTokens]="totalConversationTokens"
+        [placeholder]="'CHAT.TYPE_MESSAGE'"
+        [sendButtonTitle]="'CHAT.SEND'"
+        [(text)]="userInput"
+        (send)="sendMessage($event)"
+        (stop)="stopGeneration()"
+        (modelChange)="onModelChange($event)"
+        (reloadModels)="loadModels()"
+        (fileError)="onFileError($event)"
+      ></app-chat-input>
     </div>
   </footer>
   <ion-toast

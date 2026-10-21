@@ -65,20 +65,20 @@
 - [x] Image preview before sending.
 - [x] Remove images before sending.
 - [x] Send images using the OpenAI-compatible multimodal format.
-- [x] Detect/configure model vision capability.
-- [x] Disable image attachment when the selected model does not support vision.
-- [x] Show vision capability in the model selector.
+- [ ] Detect/configure model vision capability.
+- [ ] Disable image attachment when the selected model does not support vision.
+- [ ] Show vision capability in the model selector.
 
 ### Files
 
-- [ ] Generic file attachment system.
-- [ ] File type and size validation.
-- [ ] TXT files.
-- [ ] Source code files.
-- [ ] PDF text extraction.
-- [ ] Include extracted file contents in the model request.
-- [ ] File preview/removal before sending.
-- [ ] Show attached files in messages.
+- [x] Generic file attachment system.
+- [x] File type and size validation.
+- [x] TXT files.
+- [x] Source code files.
+- [x] PDF text extraction.
+- [x] Include extracted file contents in the model request.
+- [x] File preview/removal before sending.
+- [x] Show attached files in messages.
 
 ## v1.5 — Voice
 

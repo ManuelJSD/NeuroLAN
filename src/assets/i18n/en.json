@@ -53,7 +53,12 @@
     "MEMORY_LIMIT": "Memory limit",
     "MEMORY_LIMIT_HINT": "Maximum number of memories to keep. Oldest are discarded automatically. Set to 0 for unlimited.",
     "MEMORY_FREQ": "Extraction frequency",
-    "MEMORY_FREQ_HINT": "The assistant will scan the conversation for new data every N responses. Minimum 1 (always), default 2."
+    "MEMORY_FREQ_HINT": "The assistant will scan the conversation for new data every N responses. Minimum 1 (always), default 2.",
+    "SKIN_TITLE": "Appearance",
+    "SKIN_SUBTITLE": "Choose the visual theme for the app",
+    "SKIN_DARK": "Dark",
+    "SKIN_LIGHT": "Light",
+    "SKIN_WHATSAPP": "WhatsApp"
   },
   "MENU": {
     "LOCAL_AI": "Local AI",

@@ -20,7 +20,7 @@
 @import "@ionic/angular/css/flex-utils.css";
 
 
-/* Ionic Dark Mode — always dark */
+/* Ionic Dark Mode — always dark (only for skin-dark, overridden by others) */
 @import '@ionic/angular/css/palettes/dark.always.css';
 
 /* ============================================================
@@ -39,7 +39,7 @@ html, body {
 }
 
 /* ============================================================
-   Custom Scrollbar (Webkit)
+   Custom Scrollbar (Webkit) — skin-aware
    ============================================================ */
 
 ::-webkit-scrollbar {
@@ -52,13 +52,13 @@ html, body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #45475a;
+  background: var(--skin-scrollbar, #45475a);
   border-radius: 999px;
   transition: background 0.2s ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #585b70;
+  background: var(--skin-surface-hover, #585b70);
 }
 
 /* ============================================================
@@ -66,7 +66,7 @@ html, body {
    ============================================================ */
 
 ion-app {
-  background: #1e1e2e;
+  background: var(--skin-bg, #1e1e2e);
 }
 
 // Split pane — sin bordes extraños
@@ -76,31 +76,31 @@ ion-split-pane {
   --side-min-width: 240px;
 }
 
-// Popover — glassmorphism dark
+// Popover — skin-aware
 ion-popover {
-  --background: #313244;
+  --background: var(--skin-popover-bg, #313244);
   --backdrop-opacity: 0.5;
   --box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5);
   --border-radius: 12px;
 }
 
 ion-popover::part(content) {
-  border: 1px solid #45475a;
+  border: 1px solid var(--skin-border, #45475a);
   border-radius: 12px;
 }
 
 // Select popover
 .select-interface-option.sc-ion-select-popover-h {
-  color: #cdd6f4;
+  color: var(--skin-text, #cdd6f4);
 }
 
-// Toast — dark glassmorphism
+// Toast — skin-aware
 ion-toast {
-  --background: #313244;
-  --color: #cdd6f4;
+  --background: var(--skin-surface, #313244);
+  --color: var(--skin-text, #cdd6f4);
   --border-radius: 12px;
   --box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-  --border-color: #45475a;
+  --border-color: var(--skin-border, #45475a);
   font-family: 'Inter', sans-serif;
   font-size: 0.9rem;
 }
@@ -135,17 +135,17 @@ ion-toolbar {
   width: 40px;
   height: 40px;
   border-radius: 8px;
-  background: rgba(88, 91, 112, 0.15);
-  border: 1px solid rgba(88, 91, 112, 0.2);
-  color: #bac2de; /* Equivale a $subtext1 */
+  background: rgba(var(--skin-accent-rgb, 88, 91, 112), 0.15);
+  border: 1px solid rgba(var(--skin-accent-rgb, 88, 91, 112), 0.2);
+  color: var(--skin-subtext, #bac2de);
   cursor: pointer;
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   transition: all 0.2s ease;
 
   &:hover {
-    background: rgba(88, 91, 112, 0.25);
-    color: #cdd6f4; /* Equivale a $text */
+    background: rgba(var(--skin-accent-rgb, 88, 91, 112), 0.25);
+    color: var(--skin-text, #cdd6f4);
   }
   
   ion-icon, svg {

@@ -53,7 +53,12 @@
     "MEMORY_LIMIT": "Límite de memorias",
     "MEMORY_LIMIT_HINT": "Máximo de memorias a conservar. Las más antiguas se descartan automáticamente. Escribe 0 para sin límite.",
     "MEMORY_FREQ": "Frecuencia de extracción",
-    "MEMORY_FREQ_HINT": "El asistente analizará la conversación en busca de datos cada N respuestas. Mínimo 1 (siempre), defecto 2."
+    "MEMORY_FREQ_HINT": "El asistente analizará la conversación en busca de datos cada N respuestas. Mínimo 1 (siempre), defecto 2.",
+    "SKIN_TITLE": "Apariencia",
+    "SKIN_SUBTITLE": "Elige el tema visual de la aplicación",
+    "SKIN_DARK": "Oscuro",
+    "SKIN_LIGHT": "Claro",
+    "SKIN_WHATSAPP": "WhatsApp"
   },
   "MENU": {
     "LOCAL_AI": "IA Local",

@@ -18,6 +18,7 @@ import { SettingsService } from './core/services/settings';
 import { TranslateService } from '@ngx-translate/core';
 import { SidebarComponent } from './pages/sidebar/sidebar.component';
 import { UiService } from './core/services/ui-service';
+import { ThemeService } from './core/services/theme.service';
 
 @Component({
   selector: 'app-root',
@@ -27,6 +28,7 @@ import { UiService } from './core/services/ui-service';
 })
 export class AppComponent {
   public uiService = inject(UiService);
+  private themeService = inject(ThemeService);
 
   private openAIService = inject(OpenAIService);
   private settingsService = inject(SettingsService);
@@ -38,6 +40,7 @@ export class AppComponent {
       error: (err) => console.error('Error getting models ', err),
     });
     this.initLanguage();
+    this.themeService.init();
   }
 
   constructor() {

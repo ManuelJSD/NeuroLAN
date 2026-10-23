@@ -30,6 +30,7 @@ import { ConversationService } from 'src/app/core/services/conversation';
 import { WebSearchService } from 'src/app/core/services/search/web-search.service';
 import { MemoryService } from 'src/app/core/services/memory.service';
 import { Memory } from 'src/app/core/models/memory.model';
+import { ThemeService, AVAILABLE_SKINS, AppSkin } from 'src/app/core/services/theme.service';
 
 @Component({
   selector: 'app-settings',
@@ -54,6 +55,7 @@ import { Memory } from 'src/app/core/models/memory.model';
 })
 export class SettingsPage implements OnInit {
   public uiService = inject(UiService);
+  public themeService = inject(ThemeService);
 
   private conversationService = inject(ConversationService);
   private settingsService = inject(SettingsService);
@@ -61,6 +63,7 @@ export class SettingsPage implements OnInit {
   private formBuilder = inject(FormBuilder);
   public memoryService = inject(MemoryService);
 
+  readonly skins = AVAILABLE_SKINS;
   isToastOpen: boolean = false;
   toastMessage: string = '';
 
@@ -278,5 +281,10 @@ export class SettingsPage implements OnInit {
 
   deleteAllMemories() {
     this.isDeleteMemoriesAlertOpen = true;
+  }
+
+  async changeSkin(skin: AppSkin) {
+    await this.themeService.setSkin(skin);
+    this.setOpen(true, this.translateService.instant('SETTINGS.TOAST_SUCCESS'));
   }
 }

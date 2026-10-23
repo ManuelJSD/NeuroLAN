@@ -197,3 +197,109 @@ $rosewater:#f5e0dc;
   // Typography
   --ion-font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
+
+// ============================================================
+// Skin System — CSS custom properties per skin
+// Applied by ThemeService to <html class="skin-*">
+// ============================================================
+
+// ── Skin: Dark (default — Catppuccin Mocha) ─────────────────
+html.skin-dark {
+  --skin-bg:               #{$base};
+  --skin-bg-secondary:     #{$mantle};
+  --skin-surface:          #{$surface0};
+  --skin-surface-hover:    #{$surface1};
+  --skin-text:             #{$text};
+  --skin-subtext:          #{$overlay0};
+  --skin-accent:           #{$teal};
+  --skin-accent-rgb:       148, 226, 213;
+  --skin-border:           #{$surface1};
+  --skin-bubble-user:      #{$surface0};
+  --skin-bubble-user-text: #{$text};
+  --skin-bubble-ai:        #{$mantle};
+  --skin-bubble-ai-text:   #{$text};
+  --skin-input-bg:         #{$surface0};
+  --skin-input-border:     #{$surface1};
+  --skin-scrollbar:        #{$surface1};
+  --skin-card-bg:          #{$surface0};
+  --skin-header-bg:        #{$mantle};
+  --skin-sidebar-bg:       #{$mantle};
+  --skin-sidebar-item-hover: #{$surface0};
+  --skin-sidebar-text:     #{$subtext1};
+  --skin-popover-bg:       #{$surface0};
+  color-scheme: dark;
+}
+
+// ── Skin: Light ────────────────────────────────────────────
+html.skin-light {
+  --skin-bg:               #f5f5f7;
+  --skin-bg-secondary:     #ffffff;
+  --skin-surface:          #e8e8ed;
+  --skin-surface-hover:    #d8d8de;
+  --skin-text:             #1c1c1e;
+  --skin-subtext:          #6e6e73;
+  --skin-accent:           #0071e3;
+  --skin-accent-rgb:       0, 113, 227;
+  --skin-border:           #d2d2d7;
+  --skin-bubble-user:      #e8e8ed;
+  --skin-bubble-user-text: #1c1c1e;
+  --skin-bubble-ai:        #ffffff;
+  --skin-bubble-ai-text:   #1c1c1e;
+  --skin-input-bg:         #ffffff;
+  --skin-input-border:     #d2d2d7;
+  --skin-scrollbar:        #c7c7cc;
+  --skin-card-bg:          #ffffff;
+  --skin-header-bg:        #ffffff;
+  --skin-sidebar-bg:       #f5f5f7;
+  --skin-sidebar-item-hover: #e8e8ed;
+  --skin-sidebar-text:     #3a3a3c;
+  --skin-popover-bg:       #ffffff;
+
+  // Ionic overrides for light
+  --ion-background-color:   #f5f5f7;
+  --ion-text-color:         #1c1c1e;
+  --ion-border-color:       #d2d2d7;
+  --ion-item-background:    #ffffff;
+  --ion-item-color:         #1c1c1e;
+  --ion-toolbar-background: #ffffff;
+  --ion-toolbar-color:      #1c1c1e;
+  --ion-card-background:    #ffffff;
+  color-scheme: light;
+}
+
+// ── Skin: WhatsApp ─────────────────────────────────────────
+html.skin-whatsapp {
+  --skin-bg:               #0b141a;
+  --skin-bg-secondary:     #111b21;
+  --skin-surface:          #1f2c34;
+  --skin-surface-hover:    #2a3942;
+  --skin-text:             #e9edef;
+  --skin-subtext:          #8696a0;
+  --skin-accent:           #00a884;
+  --skin-accent-rgb:       0, 168, 132;
+  --skin-border:           #2a3942;
+  --skin-bubble-user:      #005c4b;
+  --skin-bubble-user-text: #e9edef;
+  --skin-bubble-ai:        #1f2c34;
+  --skin-bubble-ai-text:   #e9edef;
+  --skin-input-bg:         #1f2c34;
+  --skin-input-border:     #2a3942;
+  --skin-scrollbar:        #2a3942;
+  --skin-card-bg:          #1f2c34;
+  --skin-header-bg:        #202c33;
+  --skin-sidebar-bg:       #111b21;
+  --skin-sidebar-item-hover: #1f2c34;
+  --skin-sidebar-text:     #aebac1;
+  --skin-popover-bg:       #233138;
+
+  // Ionic overrides for WhatsApp
+  --ion-background-color:   #0b141a;
+  --ion-text-color:         #e9edef;
+  --ion-border-color:       #2a3942;
+  --ion-item-background:    #111b21;
+  --ion-item-color:         #e9edef;
+  --ion-toolbar-background: #202c33;
+  --ion-toolbar-color:      #e9edef;
+  --ion-card-background:    #1f2c34;
+  color-scheme: dark;
+}

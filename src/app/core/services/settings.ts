@@ -149,5 +149,16 @@ export class SettingsService {
     return (await this._storage?.get('memory_extraction_freq')) ?? 2;
   }
 
+  // --- Skin / Theme ---
+
+  async setSkin(skin: string): Promise<void> {
+    await this.ensureStorage();
+    await this._storage?.set('app_skin', skin);
+  }
+
+  async getSkin(): Promise<'dark' | 'light' | 'whatsapp'> {
+    await this.ensureStorage();
+    return (await this._storage?.get('app_skin')) ?? 'dark';
+  }
 
 }

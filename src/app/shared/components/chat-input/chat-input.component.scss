@@ -10,8 +10,8 @@ $font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
 
 .chat-input-box {
   width: 100%;
-  background: $mantle;
-  border: 1px solid $surface1;
+  background: var(--skin-card-bg, #{$mantle});
+  border: 1px solid var(--skin-input-border, #{$surface1});
   border-radius: 12px;
   padding: 0.875rem 1rem 0.625rem;
   display: flex;
@@ -21,7 +21,7 @@ $font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 
   &:focus-within {
-    border-color: rgba(148, 226, 213, 0.5);
+    border-color: rgba(var(--skin-accent-rgb, 148, 226, 213), 0.5);
   }
 }
 
@@ -34,7 +34,7 @@ $font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
   flex-wrap: wrap;
   gap: 8px;
   padding-bottom: 0.5rem;
-  border-bottom: 1px solid $surface0;
+  border-bottom: 1px solid var(--skin-border, #{$surface0});
 }
 
 .image-preview-item {
@@ -46,7 +46,7 @@ $font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
     height: 64px;
     object-fit: cover;
     border-radius: 6px;
-    border: 1px solid $surface1;
+    border: 1px solid var(--skin-border, #{$surface1});
     display: block;
   }
 
@@ -54,8 +54,8 @@ $font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
     position: absolute;
     top: -6px;
     right: -6px;
-    background: $mantle;
-    border: 1px solid $surface1;
+    background: var(--skin-card-bg, #{$mantle});
+    border: 1px solid var(--skin-border, #{$surface1});
     border-radius: 50%;
     padding: 0;
     width: 20px;
@@ -89,22 +89,22 @@ $font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
   flex-wrap: wrap;
   gap: 6px;
   padding: 4px 0 6px;
-  border-bottom: 1px solid $surface0;
+  border-bottom: 1px solid var(--skin-border, #{$surface0});
 }
 
 .file-preview-item {
   display: flex;
   align-items: center;
   gap: 6px;
-  background: $surface0;
-  border: 1px solid $surface1;
+  background: var(--skin-surface, #{$surface0});
+  border: 1px solid var(--skin-border, #{$surface1});
   border-radius: 8px;
   padding: 5px 6px 5px 8px;
   max-width: 220px;
   transition: border-color 0.15s;
 
   &:hover {
-    border-color: $overlay0;
+    border-color: var(--skin-subtext, #{$overlay0});
   }
 
   .file-preview-icon {
@@ -122,7 +122,7 @@ $font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
   .file-preview-name {
     font-size: 0.72rem;
     font-weight: 600;
-    color: $text;
+    color: var(--skin-text, #{$text});
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -131,7 +131,7 @@ $font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
 
   .file-preview-size {
     font-size: 0.62rem;
-    color: $subtext0;
+    color: var(--skin-subtext, #{$subtext0});
   }
 
   .preview-remove-btn {
@@ -139,7 +139,7 @@ $font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
     background: none;
     border: none;
     cursor: pointer;
-    color: $subtext1;
+    color: var(--skin-subtext, #{$subtext1});
     font-size: 1rem;
     display: flex;
     align-items: center;
@@ -162,10 +162,10 @@ $font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
   --padding-top: 0;
   --padding-bottom: 0;
   --background: transparent;
-  --color: #{$text};
-  --placeholder-color: #{$overlay0};
-  --highlight-color-focused: #{$teal};
-  --highlight-color-valid:   #{$teal};
+  --color: var(--skin-text, #{$text});
+  --placeholder-color: var(--skin-subtext, #{$overlay0});
+  --highlight-color-focused: var(--skin-accent, #{$teal});
+  --highlight-color-valid:   var(--skin-accent, #{$teal});
   --highlight-color-invalid: #{$red};
   font-size: 0.95rem;
   font-family: $font-ui;
@@ -173,7 +173,7 @@ $font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
   width: 100%;
   min-height: 28px;
   max-height: 200px;
-  caret-color: $teal;
+  caret-color: var(--skin-accent, #{$teal});
 
   ::ng-deep textarea {
     overflow-y: auto;
@@ -191,7 +191,7 @@ $font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
   justify-content: space-between;
   gap: 0.5rem;
   padding-top: 0.375rem;
-  border-top: 1px solid $surface0;
+  border-top: 1px solid var(--skin-border, #{$surface0});
 }
 
 .model-selector-wrapper {
@@ -220,11 +220,11 @@ $font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: $overlay0;
+  color: var(--skin-subtext, #{$overlay0});
   transition: color 0.15s ease;
 
   &:hover {
-    color: $teal;
+    color: var(--skin-accent, #{$teal});
   }
 
   ion-icon {
@@ -258,7 +258,7 @@ $font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
 /* Attach button */
 .attach-btn {
   background: transparent;
-  border: 1px solid $surface1;
+  border: 1px solid var(--skin-border, #{$surface1});
   border-radius: 6px;
   width: 32px;
   height: 32px;
@@ -267,7 +267,7 @@ $font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
   justify-content: center;
   cursor: pointer;
   flex-shrink: 0;
-  color: $overlay0;
+  color: var(--skin-subtext, #{$overlay0});
   transition: color 0.18s ease, border-color 0.18s ease, transform 0.1s ease;
 
   ion-icon {
@@ -275,8 +275,8 @@ $font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
   }
 
   &:hover {
-    color: $teal;
-    border-color: rgba(148, 226, 213, 0.35);
+    color: var(--skin-accent, #{$teal});
+    border-color: rgba(var(--skin-accent-rgb, 148, 226, 213), 0.35);
   }
 
   &:active {
@@ -285,8 +285,8 @@ $font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
 
   &:disabled {
     cursor: not-allowed;
-    border-color: $surface1;
-    color: $overlay0;
+    border-color: var(--skin-border, #{$surface1});
+    color: var(--skin-subtext, #{$overlay0});
     pointer-events: none;
   }
 }
@@ -294,7 +294,7 @@ $font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
 /* Botón Chat Temporal */
 .temp-chat-btn {
   background: transparent;
-  border: 1px solid $surface1;
+  border: 1px solid var(--skin-border, #{$surface1});
   border-radius: 6px;
   width: 32px;
   height: 32px;
@@ -303,7 +303,7 @@ $font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
   justify-content: center;
   cursor: pointer;
   flex-shrink: 0;
-  color: $overlay0;
+  color: var(--skin-subtext, #{$overlay0});
   transition: all 0.2s ease;
 
   ion-icon {
@@ -312,14 +312,14 @@ $font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
   }
 
   &:hover {
-    color: $teal;
-    border-color: rgba(148, 226, 213, 0.35);
+    color: var(--skin-accent, #{$teal});
+    border-color: rgba(var(--skin-accent-rgb, 148, 226, 213), 0.35);
   }
 
   &.active {
-    color: $teal;
-    background: $surface0;
-    border-color: rgba(148, 226, 213, 0.5);
+    color: var(--skin-accent, #{$teal});
+    background: var(--skin-surface, #{$surface0});
+    border-color: rgba(var(--skin-accent-rgb, 148, 226, 213), 0.5);
 
     ion-icon {
       animation: hourglass-pulse 2s ease-in-out infinite;
@@ -335,7 +335,7 @@ $font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
 /* Botón de búsqueda web (opt-in) */
 .web-search-toggle-btn {
   background: transparent;
-  border: 1px solid $surface1;
+  border: 1px solid var(--skin-border, #{$surface1});
   border-radius: 6px;
   width: 32px;
   height: 32px;
@@ -344,12 +344,12 @@ $font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
   justify-content: center;
   cursor: pointer;
   flex-shrink: 0;
-  color: $overlay0;
+  color: var(--skin-subtext, #{$overlay0});
   transition: color 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease, transform 0.1s ease;
 
   &:hover {
-    color: $teal;
-    border-color: rgba(148, 226, 213, 0.35);
+    color: var(--skin-accent, #{$teal});
+    border-color: rgba(var(--skin-accent-rgb, 148, 226, 213), 0.35);
   }
 
   &:active {
@@ -357,17 +357,17 @@ $font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
   }
 
   &.active {
-    color: $teal;
-    border-color: rgba(148, 226, 213, 0.6);
-    background: rgba(148, 226, 213, 0.08);
-    box-shadow: 0 0 8px rgba(148, 226, 213, 0.2);
+    color: var(--skin-accent, #{$teal});
+    border-color: rgba(var(--skin-accent-rgb, 148, 226, 213), 0.6);
+    background: rgba(var(--skin-accent-rgb, 148, 226, 213), 0.08);
+    box-shadow: 0 0 8px rgba(var(--skin-accent-rgb, 148, 226, 213), 0.2);
   }
 }
 
 /* Send & Stop buttons */
 .send-btn,
 .stop-btn {
-  background: $teal;
+  background: var(--skin-accent, #{$teal});
   border: none;
   border-radius: 6px;
   width: 32px;
@@ -377,7 +377,7 @@ $font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
   justify-content: center;
   cursor: pointer;
   flex-shrink: 0;
-  color: $crust;
+  color: #{$crust};
   transition: opacity 0.15s ease, transform 0.1s ease;
 
   &:hover:not(:disabled) {

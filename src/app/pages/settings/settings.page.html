@@ -100,6 +100,66 @@
         </div>
       </div>
 
+      <!-- Skin Card -->
+      <div class="settings-card skin-card">
+        <div class="card-header">
+          <div class="card-icon skin-card-icon">
+            <!-- Palette icon -->
+            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor"
+              stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/>
+              <circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/>
+              <circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/>
+              <circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/>
+              <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/>
+            </svg>
+          </div>
+          <div class="card-header-text">
+            <h2 class="card-title">{{ "SETTINGS.SKIN_TITLE" | translate }}</h2>
+            <p class="card-subtitle">{{ "SETTINGS.SKIN_SUBTITLE" | translate }}</p>
+          </div>
+        </div>
+
+        <div class="skin-picker">
+          @for (skin of skins; track skin.id) {
+          <button
+            class="skin-option"
+            [class.skin-option--active]="themeService.activeSkin() === skin.id"
+            (click)="changeSkin(skin.id)"
+            [title]="skin.labelKey | translate"
+          >
+            <!-- Mini preview -->
+            <div class="skin-preview" [style.background]="skin.previewBg">
+              <!-- AI bubble -->
+              <div class="skin-preview-bubble skin-preview-bubble--ai"
+                [style.background]="skin.previewBubbleAi"
+                [style.color]="skin.previewText">
+                <span class="skin-preview-dot"></span>
+                <span class="skin-preview-dot"></span>
+                <span class="skin-preview-dot"></span>
+              </div>
+              <!-- User bubble -->
+              <div class="skin-preview-bubble skin-preview-bubble--user"
+                [style.background]="skin.previewBubbleUser"
+                [style.color]="skin.previewText">
+              </div>
+            </div>
+
+            <!-- Active checkmark -->
+            @if (themeService.activeSkin() === skin.id) {
+            <div class="skin-active-badge">
+              <svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" stroke-width="3" fill="none">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+            </div>
+            }
+
+            <span class="skin-label">{{ skin.labelKey | translate }}</span>
+          </button>
+          }
+        </div>
+      </div>
+
       <!-- Language Card -->
       <div class="settings-card language-card">
         <div class="card-header">

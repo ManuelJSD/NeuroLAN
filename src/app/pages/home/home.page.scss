@@ -11,7 +11,7 @@ $font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
   display: flex;
   flex-direction: column;
   height: 100%;
-  background: $base;
+  background: var(--skin-bg, #{$base});
   font-family: $font-ui;
   contain: layout style;
 }
@@ -64,18 +64,18 @@ $font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
   letter-spacing: -0.04em;
   margin: 0;
   line-height: 1.1;
-  color: $text;
+  color: var(--skin-text, #{$text});
 
   /* Decorative left line — the only visual accent */
   padding-left: 1.25rem;
-  border-left: 3px solid $teal;
+  border-left: 3px solid var(--skin-accent, #{$teal});
 }
 
 .welcome-subtitle {
   font-size: 0.8rem;
   font-weight: 500;
   margin: 0;
-  color: $overlay0;
+  color: var(--skin-subtext, #{$overlay0});
   font-family: $font-mono;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -103,12 +103,12 @@ $font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
 
 .suggestion-chip {
   background: transparent;
-  border: 1px solid $surface1;
+  border: 1px solid var(--skin-border, #{$surface1});
   border-radius: 4px;
   padding: 0.35rem 0.75rem;
   font-size: 0.72rem;
   font-family: $font-mono;
-  color: $subtext0;
+  color: var(--skin-subtext, #{$subtext0});
   cursor: pointer;
   transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
   white-space: nowrap;
@@ -116,14 +116,14 @@ $font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
 
   &::before {
     content: '> ';
-    color: $teal;
+    color: var(--skin-accent, #{$teal});
     opacity: 0.6;
   }
 
   &:hover {
-    color: $text;
-    border-color: rgba(148, 226, 213, 0.35);
-    background: rgba(148, 226, 213, 0.04);
+    color: var(--skin-text, #{$text});
+    border-color: rgba(var(--skin-accent-rgb, 148, 226, 213), 0.35);
+    background: rgba(var(--skin-accent-rgb, 148, 226, 213), 0.04);
 
     &::before {
       opacity: 1;

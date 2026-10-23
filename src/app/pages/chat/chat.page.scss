@@ -11,7 +11,7 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
   display: flex;
   flex-direction: column;
   height: 100%;
-  background: $base;
+  background: var(--skin-bg, #{$base});
   font-family: $font-main;
   contain: layout style;
 }
@@ -25,7 +25,7 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
   flex-direction: column;
   height: 100%;
   width: 100%;
-  background: $base;
+  background: var(--skin-bg, #{$base});
   position: relative;
 
   &::before {
@@ -37,8 +37,8 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
     height: calc(45px + env(safe-area-inset-top, 0px));
     background: linear-gradient(
       to bottom,
-      $base 0%,
-      $base env(safe-area-inset-top, 0px),
+      var(--skin-bg, #{$base}) 0%,
+      var(--skin-bg, #{$base}) env(safe-area-inset-top, 0px),
       transparent 100%
     );
     z-index: 5;
@@ -53,8 +53,8 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
 .chat-header {
   flex-shrink: 0;
   padding: calc(10px + env(safe-area-inset-top, 0px)) 20px 10px 20px;
-  border-bottom: 1px solid $surface0;
-  background: $mantle;
+  border-bottom: 1px solid var(--skin-border, #{$surface0});
+  background: var(--skin-header-bg, #{$mantle});
   z-index: 10;
   position: relative;
 
@@ -69,7 +69,7 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
   }
 
   .menu-btn {
-    --color: #{$subtext1};
+    --color: var(--skin-subtext, #{$subtext1});
     flex-shrink: 0;
     display: none;
 
@@ -88,15 +88,15 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
     --background: transparent;
     --padding-start: 0;
     --padding-end: 8px;
-    --placeholder-color: #{$subtext0};
+    --placeholder-color: var(--skin-subtext, #{$subtext0});
     font-weight: 600;
-    color: $text;
+    color: var(--skin-text, #{$text});
     font-size: 0.9rem;
     max-width: 280px;
     font-family: $font-main;
 
-    --highlight-color-focused: #{$teal};
-    --highlight-color-valid:   #{$teal};
+    --highlight-color-focused: var(--skin-accent, #{$teal});
+    --highlight-color-valid:   var(--skin-accent, #{$teal});
     --highlight-color-invalid: #{$red};
   }
 
@@ -112,10 +112,10 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
     align-items: center;
     gap: 6px;
     padding: 7px 13px;
-    background: rgba(148, 226, 213, 0.08);
-    border: 1px solid rgba(148, 226, 213, 0.2);
+    background: rgba(var(--skin-accent-rgb, 148, 226, 213), 0.08);
+    border: 1px solid rgba(var(--skin-accent-rgb, 148, 226, 213), 0.2);
     border-radius: 8px;
-    color: $teal;
+    color: var(--skin-accent, #{$teal});
     font-family: $font-main;
     font-size: 0.82rem;
     font-weight: 600;
@@ -128,8 +128,8 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
     }
 
     &:hover {
-      background: rgba(148, 226, 213, 0.14);
-      border-color: rgba(148, 226, 213, 0.4);
+      background: rgba(var(--skin-accent-rgb, 148, 226, 213), 0.14);
+      border-color: rgba(var(--skin-accent-rgb, 148, 226, 213), 0.4);
     }
 
     &:active {
@@ -151,9 +151,9 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
     height: 34px;
     flex-shrink: 0;
     background: transparent;
-    border: 1px solid $surface1;
+    border: 1px solid var(--skin-border, #{$surface1});
     border-radius: 8px;
-    color: $subtext0;
+    color: var(--skin-subtext, #{$subtext0});
     cursor: pointer;
     transition: color 0.18s ease, border-color 0.18s ease;
 
@@ -163,8 +163,8 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
     }
 
     &:hover {
-      color: $teal;
-      border-color: rgba(148, 226, 213, 0.35);
+      color: var(--skin-accent, #{$teal});
+      border-color: rgba(var(--skin-accent-rgb, 148, 226, 213), 0.35);
 
       ion-icon {
         transform: rotate(180deg);
@@ -249,7 +249,7 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
   padding: 12px 20px calc(20px + env(safe-area-inset-bottom, 0px));
   position: relative;
   z-index: 10;
-  background: $base;
+  background: var(--skin-bg, #{$base});
 
   &::before {
     content: '';
@@ -258,7 +258,7 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
     left: 0;
     right: 0;
     height: 40px;
-    background: linear-gradient(to bottom, transparent, $base);
+    background: linear-gradient(to bottom, transparent, var(--skin-bg, #{$base}));
     pointer-events: none;
   }
 
@@ -292,14 +292,14 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
   }
 
   .ai-avatar {
-    background: $mantle;
-    color: $teal;
-    border: 1px solid rgba(148, 226, 213, 0.2);
+    background: var(--skin-bubble-ai, #{$mantle});
+    color: var(--skin-accent, #{$teal});
+    border: 1px solid rgba(var(--skin-accent-rgb, 148, 226, 213), 0.2);
   }
 
   .user-avatar {
-    background: $teal;
-    color: $crust;
+    background: var(--skin-accent, #{$teal});
+    color: #{$crust};
     border-radius: 8px;
   }
 
@@ -315,10 +315,10 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
       top: -4px;
       right: -8px;
       margin: 0;
-      --color: #{$subtext0};
+      --color: var(--skin-subtext, #{$subtext0});
 
       &:hover {
-        --color: #{$teal};
+        --color: var(--skin-accent, #{$teal});
       }
     }
   }
@@ -327,7 +327,7 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
     font-size: 0.75rem;
     font-weight: 700;
     margin-bottom: 6px;
-    color: $overlay0;
+    color: var(--skin-subtext, #{$overlay0});
     letter-spacing: 0.8px;
     text-transform: uppercase;
     font-family: $font-mono;
@@ -336,7 +336,7 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
   .message-text {
     white-space: pre-wrap;
     line-height: 1.65;
-    color: $text;
+    color: var(--skin-text, #{$text});
     font-size: 0.97rem;
     font-family: $font-main;
   }
@@ -351,11 +351,11 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
     .response-time {
       font-size: 0.72rem;
       font-family: $font-mono;
-      color: $overlay0;
-      background: $surface0;
+      color: var(--skin-subtext, #{$overlay0});
+      background: var(--skin-surface, #{$surface0});
       padding: 3px 8px;
       border-radius: 4px;
-      border: 1px solid $surface1;
+      border: 1px solid var(--skin-border, #{$surface1});
       display: inline-flex;
       align-items: center;
       gap: 4px;
@@ -364,9 +364,9 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
     .regenerate-btn {
       margin-left: auto;
       background: transparent;
-      border: 1px solid $surface1;
+      border: 1px solid var(--skin-border, #{$surface1});
       border-radius: 6px;
-      color: $subtext0;
+      color: var(--skin-subtext, #{$subtext0});
       padding: 3px 6px;
       cursor: pointer;
       display: inline-flex;
@@ -376,9 +376,9 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
       transition: all 0.2s ease;
 
       &:hover {
-        color: $teal;
-        border-color: rgba(148, 226, 213, 0.35);
-        background: rgba(148, 226, 213, 0.05);
+        color: var(--skin-accent, #{$teal});
+        border-color: rgba(var(--skin-accent-rgb, 148, 226, 213), 0.35);
+        background: rgba(var(--skin-accent-rgb, 148, 226, 213), 0.05);
       }
     }
   }
@@ -389,31 +389,30 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
     gap: 12px;
 
     .message-bubble {
-      background: $teal;
-      color: $crust;
+      background: var(--skin-bubble-user, #{$teal});
+      color: var(--skin-bubble-user-text, #{$crust});
       padding: 12px 16px;
       border-radius: 12px 3px 12px 12px;
       max-width: 78%;
       box-shadow: none;
       flex: none;
-      position: relative; /* Necesario para anclar el botón */
+      position: relative;
 
       .message-sender {
         display: none;
       }
 
       .message-text {
-        color: $crust;
+        color: var(--skin-bubble-user-text, #{$crust});
         font-weight: 500;
         font-size: 0.95rem;
       }
 
-      /* Estética del modo edición dentro de la burbuja */
       .edit-mode-container {
         .edit-textarea {
-          --color: #{$crust};
-          --highlight-color-focused: #{$crust};
-          --highlight-color: #{$crust};
+          --color: var(--skin-bubble-user-text, #{$crust});
+          --highlight-color-focused: var(--skin-bubble-user-text, #{$crust});
+          --highlight-color: var(--skin-bubble-user-text, #{$crust});
           --border-color: rgba(17, 17, 27, 0.2);
           font-weight: 500;
           font-size: 0.95rem;
@@ -439,15 +438,14 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
         }
       }
 
-      /* Estética del botón de editar */
       .edit-btn {
         position: absolute;
         top: 50%;
-        left: -42px; /* Flotando a la izquierda de la burbuja */
+        left: -42px;
         transform: translateY(-50%);
-        background: rgba(49, 50, 68, 0.5); /* $surface0 */
-        border: 1px solid rgba(166, 173, 200, 0.2);
-        color: rgba(166, 173, 200, 0.8); /* $subtext0 */
+        background: var(--skin-surface, rgba(49, 50, 68, 0.5));
+        border: 1px solid var(--skin-border, rgba(166, 173, 200, 0.2));
+        color: var(--skin-subtext, rgba(166, 173, 200, 0.8));
         width: 30px;
         height: 30px;
         border-radius: 50%;
@@ -458,8 +456,8 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
         transition: all 0.2s ease;
 
         &:hover {
-          color: #94e2d5; /* $teal */
-          background: rgba(49, 50, 68, 0.9);
+          color: var(--skin-accent, #94e2d5);
+          background: var(--skin-surface, rgba(49, 50, 68, 0.9));
         }
 
         ion-icon {
@@ -483,7 +481,7 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
    ========================================================================== */
 
 .markdown-view {
-  color: $text;
+  color: var(--skin-text, #{$text});
   line-height: 1.75;
   font-size: 0.97rem;
   width: 100%;
@@ -494,7 +492,7 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
     .code-copy-btn {
       background: transparent;
       border: none;
-      color: $subtext0;
+      color: var(--skin-subtext, #{$subtext0});
       cursor: pointer;
       padding: 4px;
       border-radius: 4px;
@@ -508,8 +506,8 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
       }
 
       &:hover, &.copied {
-        color: $teal;
-        background: rgba(148, 226, 213, 0.1);
+        color: var(--skin-accent, #{$teal});
+        background: rgba(var(--skin-accent-rgb, 148, 226, 213), 0.1);
       }
     }
 
@@ -521,11 +519,11 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
 
     pre {
       position: relative;
-      background: $crust;
+      background: var(--skin-bg, #{$crust});
       padding: 18px;
       border-radius: 8px;
       overflow-x: auto;
-      border: 1px solid $surface0;
+      border: 1px solid var(--skin-border, #{$surface0});
       margin: 14px 0;
 
       code {
@@ -533,19 +531,19 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
         padding: 0;
         font-family: $font-mono;
         font-size: 0.875em;
-        color: $text;
+        color: var(--skin-text, #{$text});
         line-height: 1.65;
       }
     }
 
     code {
-      background: rgba(49, 50, 68, 0.8);
+      background: var(--skin-surface, rgba(49, 50, 68, 0.8));
       padding: 3px 7px;
       border-radius: 4px;
       font-family: $font-mono;
       font-size: 0.875em;
-      color: $teal;
-      border: 1px solid $surface1;
+      color: var(--skin-accent, #{$teal});
+      border: 1px solid var(--skin-border, #{$surface1});
     }
 
     ul, ol {
@@ -558,11 +556,11 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
     }
 
     blockquote {
-      border-left: 3px solid $teal;
+      border-left: 3px solid var(--skin-accent, #{$teal});
       margin: 14px 0;
       padding: 10px 16px;
-      color: $subtext1;
-      background: rgba(148, 226, 213, 0.04);
+      color: var(--skin-text, #{$subtext1});
+      background: rgba(var(--skin-accent-rgb, 148, 226, 213), 0.04);
       border-radius: 0 6px 6px 0;
     }
 
@@ -577,37 +575,37 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
       font-size: 0.9rem;
 
       th, td {
-        border: 1px solid $surface1;
+        border: 1px solid var(--skin-border, #{$surface1});
         padding: 9px 14px;
         text-align: left;
       }
       th {
-        background: $surface0;
+        background: var(--skin-surface, #{$surface0});
         font-weight: 600;
-        color: $subtext1;
+        color: var(--skin-subtext, #{$subtext1});
         font-size: 0.8rem;
         letter-spacing: 0.5px;
         text-transform: uppercase;
         font-family: $font-mono;
       }
       tr:nth-child(even) td {
-        background: rgba(49, 50, 68, 0.3);
+        background: var(--skin-surface, rgba(49, 50, 68, 0.3));
       }
     }
 
     a {
-      color: $teal;
+      color: var(--skin-accent, #{$teal});
       text-decoration: none;
-      border-bottom: 1px solid rgba(148, 226, 213, 0.3);
+      border-bottom: 1px solid rgba(var(--skin-accent-rgb, 148, 226, 213), 0.3);
       transition: border-color 0.2s ease;
 
       &:hover {
-        border-bottom-color: rgba(148, 226, 213, 0.8);
+        border-bottom-color: rgba(var(--skin-accent-rgb, 148, 226, 213), 0.8);
       }
     }
 
     h1, h2, h3, h4 {
-      color: $text;
+      color: var(--skin-text, #{$text});
       font-weight: 700;
       margin: 1.2em 0 0.5em;
       line-height: 1.3;
@@ -616,16 +614,16 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
     h1 { font-size: 1.5rem; }
     h2 { font-size: 1.25rem; }
     h3 { font-size: 1.1rem; }
-    h4 { font-size: 1rem; color: $subtext1; }
+    h4 { font-size: 1rem; color: var(--skin-subtext, #{$subtext1}); }
 
     hr {
       border: none;
-      border-top: 1px solid $surface1;
+      border-top: 1px solid var(--skin-border, #{$surface1});
       margin: 1.5em 0;
     }
 
-    strong { color: $text; font-weight: 700; }
-    em     { color: $subtext1; }
+    strong { color: var(--skin-text, #{$text}); font-weight: 700; }
+    em     { color: var(--skin-subtext, #{$subtext1}); }
   }
 }
 
@@ -638,15 +636,15 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
   flex-direction: row !important;
   align-items: center;
   gap: 10px;
-  background: $surface0;
+  background: var(--skin-surface, #{$surface0});
   padding: 10px 16px !important;
   border-radius: 10px;
   width: fit-content;
-  border: 1px solid $surface1;
+  border: 1px solid var(--skin-border, #{$surface1});
 
   .thinking-text {
     font-size: 0.85rem;
-    color: $subtext1;
+    color: var(--skin-text, #{$subtext1});
     font-weight: 500;
     font-family: $font-mono;
     letter-spacing: 0.02em;
@@ -656,17 +654,16 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
   .custom-spinner {
     width: 18px;
     height: 18px;
-    color: $teal;
+    color: var(--skin-accent, #{$teal});
   }
 }
 
-// Processing Steps Panel (Opción B: pasos secuenciales estilo Perplexity)
 .processing-steps-panel {
   display: flex;
   flex-direction: column;
   gap: 6px;
-  background: $surface0;
-  border: 1px solid $surface1;
+  background: var(--skin-surface, #{$surface0});
+  border: 1px solid var(--skin-border, #{$surface1});
   border-radius: 10px;
   padding: 10px 14px;
   width: fit-content;
@@ -685,7 +682,7 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
     flex-shrink: 0;
     width: 14px;
     height: 14px;
-    color: $teal;
+    color: var(--skin-accent, #{$teal});
   }
 
   .step-check {
@@ -696,7 +693,7 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
     align-items: center;
     justify-content: center;
     font-size: 0.8rem;
-    color: $teal;
+    color: var(--skin-accent, #{$teal});
     font-weight: 700;
     line-height: 1;
   }
@@ -704,7 +701,7 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
   .step-label {
     font-size: 0.82rem;
     font-family: $font-mono;
-    color: $subtext1;
+    color: var(--skin-text, #{$subtext1});
     letter-spacing: 0.01em;
     white-space: nowrap;
     overflow: hidden;
@@ -712,7 +709,7 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
   }
 
   &.step-done .step-label {
-    color: $subtext0;
+    color: var(--skin-subtext, #{$subtext0});
   }
 }
 
@@ -757,8 +754,8 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
     width: 56px;
     height: 56px;
     border-radius: 14px;
-    background: $surface0;
-    border: 1px solid rgba(148, 226, 213, 0.15);
+    background: var(--skin-surface, #{$surface0});
+    border: 1px solid rgba(var(--skin-accent-rgb, 148, 226, 213), 0.15);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -769,14 +766,14 @@ $font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
   h2 {
     font-size: 1.2rem;
     font-weight: 700;
-    color: $text;
+    color: var(--skin-text, #{$text});
     margin: 0;
     font-family: $font-main;
   }
 
   p {
     font-size: 0.88rem;
-    color: $subtext0;
+    color: var(--skin-subtext, #{$subtext0});
     margin: 0;
     line-height: 1.6;
     max-width: 280px;

@@ -10,7 +10,7 @@ $font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-seri
   display: flex;
   flex-direction: column;
   height: 100%;
-  background: $base;
+  background: var(--skin-bg, #{$base});
   font-family: $font;
 }
 
@@ -36,34 +36,34 @@ $font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-seri
   padding: 1px 10px;
   border-radius: 8px;
   cursor: pointer;
-  color: $subtext0;
+  color: var(--skin-subtext, #{$subtext0});
   list-style: none;
   transition: background 0.18s ease, color 0.18s ease;
 
   &:hover {
-    background: rgba(88, 91, 112, 0.25);
-    color: $text;
+    background: var(--skin-sidebar-item-hover, rgba(88, 91, 112, 0.25));
+    color: var(--skin-text, #{$text});
 
     .history-icon {
-      color: $blue;
+      color: var(--skin-accent, #{$blue});
     }
   }
 
   &.active {
-    background: rgba(137, 180, 250, 0.12);
-    color: $blue;
+    background: rgba(var(--skin-accent-rgb, 137, 180, 250), 0.12);
+    color: var(--skin-accent, #{$blue});
     font-weight: 500;
-    box-shadow: inset 3px 0 0 0 $blue; // Left border effect
+    box-shadow: inset 3px 0 0 0 var(--skin-accent, #{$blue});
 
     .history-icon {
-      color: $blue;
+      color: var(--skin-accent, #{$blue});
     }
   }
 }
 
 .history-icon {
   font-size: 0.9rem;
-  color: $surface2;
+  color: var(--skin-subtext, #{$surface2});
   flex-shrink: 0;
   transition: color 0.18s ease;
 }
@@ -83,7 +83,7 @@ $font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-seri
   padding: 8px 10px;
   font-family: $font;
   font-size: 0.8rem;
-  color: $overlay0;
+  color: var(--skin-subtext, #{$overlay0});
   font-style: italic;
 }
 
@@ -94,8 +94,8 @@ $font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-seri
 .conv-header {
   flex-shrink: 0;
   padding: calc(28px + env(safe-area-inset-top, 0px)) 24px 24px;
-  border-bottom: 1px solid rgba(69, 71, 90, 0.5);
-  background: rgba(24, 24, 37, 0.85);
+  border-bottom: 1px solid var(--skin-border, rgba(69, 71, 90, 0.5));
+  background: var(--skin-header-bg, rgba(24, 24, 37, 0.85));
   backdrop-filter: blur(12px);
   position: relative;
   z-index: 5;
@@ -112,21 +112,21 @@ $font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-seri
     width: 48px;
     height: 48px;
     border-radius: 14px;
-    background: linear-gradient(135deg, rgba(137, 180, 250, 0.15) 0%, rgba(116, 199, 236, 0.1) 100%);
-    border: 1px solid rgba(137, 180, 250, 0.25);
+    background: linear-gradient(135deg, rgba(var(--skin-accent-rgb, 137, 180, 250), 0.15) 0%, rgba(var(--skin-accent-rgb, 116, 199, 236), 0.1) 100%);
+    border: 1px solid rgba(var(--skin-accent-rgb, 137, 180, 250), 0.25);
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 1.4rem;
-    color: $blue;
+    color: var(--skin-accent, #{$blue});
     flex-shrink: 0;
-    box-shadow: 0 4px 16px rgba(137, 180, 250, 0.12);
+    box-shadow: 0 4px 16px rgba(var(--skin-accent-rgb, 137, 180, 250), 0.12);
   }
 
   .header-title {
     font-size: 1.5rem;
     font-weight: 700;
-    color: $text;
+    color: var(--skin-text, #{$text});
     margin: 0 0 2px;
     font-family: $font;
     line-height: 1.2;
@@ -134,7 +134,7 @@ $font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-seri
 
   .header-subtitle {
     font-size: 0.85rem;
-    color: $subtext0;
+    color: var(--skin-subtext, #{$subtext0});
     margin: 0;
     font-family: $font;
   }
@@ -204,14 +204,14 @@ $font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-seri
 .empty-title {
   font-size: 1.3rem;
   font-weight: 700;
-  color: $text;
+  color: var(--skin-text, #{$text});
   margin: 0;
   font-family: $font;
 }
 
 .empty-description {
   font-size: 0.9rem;
-  color: $subtext0;
+  color: var(--skin-subtext, #{$subtext0});
   margin: 0;
   line-height: 1.65;
   max-width: 280px;
@@ -242,14 +242,14 @@ $font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-seri
 // ============================================================
 
 .options-button {
-  margin-left: auto; /* Push button to the right end in flex containers */
-  --color: #{$overlay0}; /* Default subtle color */
-  --color-hover: #{$text}; /* Hover color */
+  margin-left: auto;
+  --color: var(--skin-subtext, #{$overlay0});
+  --color-hover: var(--skin-text, #{$text});
   height: 38px;
   width: 38px;
   --padding-start: 0;
   --padding-end: 0;
-  margin-right: -4px; /* Fine adjustment */
+  margin-right: -4px;
 
   ion-icon {
     font-size: 1.15rem;
@@ -264,7 +264,7 @@ $font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-seri
   display: flex;
   gap: 8px;
   padding: 10px 10px 6px;
-  border-top: 1px solid rgba(69, 71, 90, 0.45);
+  border-top: 1px solid var(--skin-border, rgba(69, 71, 90, 0.45));
   margin-top: 4px;
 }
 
